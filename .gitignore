@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+
+#visual studio
+.vs/
+
+#Builds
+Builds/
+
+#JUCE
+JuceLibraryCode/
