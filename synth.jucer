@@ -6,6 +6,8 @@
               pluginName="synth" pluginDesc="synth" cppLanguageStandard="17">
   <MAINGROUP id="JSwRcx" name="synth">
     <GROUP id="{DF528F5F-5BB4-CD02-99F8-134C14A3FAD5}" name="Source">
+      <FILE id="ut2rHC" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
+      <FILE id="XaIlcb" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
       <FILE id="JcNCtk" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="uMMr7B" name="PluginProcessor.h" compile="0" resource="0"
