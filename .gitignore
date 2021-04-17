@@ -36,7 +36,5 @@
 .vs/
 
 #Builds
-Builds/
+build/
 
-#JUCE
-JuceLibraryCode/
