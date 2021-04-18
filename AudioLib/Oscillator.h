@@ -10,7 +10,10 @@
 class Oscillator {
 public:
 	Oscillator();
-	double generateSinWave(double freq);
+	double generateSinWave(double frequency);
+	double generateSquareWave(double frequency);
+	double generateTriangleWave(double frequency);
+	double generateSawtoothWave(double frequency);
 
 	static double sampleRate;
 

@@ -4,8 +4,6 @@
 SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
     setSize (400, 300);
 
 	midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
@@ -14,10 +12,18 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	midiVolume.setPopupDisplayEnabled(true, false, this);
 	midiVolume.setTextValueSuffix("Volume");
 	midiVolume.setValue(1.0);
+	midiVolume.addListener(this);
 	addAndMakeVisible(&midiVolume);
 
+	waveformBox.setTextWhenNoChoicesAvailable("No waveform selected :(");
+	juce::StringArray waveforms{"sin", "square", "triangle", "sawtooth"};
+	waveformBox.addItemList(waveforms, 1);
+	waveformBox.setSelectedItemIndex(0, juce::dontSendNotification);
 
-	midiVolume.addListener(this);
+	waveformBoxAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+		audioProcessor.tree, "WAVEFORM", waveformBox);
+
+	addAndMakeVisible(waveformBox);	
 }
 
 SynthAudioProcessorEditor::~SynthAudioProcessorEditor()
@@ -37,6 +43,7 @@ void SynthAudioProcessorEditor::paint (juce::Graphics& g)
 void SynthAudioProcessorEditor::resized()
 {
 	midiVolume.setBounds(40, 30, 20, getHeight() - 60);
+	waveformBox.setBounds(200, 100, getWidth() - 210, 20);
 }
 
 void SynthAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)

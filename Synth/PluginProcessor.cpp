@@ -1,6 +1,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include <vector>
+#include <memory>
+
 SynthAudioProcessor::SynthAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
@@ -10,13 +13,16 @@ SynthAudioProcessor::SynthAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), tree(*this, nullptr, "SynthAudioProcessorParameters", {
+		std::make_unique<juce::AudioParameterInt>("WAVEFORM", "waveform", 0, 3, 0)
+	})
 #endif
 {
 	synth.clearVoices();
 	for (int i = 0; i < 5; i++) {
 		synth.addVoice(new SynthVoice());
 	}
+	synth.clearSounds();
 	synth.addSound(new SynthSound());
 }
 
@@ -126,6 +132,14 @@ bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
 
 void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+	SynthVoice* tmpVoice = nullptr;
+	for (int i = 0; i < synth.getNumVoices(); i++) {
+		if (tmpVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
+			int osci = *tree.getRawParameterValue("WAVEFORM");
+			tmpVoice->setOscillator(osci);
+		}
+	}
+
 	buffer.clear();
 	int numSamples = buffer.getNumSamples();
 	synth.renderNextBlock(buffer, midiMessages, 0, numSamples);

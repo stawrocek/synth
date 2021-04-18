@@ -18,6 +18,9 @@ private:
 
     SynthAudioProcessor& audioProcessor;
 	juce::Slider midiVolume;
+	juce::ComboBox waveformBox;
+
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformBoxAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessorEditor)
 };
