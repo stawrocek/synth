@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 
 #include "SynthSound.h"
+#include "Oscillator.h"
 
 class SynthVoice : public juce::SynthesiserVoice
 {
@@ -15,6 +16,7 @@ public:
 	void startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound,
 		int currentPitchWheelPosition) override
 	{
+		level = velocity;
 		frequency = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
 	}
 
@@ -22,16 +24,17 @@ public:
 	{
 		if (velocity < 0.00001)
 			clearCurrentNote();
+		level = 0;
 	}
 
 	void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override
 	{
-		double val = 100.0;
 		for (int sample = 0; sample < numSamples; sample++)
 		{
+			double signal = osc1.generateSinWave(frequency) * level;
 			for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
 			{
-				outputBuffer.addSample(channel, startSample, val);
+				outputBuffer.addSample(channel, startSample, signal);
 			}
 
 			++startSample;
@@ -51,4 +54,5 @@ public:
 private:
 	double level;
 	double frequency;
+	Oscillator osc1;
 };

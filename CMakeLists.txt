@@ -42,10 +42,10 @@ juce_add_plugin(SynthPlugin
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
     COMPANY_NAME Staszkosoft                    # Specify the name of the plugin's author
-    IS_SYNTH TRUE                              # Is this a synth or an effect?
-    NEEDS_MIDI_INPUT TRUE                      # Does the plugin need midi input?
-    NEEDS_MIDI_OUTPUT FALSE                    # Does the plugin need midi output?
-    # IS_MIDI_EFFECT TRUE/FALSE                 # Is this plugin a MIDI effect?
+    IS_SYNTH TRUE                               # Is this a synth or an effect?
+    NEEDS_MIDI_INPUT TRUE                       # Does the plugin need midi input?
+    NEEDS_MIDI_OUTPUT FALSE                     # Does the plugin need midi output?
+    IS_MIDI_EFFECT FALSE                        # Is this plugin a MIDI effect?
     # EDITOR_WANTS_KEYBOARD_FOCUS TRUE/FALSE    # Does the editor need keyboard focus?
     # COPY_PLUGIN_AFTER_BUILD TRUE/FALSE        # Should the plugin be installed to a default location after building?
     PLUGIN_MANUFACTURER_CODE Skrt               # A four-character manufacturer id with at least one upper-case character
@@ -68,7 +68,12 @@ juce_generate_juce_header(SynthPlugin)
 # CMake command.
 
 add_subdirectory(Synth/)
-		
+add_subdirectory(AudioLib/)
+
+target_include_directories(
+    SynthPlugin PUBLIC
+    AudioLib/
+)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
@@ -102,8 +107,11 @@ target_compile_definitions(SynthPlugin
 target_link_libraries(SynthPlugin
     PRIVATE
         # AudioPluginData           # If we'd created a binary data target, we'd link to it here
+		AudioLib
         juce::juce_audio_utils
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags)
+		
+

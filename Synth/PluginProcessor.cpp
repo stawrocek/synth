@@ -126,13 +126,9 @@ bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
 
 void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-
 	buffer.clear();
-	synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-
+	int numSamples = buffer.getNumSamples();
+	synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
 }
 
 bool SynthAudioProcessor::hasEditor() const

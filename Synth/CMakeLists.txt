@@ -8,4 +8,9 @@ project(SynthProject VERSION 0.0.1)
 target_sources(SynthPlugin
     PRIVATE
         PluginEditor.cpp
-        PluginProcessor.cpp)
+		PluginEditor.h
+        PluginProcessor.cpp
+		PluginProcessor.h
+		SynthVoice.h
+		SynthSound.h
+)

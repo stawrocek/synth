@@ -12,7 +12,7 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	midiVolume.setRange(0.0, 127.0, 1.0);
 	midiVolume.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
 	midiVolume.setPopupDisplayEnabled(true, false, this);
-	midiVolume.setTextValueSuffix(" Volume2");
+	midiVolume.setTextValueSuffix("Volume");
 	midiVolume.setValue(1.0);
 	addAndMakeVisible(&midiVolume);
 
