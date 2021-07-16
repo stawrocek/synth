@@ -6,11 +6,16 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 {
     setSize (400, 300);
 
+	if (JUCEApplication::isStandaloneApp())
+		addAndMakeVisible(midiKeyboardComponent);
+	midiKeyboardComponent.setMidiChannel(2);
+	midiKeyboardState.addListener(&audioProcessor.midiMessageCollector);
+
 	midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
 	midiVolume.setRange(0.0, 127.0, 1.0);
 	midiVolume.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
 	midiVolume.setPopupDisplayEnabled(true, false, this);
-	midiVolume.setTextValueSuffix("Volume");
+	midiVolume.setTextValueSuffix("Volume2");
 	midiVolume.setValue(1.0);
 	midiVolume.addListener(this);
 	addAndMakeVisible(&midiVolume);
@@ -23,11 +28,12 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	waveformBoxAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
 		audioProcessor.tree, "WAVEFORM", waveformBox);
 
-	addAndMakeVisible(waveformBox);	
+	addAndMakeVisible(waveformBox);		
 }
 
 SynthAudioProcessorEditor::~SynthAudioProcessorEditor()
 {
+	midiKeyboardState.removeListener(&audioProcessor.midiMessageCollector);
 }
 
 void SynthAudioProcessorEditor::paint (juce::Graphics& g)
@@ -42,6 +48,9 @@ void SynthAudioProcessorEditor::paint (juce::Graphics& g)
 
 void SynthAudioProcessorEditor::resized()
 {
+	auto area = getLocalBounds();
+	if(JUCEApplication::isStandaloneApp())
+		midiKeyboardComponent.setBounds(area.removeFromTop(80).reduced(8));
 	midiVolume.setBounds(40, 30, 20, getHeight() - 60);
 	waveformBox.setBounds(200, 100, getWidth() - 210, 20);
 }

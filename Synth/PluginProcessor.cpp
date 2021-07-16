@@ -96,6 +96,7 @@ void SynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 	juce::ignoreUnused(samplesPerBlock);
 	lastSampleRate = sampleRate;
 	synth.setCurrentPlaybackSampleRate(lastSampleRate);
+	midiMessageCollector.reset(sampleRate);
 }
 
 void SynthAudioProcessor::releaseResources()
@@ -132,6 +133,8 @@ bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
 
 void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+	midiMessageCollector.removeNextBlockOfMessages(midiMessages, buffer.getNumSamples());
+
 	SynthVoice* tmpVoice = nullptr;
 	for (int i = 0; i < synth.getNumVoices(); i++) {
 		if (tmpVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {

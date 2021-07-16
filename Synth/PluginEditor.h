@@ -19,6 +19,8 @@ private:
     SynthAudioProcessor& audioProcessor;
 	juce::Slider midiVolume;
 	juce::ComboBox waveformBox;
+	juce::MidiKeyboardState midiKeyboardState;
+	juce::MidiKeyboardComponent midiKeyboardComponent{ midiKeyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformBoxAttachment;
 
