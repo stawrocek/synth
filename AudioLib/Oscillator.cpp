@@ -34,14 +34,14 @@ double Oscillator::generateSquareWave(double frequency) {
 
 double Oscillator::generateTriangleWave(double frequency) {
 	double result = 0.;
-	if (phase < 0.) {
-		result = 2. * phase + 1.;
-	}
-	if (phase > 0.) {
-		result = -2. * phase - 1.;
-	}
 	if (phase >= 1.0) {
-		phase -= 2.0;
+		phase -= 1.0;
+	}
+	if (phase <= 0.5) {
+		result = (phase - 0.25) * 4;
+	}
+	else {
+		result = ((1.0 - phase) - 0.25) * 4;
 	}
 	phase += frequency / sampleRate;
 	return result;
