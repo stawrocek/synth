@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "ScopeComponent.h"
 
 class SynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
 								   private juce::Slider::Listener
@@ -21,6 +22,7 @@ private:
 	juce::ComboBox waveformBox;
 	juce::MidiKeyboardState midiKeyboardState;
 	juce::MidiKeyboardComponent midiKeyboardComponent{ midiKeyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
+	ScopeComponent<float> scopeComponent;
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformBoxAttachment;
 

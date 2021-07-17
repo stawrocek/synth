@@ -2,20 +2,26 @@
 #include "PluginEditor.h"
 
 SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p),
+	scopeComponent(p.audioBufferQueue)
 {
-    setSize (400, 300);
+    setSize (400, 400);
 
 	if (JUCEApplication::isStandaloneApp())
 		addAndMakeVisible(midiKeyboardComponent);
 	midiKeyboardComponent.setMidiChannel(2);
 	midiKeyboardState.addListener(&audioProcessor.midiMessageCollector);
 
+	auto area = getLocalBounds();
+	scopeComponent.setTopLeftPosition(0, 80);
+	scopeComponent.setSize(area.getWidth(), area.getHeight() - 100);
+	addAndMakeVisible(scopeComponent);
+
 	midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
 	midiVolume.setRange(0.0, 127.0, 1.0);
 	midiVolume.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
 	midiVolume.setPopupDisplayEnabled(true, false, this);
-	midiVolume.setTextValueSuffix("Volume2");
+	midiVolume.setTextValueSuffix("Volume");
 	midiVolume.setValue(1.0);
 	midiVolume.addListener(this);
 	addAndMakeVisible(&midiVolume);

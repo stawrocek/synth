@@ -4,6 +4,8 @@
 
 #include "SynthSound.h"
 #include "SynthVoice.h"
+#include "AudioBufferQueue.h"
+#include "ScopeDataCollector.h"
 
 class SynthAudioProcessor  : public juce::AudioProcessor
 {
@@ -41,6 +43,8 @@ public:
 
 	AudioProcessorValueTreeState tree;
 	juce::MidiMessageCollector midiMessageCollector;
+	AudioBufferQueue<float> audioBufferQueue;
+	ScopeDataCollector<float> scopeDataCollector{ audioBufferQueue };
 
 private:
 	juce::Synthesiser synth;

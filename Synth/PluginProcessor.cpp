@@ -146,6 +146,7 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	buffer.clear();
 	int numSamples = buffer.getNumSamples();
 	synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
+	scopeDataCollector.process(buffer.getReadPointer(0), (size_t)buffer.getNumSamples());
 }
 
 bool SynthAudioProcessor::hasEditor() const

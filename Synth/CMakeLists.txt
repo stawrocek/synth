@@ -13,4 +13,7 @@ target_sources(SynthPlugin
 		PluginProcessor.h
 		SynthVoice.h
 		SynthSound.h
+		AudioBufferQueue.h
+		ScopeComponent.h
+		ScopeDataCollector.h
 )
