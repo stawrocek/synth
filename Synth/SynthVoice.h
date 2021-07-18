@@ -32,15 +32,11 @@ public:
 	{
 		for (int sample = 0; sample < numSamples; sample++)
 		{
-			double signal = 0.0;
-			if(oscillatorType == 0)
-				signal = osc1.generateSinWave(frequency) * level;
-			else if(oscillatorType == 1)
-				signal = osc1.generateSquareWave(frequency) * level;
-			else if (oscillatorType == 2)
-				signal = osc1.generateTriangleWave(frequency) * level;
-			else if (oscillatorType == 3)
-				signal = osc1.generateSawtoothWave(frequency) * level;
+			double signal1 = osc1.generateWave(frequency);
+			double signal2 = osc2.generateWave(frequency*1.05);
+			double signal3 = osc3.generateWave(frequency);
+
+			double signal = (signal1 * level + signal2 * level + signal3 * level)/3.0;
 
 			for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
 			{
@@ -61,13 +57,14 @@ public:
 
 	}
 
-	void setOscillator(int oscillatorIndex) {
-		oscillatorType = oscillatorIndex;
+	void setOscillator(OscillatorType oscillatorType) {
+		osc1.setType(oscillatorType);
 	}
 
 private:
 	double level;
 	double frequency;
-	int oscillatorType = 0;
 	Oscillator osc1;
+	Oscillator osc2;
+	Oscillator osc3;
 };

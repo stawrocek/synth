@@ -139,7 +139,7 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	for (int i = 0; i < synth.getNumVoices(); i++) {
 		if (tmpVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
 			int osci = *tree.getRawParameterValue("WAVEFORM");
-			tmpVoice->setOscillator(osci);
+			tmpVoice->setOscillator(static_cast<OscillatorType>(osci));
 		}
 	}
 

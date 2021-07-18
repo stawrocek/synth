@@ -7,6 +7,13 @@
 #define PI  3.1415926535897932384626433832795
 #endif
 
+enum class OscillatorType {
+	OscSin=0,
+	OscSquare=1,
+	OscTriangle=2,
+	OscSawtooth=3
+};
+
 class Oscillator {
 public:
 	Oscillator();
@@ -15,8 +22,13 @@ public:
 	double generateTriangleWave(double frequency);
 	double generateSawtoothWave(double frequency);
 
+	double generateWave(double frequency);
 	static double sampleRate;
 
+	OscillatorType getType();
+	void setType(OscillatorType oscType);
+
 private:
-	double phase;
+	OscillatorType oscillatorType = OscillatorType::OscSin;
+	double phase=0.0;
 };

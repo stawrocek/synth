@@ -57,4 +57,21 @@ double Oscillator::generateSawtoothWave(double frequency) {
 	return result;
 }
 
+double Oscillator::generateWave(double frequency) {
+	if (oscillatorType == OscillatorType::OscSin)
+		return generateSinWave(frequency);
+	else if (oscillatorType == OscillatorType::OscSquare)
+		return generateSquareWave(frequency);
+	else if (oscillatorType == OscillatorType::OscTriangle)
+		return generateTriangleWave(frequency);
+	else if (oscillatorType == OscillatorType::OscSawtooth)
+		return generateSawtoothWave(frequency);
+}
+
+OscillatorType Oscillator::getType() {
+	return oscillatorType;
+}
+void Oscillator::setType(OscillatorType oscType_) {
+	oscillatorType = oscType_;
+}
 
