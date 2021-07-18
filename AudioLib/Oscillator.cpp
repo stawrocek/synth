@@ -9,7 +9,7 @@ Oscillator::Oscillator()
 double Oscillator::sampleRate = 44100.;
 
 double Oscillator::generateSinWave(double frequency) {
-	double result = sin(phase * PI);
+	double result = sin(phase * 2.0 * PI);
 	if (phase >= 1.) {
 		phase -= 2.;
 	}
@@ -19,14 +19,14 @@ double Oscillator::generateSinWave(double frequency) {
 
 double Oscillator::generateSquareWave(double frequency) {
 	double result = 0.;
-	if (phase < 0.) {
+	if (phase < 0.5) {
 		result = -1.;
 	}
-	if (phase > 0.) {
+	if (phase > 0.5) {
 		result = 1.;
 	}
 	if (phase >= 1.0) {
-		phase -= 2.0;
+		phase -= 1.0;
 	}
 	phase += frequency / sampleRate;
 	return result;
