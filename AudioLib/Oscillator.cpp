@@ -51,7 +51,7 @@ double Oscillator::generateSawtoothWave(double frequency) {
 	double result = 0.;
 	result = phase;
 	if (phase >= 1.0) {
-		phase -= 2.0;
+		phase -= 1.0;
 	}
 	phase += frequency / sampleRate;
 	return result;
