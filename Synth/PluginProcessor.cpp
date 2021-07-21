@@ -6,39 +6,41 @@
 
 SynthAudioProcessor::SynthAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       ), tree(*this, nullptr, "SynthAudioProcessorParameters", {
-		//std::make_unique<juce::AudioParameterInt>("WAVEFORM1", "waveform1", 0, 3, 0),
+	: AudioProcessor(BusesProperties()
+#if ! JucePlugin_IsMidiEffect
+#if ! JucePlugin_IsSynth
+		.withInput("Input", juce::AudioChannelSet::stereo(), true)
+#endif
+		.withOutput("Output", juce::AudioChannelSet::stereo(), true)
+#endif
+	), tree(*this, nullptr, "SynthAudioProcessorParameters", {
+		std::make_unique<juce::AudioParameterInt>("WAVEFORM1", "waveform1", 0, 3, 0),
+		std::make_unique<juce::AudioParameterInt>("WAVEFORM2", "waveform2", 0, 3, 0),
+		std::make_unique<juce::AudioParameterInt>("WAVEFORM3", "waveform3", 0, 3, 0),
+		std::make_unique<juce::AudioParameterInt>("OSC1DETUNE", "osc1detune", -100, 100, 0),
+		std::make_unique<juce::AudioParameterInt>("OSC2DETUNE", "osc2detune", -100, 100, 0),
+		std::make_unique<juce::AudioParameterInt>("OSC3DETUNE", "osc3detune", -100, 100, 0)
+		
 	})
 #endif
 {
-
-	waveform_types.add(new juce::AudioParameterChoice("WAVEFORM1", "waveform1", oscs_names, 0));
-	waveform_types.add(new juce::AudioParameterChoice("WAVEFORM2", "waveform2", oscs_names, 0));
-	waveform_types.add(new juce::AudioParameterChoice("WAVEFORM3", "waveform3", oscs_names, 0));
-	
-	for(int i = 0; i < waveform_types.size(); i++)
-		addParameter(waveform_types[i]);
-
+	tree.addParameterListener("WAVEFORM1", this);
+	tree.addParameterListener("WAVEFORM2", this);
+	tree.addParameterListener("WAVEFORM3", this);
+	tree.addParameterListener("OSC1DETUNE", this);
+	tree.addParameterListener("OSC2DETUNE", this);
+	tree.addParameterListener("OSC3DETUNE", this);
 
 	synth.clearVoices();
 	for (int i = 0; i < 5; i++) {
-		synth.addVoice(new SynthVoice());
+		voices.push_back(new SynthVoice());
+		synth.addVoice(voices.back());
 	}
 	synth.clearSounds();
 	synth.addSound(new SynthSound());
 }
 
-SynthAudioProcessor::~SynthAudioProcessor()
-{
-	waveform_types.clear();
-}
+SynthAudioProcessor::~SynthAudioProcessor() {}
 
 const juce::String SynthAudioProcessor::getName() const
 {
@@ -145,20 +147,6 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 {
 	midiMessageCollector.removeNextBlockOfMessages(midiMessages, buffer.getNumSamples());
 
-	SynthVoice* tmpVoice = nullptr;
-	for (int i = 0; i < synth.getNumVoices(); i++) {
-		if (tmpVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
-			int osci1 = *waveform_types[0];
-			tmpVoice->setOscillator(static_cast<OscillatorType>(osci1), 1);
-
-			int osci2 = *waveform_types[1];
-			tmpVoice->setOscillator(static_cast<OscillatorType>(osci2), 2);
-
-			int osci3 = *waveform_types[2];
-			tmpVoice->setOscillator(static_cast<OscillatorType>(osci3), 3);
-		}
-	}
-
 	buffer.clear();
 	int numSamples = buffer.getNumSamples();
 	synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
@@ -188,8 +176,26 @@ void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes
     // whose contents will have been created by the getStateInformation() call.
 }
 
-// This creates new instances of the plugin..
+void SynthAudioProcessor::parameterChanged(const String& parameterID, float newValue) {
+	for (SynthVoice* synthVoice : voices) {
+		if (parameterID == "WAVEFORM1")
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue("WAVEFORM1")), 1);
+		else if (parameterID == "WAVEFORM2")
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue("WAVEFORM2")), 2);
+		else if (parameterID == "WAVEFORM3")
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue("WAVEFORM3")), 3);
+		else if (parameterID == "OSC1DETUNE")
+			synthVoice->setDetune((int)*tree.getRawParameterValue("OSC1DETUNE"), 1);
+		else if (parameterID == "OSC2DETUNE")
+			synthVoice->setDetune((int)*tree.getRawParameterValue("OSC2DETUNE"), 2);
+		else if (parameterID == "OSC3DETUNE")
+			synthVoice->setDetune((int)*tree.getRawParameterValue("OSC3DETUNE"), 3);
+	}
+}
+
+// This creates new instances of the plugin.
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SynthAudioProcessor();
 }
+

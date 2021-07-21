@@ -66,6 +66,15 @@ public:
 			osc3.setType(oscillatorType);
 	}
 
+	void setDetune(int detune, int id) {
+		if (id == 1)
+			osc1.setDetune(detune/100.f);
+		if (id == 2)
+			osc2.setDetune(detune/100.f);
+		if (id == 3)
+			osc3.setDetune(detune/100.f);
+	}
+
 private:
 	double level;
 	double frequency;

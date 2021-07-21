@@ -7,7 +7,8 @@
 #include "AudioBufferQueue.h"
 #include "ScopeDataCollector.h"
 
-class SynthAudioProcessor  : public juce::AudioProcessor
+class SynthAudioProcessor  : public juce::AudioProcessor,
+							 public AudioProcessorValueTreeState::Listener
 {
 public:
     SynthAudioProcessor();
@@ -41,16 +42,18 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+	void parameterChanged(const String& parameterID, float newValue) override;
+
 	AudioProcessorValueTreeState tree;
 	juce::MidiMessageCollector midiMessageCollector;
 	AudioBufferQueue<float> audioBufferQueue;
 	ScopeDataCollector<float> scopeDataCollector{ audioBufferQueue };
-	juce::StringArray oscs_names = { "sine", "rectangle", "triangle", "sawtooth" };
-	juce::Array<juce::AudioParameterChoice*> waveform_types;
 
 private:
 	juce::Synthesiser synth;
 	double lastSampleRate;
+	
+	std::vector<SynthVoice*> voices;
 	
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessor)

@@ -26,6 +26,13 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	addAndMakeVisible(btnOscTriangle);
 	addAndMakeVisible(btnOscSawtooth);
 
+	sliderDetune.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+	sliderDetune.setRange(-100, 100.0, 1.0);
+	sliderDetune.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
+    sliderDetuneAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+		processor.tree, "OSC"+std::to_string(id)+"DETUNE", sliderDetune);
+	addAndMakeVisible(sliderDetune);
+
 	startTimer(100);
 }
 
@@ -63,24 +70,22 @@ void OscillatorComponent::resized() {
 		juce::GridItem(btnOscTriangle), juce::GridItem(btnOscSawtooth) };
 
 	gridWaves.performLayout(juce::Rectangle<int>(0, h*0.1, w*0.25, h*0.9));
+
+	sliderDetune.setBounds(w*0.25, h*0.1, w*0.25, h*0.9);
 }
 
 void OscillatorComponent::buttonClicked(juce::Button* button) {
 	if (button == &btnOscSine) {
-		//processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(0);
-		*processor.waveform_types[id - 1] = 0;
+		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(0);
 	}
 	else if (button == &btnOscRect) {
-		//processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(1);
-		*processor.waveform_types[id - 1] = 1;
+		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(1);
 	}
 	else if (button == &btnOscTriangle) {
-		//processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(2);
-		*processor.waveform_types[id - 1] = 2;
+		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(2);
 	}
 	else if (button == &btnOscSawtooth) {
-		//processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(3);
-		*processor.waveform_types[id - 1] = 3;
+		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(3);
 	}
 }
 

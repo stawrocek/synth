@@ -58,6 +58,7 @@ double Oscillator::generateSawtoothWave(double frequency) {
 }
 
 double Oscillator::generateWave(double frequency) {
+	frequency *= (1.0 + detune);
 	if (oscillatorType == OscillatorType::OscSin)
 		return generateSinWave(frequency);
 	else if (oscillatorType == OscillatorType::OscSquare)
@@ -73,5 +74,21 @@ OscillatorType Oscillator::getType() {
 }
 void Oscillator::setType(OscillatorType oscType_) {
 	oscillatorType = oscType_;
+}
+
+double Oscillator::getPhase() {
+	return phase;
+}
+
+void Oscillator::setPhase(double phase_) {
+	phase = phase_;
+}
+
+double Oscillator::getDetune() {
+	return detune;
+}
+
+void Oscillator::setDetune(double detune_) {
+	detune = detune_;
 }
 
