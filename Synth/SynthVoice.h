@@ -33,11 +33,11 @@ public:
 		for (int sample = 0; sample < numSamples; sample++)
 		{
 			double signal1 = osc1.generateWave(frequency);
-			double signal2 = osc2.generateWave(frequency*1.05);
+			double signal2 = osc2.generateWave(frequency);
 			double signal3 = osc3.generateWave(frequency);
 
 			double signal = (signal1 * level + signal2 * level + signal3 * level)/3.0;
-
+			//double signal = signal1 * level;
 			for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
 			{
 				outputBuffer.addSample(channel, startSample, signal);
@@ -57,8 +57,13 @@ public:
 
 	}
 
-	void setOscillator(OscillatorType oscillatorType) {
-		osc1.setType(oscillatorType);
+	void setOscillator(OscillatorType oscillatorType, int id) {
+		if(id == 1)
+			osc1.setType(oscillatorType);
+		if (id == 2)
+			osc2.setType(oscillatorType);
+		if (id == 3)
+			osc3.setType(oscillatorType);
 	}
 
 private:

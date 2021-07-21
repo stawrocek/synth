@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "OscillatorComponent.h"
 #include "PluginProcessor.h"
 #include "ScopeComponent.h"
 
@@ -23,8 +24,11 @@ private:
 	juce::MidiKeyboardState midiKeyboardState;
 	juce::MidiKeyboardComponent midiKeyboardComponent{ midiKeyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
 	ScopeComponent<float> scopeComponent;
+	OscillatorComponent osc1Component;
+	OscillatorComponent osc2Component;
+	OscillatorComponent osc3Component;
 
-	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformBoxAttachment;
+	//std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformBoxAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessorEditor)
 };

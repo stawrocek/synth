@@ -14,7 +14,9 @@ SynthAudioProcessor::SynthAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ), tree(*this, nullptr, "SynthAudioProcessorParameters", {
-		std::make_unique<juce::AudioParameterInt>("WAVEFORM", "waveform", 0, 3, 0)
+		std::make_unique<juce::AudioParameterInt>("WAVEFORM1", "waveform1", 0, 3, 0),
+		std::make_unique<juce::AudioParameterInt>("WAVEFORM2", "waveform2", 0, 3, 0),
+		std::make_unique<juce::AudioParameterInt>("WAVEFORM3", "waveform3", 0, 3, 0)
 	})
 #endif
 {
@@ -138,8 +140,14 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	SynthVoice* tmpVoice = nullptr;
 	for (int i = 0; i < synth.getNumVoices(); i++) {
 		if (tmpVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
-			int osci = *tree.getRawParameterValue("WAVEFORM");
-			tmpVoice->setOscillator(static_cast<OscillatorType>(osci));
+			int osci1 = *tree.getRawParameterValue("WAVEFORM1");
+			tmpVoice->setOscillator(static_cast<OscillatorType>(osci1), 1);
+
+			int osci2 = *tree.getRawParameterValue("WAVEFORM2");
+			tmpVoice->setOscillator(static_cast<OscillatorType>(osci2), 2);
+
+			int osci3 = *tree.getRawParameterValue("WAVEFORM3");
+			tmpVoice->setOscillator(static_cast<OscillatorType>(osci3), 3);
 		}
 	}
 

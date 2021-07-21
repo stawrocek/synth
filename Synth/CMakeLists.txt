@@ -16,4 +16,6 @@ target_sources(SynthPlugin
 		AudioBufferQueue.h
 		ScopeComponent.h
 		ScopeDataCollector.h
+		OscillatorComponent.h
+		OscillatorComponent.cpp
 )

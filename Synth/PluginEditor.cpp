@@ -3,37 +3,40 @@
 
 SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
-	scopeComponent(p.audioBufferQueue)
+	scopeComponent(p.audioBufferQueue), osc1Component(p, 1), osc2Component(p, 2), osc3Component(p, 3)
 {
-    setSize (400, 400);
+	setSize(800, 600);
+
+	addAndMakeVisible(osc1Component);
+	addAndMakeVisible(osc2Component);
+	addAndMakeVisible(osc3Component);
 
 	if (JUCEApplication::isStandaloneApp())
 		addAndMakeVisible(midiKeyboardComponent);
 	midiKeyboardComponent.setMidiChannel(2);
 	midiKeyboardState.addListener(&audioProcessor.midiMessageCollector);
 
-	auto area = getLocalBounds();
-	scopeComponent.setTopLeftPosition(0, 80);
-	scopeComponent.setSize(area.getWidth(), area.getHeight() - 100);
+	
 	addAndMakeVisible(scopeComponent);
 
-	midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
+	/*midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
 	midiVolume.setRange(0.0, 127.0, 1.0);
 	midiVolume.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
 	midiVolume.setPopupDisplayEnabled(true, false, this);
 	midiVolume.setTextValueSuffix("Volume");
 	midiVolume.setValue(1.0);
 	midiVolume.addListener(this);
-	addAndMakeVisible(&midiVolume);
+	addAndMakeVisible(&midiVolume);*/
 
 	waveformBox.setTextWhenNoChoicesAvailable("No waveform selected :(");
 	juce::StringArray waveforms{"sin", "square", "triangle", "sawtooth"};
 	waveformBox.addItemList(waveforms, 1);
 	waveformBox.setSelectedItemIndex(0, juce::dontSendNotification);
 
-	waveformBoxAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
-		audioProcessor.tree, "WAVEFORM", waveformBox);
+	//waveformBoxAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+	//	audioProcessor.tree, "WAVEFORM", waveformBox);
 
+	
 	addAndMakeVisible(waveformBox);		
 }
 
@@ -55,10 +58,21 @@ void SynthAudioProcessorEditor::paint (juce::Graphics& g)
 void SynthAudioProcessorEditor::resized()
 {
 	auto area = getLocalBounds();
+	auto h = area.getHeight();
+	auto w = area.getWidth();
+
+	osc1Component.setBounds(0, 0, w * 0.33, h * 0.2);
+	osc2Component.setBounds(osc1Component.getBounds().withY(h*0.2));
+	osc3Component.setBounds(osc1Component.getBounds().withY(h*0.4));
+
+	scopeComponent.setBounds(0, h*0.6, w, h*0.3);
+	//scopeComponent.setTopLeftPosition(0, 80);
+	//scopeComponent.setSize(area.getWidth(), area.getHeight() - 100);
+
 	if(JUCEApplication::isStandaloneApp())
-		midiKeyboardComponent.setBounds(area.removeFromTop(80).reduced(8));
-	midiVolume.setBounds(40, 30, 20, getHeight() - 60);
-	waveformBox.setBounds(200, 100, getWidth() - 210, 20);
+		midiKeyboardComponent.setBounds(area.removeFromBottom(h * 0.1));
+	//midiVolume.setBounds(0, getHeight()*0.6, getWidth(), getHeight()*0.15);
+	waveformBox.setBounds(200, 100, w - 210, 20);
 }
 
 void SynthAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
