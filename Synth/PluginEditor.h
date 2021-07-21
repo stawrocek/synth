@@ -19,8 +19,8 @@ private:
 	void sliderValueChanged(juce::Slider* slider) override;
 
     SynthAudioProcessor& audioProcessor;
-	juce::Slider midiVolume;
-	juce::ComboBox waveformBox;
+	//juce::Slider midiVolume;
+	//juce::ComboBox waveformBox;
 	juce::MidiKeyboardState midiKeyboardState;
 	juce::MidiKeyboardComponent midiKeyboardComponent{ midiKeyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
 	ScopeComponent<float> scopeComponent;

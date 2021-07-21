@@ -45,10 +45,13 @@ public:
 	juce::MidiMessageCollector midiMessageCollector;
 	AudioBufferQueue<float> audioBufferQueue;
 	ScopeDataCollector<float> scopeDataCollector{ audioBufferQueue };
+	juce::StringArray oscs_names = { "sine", "rectangle", "triangle", "sawtooth" };
+	juce::Array<juce::AudioParameterChoice*> waveform_types;
 
 private:
 	juce::Synthesiser synth;
 	double lastSampleRate;
 	
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessor)
 };

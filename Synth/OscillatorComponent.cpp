@@ -67,16 +67,20 @@ void OscillatorComponent::resized() {
 
 void OscillatorComponent::buttonClicked(juce::Button* button) {
 	if (button == &btnOscSine) {
-		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(0);
+		//processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(0);
+		*processor.waveform_types[id - 1] = 0;
 	}
 	else if (button == &btnOscRect) {
-		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(1);
+		//processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(1);
+		*processor.waveform_types[id - 1] = 1;
 	}
 	else if (button == &btnOscTriangle) {
-		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(2);
+		//processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(2);
+		*processor.waveform_types[id - 1] = 2;
 	}
 	else if (button == &btnOscSawtooth) {
-		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(3);
+		//processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(3);
+		*processor.waveform_types[id - 1] = 3;
 	}
 }
 
@@ -98,10 +102,10 @@ void OscillatorComponent::generateOscillatorSelectionButtonsShapes() {
 		float y1 = -1.0;
 		float y2 = -1.0;
 
-		if (int(x1 + offsetRect) % 2 == 1 && int(x1 + offsetRect) % 2 == 0) {
+		if (int(x1 + offsetRect) % 2 == 1 || int(x1 + offsetRect) % 2 == 0) {
 			y1 = 1.0;
 		}
-		if (int(x2 + offsetRect) % 2 == 1 && int(x2 + offsetRect) % 2 == 0) {
+		if (int(x2 + offsetRect) % 2 == 1 || int(x2 + offsetRect) % 2 == 0) {
 			y2 = 1.0;
 		}
 

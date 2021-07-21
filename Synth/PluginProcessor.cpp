@@ -14,12 +14,19 @@ SynthAudioProcessor::SynthAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ), tree(*this, nullptr, "SynthAudioProcessorParameters", {
-		std::make_unique<juce::AudioParameterInt>("WAVEFORM1", "waveform1", 0, 3, 0),
-		std::make_unique<juce::AudioParameterInt>("WAVEFORM2", "waveform2", 0, 3, 0),
-		std::make_unique<juce::AudioParameterInt>("WAVEFORM3", "waveform3", 0, 3, 0)
+		//std::make_unique<juce::AudioParameterInt>("WAVEFORM1", "waveform1", 0, 3, 0),
 	})
 #endif
 {
+
+	waveform_types.add(new juce::AudioParameterChoice("WAVEFORM1", "waveform1", oscs_names, 0));
+	waveform_types.add(new juce::AudioParameterChoice("WAVEFORM2", "waveform2", oscs_names, 0));
+	waveform_types.add(new juce::AudioParameterChoice("WAVEFORM3", "waveform3", oscs_names, 0));
+	
+	for(int i = 0; i < waveform_types.size(); i++)
+		addParameter(waveform_types[i]);
+
+
 	synth.clearVoices();
 	for (int i = 0; i < 5; i++) {
 		synth.addVoice(new SynthVoice());
@@ -30,6 +37,7 @@ SynthAudioProcessor::SynthAudioProcessor()
 
 SynthAudioProcessor::~SynthAudioProcessor()
 {
+	waveform_types.clear();
 }
 
 const juce::String SynthAudioProcessor::getName() const
@@ -140,13 +148,13 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	SynthVoice* tmpVoice = nullptr;
 	for (int i = 0; i < synth.getNumVoices(); i++) {
 		if (tmpVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
-			int osci1 = *tree.getRawParameterValue("WAVEFORM1");
+			int osci1 = *waveform_types[0];
 			tmpVoice->setOscillator(static_cast<OscillatorType>(osci1), 1);
 
-			int osci2 = *tree.getRawParameterValue("WAVEFORM2");
+			int osci2 = *waveform_types[1];
 			tmpVoice->setOscillator(static_cast<OscillatorType>(osci2), 2);
 
-			int osci3 = *tree.getRawParameterValue("WAVEFORM3");
+			int osci3 = *waveform_types[2];
 			tmpVoice->setOscillator(static_cast<OscillatorType>(osci3), 3);
 		}
 	}
