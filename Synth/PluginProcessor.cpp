@@ -19,7 +19,10 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterInt>("WAVEFORM3", "waveform3", 0, 3, 0),
 		std::make_unique<juce::AudioParameterInt>("OSC1DETUNE", "osc1detune", -100, 100, 0),
 		std::make_unique<juce::AudioParameterInt>("OSC2DETUNE", "osc2detune", -100, 100, 0),
-		std::make_unique<juce::AudioParameterInt>("OSC3DETUNE", "osc3detune", -100, 100, 0)
+		std::make_unique<juce::AudioParameterInt>("OSC3DETUNE", "osc3detune", -100, 100, 0),
+		std::make_unique<juce::AudioParameterInt>("OSC1MIX", "osc1mix", 0, 100, 100),
+		std::make_unique<juce::AudioParameterInt>("OSC2MIX", "osc2mix", 0, 100, 100),
+		std::make_unique<juce::AudioParameterInt>("OSC3MIX", "osc3mix", 0, 100, 100)
 		
 	})
 #endif
@@ -30,6 +33,9 @@ SynthAudioProcessor::SynthAudioProcessor()
 	tree.addParameterListener("OSC1DETUNE", this);
 	tree.addParameterListener("OSC2DETUNE", this);
 	tree.addParameterListener("OSC3DETUNE", this);
+	tree.addParameterListener("OSC1MIX", this);
+	tree.addParameterListener("OSC2MIX", this);
+	tree.addParameterListener("OSC3MIX", this);
 
 	synth.clearVoices();
 	for (int i = 0; i < 5; i++) {
@@ -190,6 +196,12 @@ void SynthAudioProcessor::parameterChanged(const String& parameterID, float newV
 			synthVoice->setDetune((int)*tree.getRawParameterValue("OSC2DETUNE"), 2);
 		else if (parameterID == "OSC3DETUNE")
 			synthVoice->setDetune((int)*tree.getRawParameterValue("OSC3DETUNE"), 3);
+		else if (parameterID == "OSC1MIX")
+			synthVoice->setMix((int)*tree.getRawParameterValue("OSC1MIX"), 1);
+		else if (parameterID == "OSC2MIX")
+			synthVoice->setMix((int)*tree.getRawParameterValue("OSC2MIX"), 2);
+		else if (parameterID == "OSC3MIX")
+			synthVoice->setMix((int)*tree.getRawParameterValue("OSC3MIX"), 3);
 	}
 }
 

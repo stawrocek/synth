@@ -29,9 +29,18 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	sliderDetune.setSliderStyle(juce::Slider::SliderStyle::Rotary);
 	sliderDetune.setRange(-100, 100.0, 1.0);
 	sliderDetune.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
+	sliderDetune.setTooltip("detune");
     sliderDetuneAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, "OSC"+std::to_string(id)+"DETUNE", sliderDetune);
 	addAndMakeVisible(sliderDetune);
+
+	sliderMix.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+	sliderMix.setRange(0, 100.0, 1.0);
+	sliderMix.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
+	sliderMix.setTooltip("mix");
+	sliderMixAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+		processor.tree, "OSC" + std::to_string(id) + "MIX", sliderMix);
+	addAndMakeVisible(sliderMix);
 
 	startTimer(100);
 }
@@ -71,7 +80,8 @@ void OscillatorComponent::resized() {
 
 	gridWaves.performLayout(juce::Rectangle<int>(0, h*0.1, w*0.25, h*0.9));
 
-	sliderDetune.setBounds(w*0.25, h*0.1, w*0.25, h*0.9);
+	sliderDetune.setBounds(juce::Rectangle<int>(w*0.25, h*0.1, w*0.25, h*0.9).reduced(3, 3));
+	sliderMix.setBounds(juce::Rectangle<int>(w*0.5, h*0.1, w*0.25, h*0.9).reduced(3, 3));
 }
 
 void OscillatorComponent::buttonClicked(juce::Button* button) {

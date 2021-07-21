@@ -25,7 +25,9 @@ private:
 	juce::ShapeButton btnOscTriangle;
 	juce::ShapeButton btnOscSawtooth;
 	juce::Slider sliderDetune;
+	juce::Slider sliderMix;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderDetuneAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderMixAttachment;
 	void timerCallback() override;
 	float offsetSine = 0.0;
 	float offsetRect = 0.0;

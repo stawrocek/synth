@@ -32,9 +32,9 @@ public:
 	{
 		for (int sample = 0; sample < numSamples; sample++)
 		{
-			double signal1 = osc1.generateWave(frequency);
-			double signal2 = osc2.generateWave(frequency);
-			double signal3 = osc3.generateWave(frequency);
+			double signal1 = osc1.generateWave(frequency) * mix[0];
+			double signal2 = osc2.generateWave(frequency) * mix[1];
+			double signal3 = osc3.generateWave(frequency) * mix[2];
 
 			double signal = (signal1 * level + signal2 * level + signal3 * level)/3.0;
 			//double signal = signal1 * level;
@@ -68,11 +68,15 @@ public:
 
 	void setDetune(int detune, int id) {
 		if (id == 1)
-			osc1.setDetune(detune/100.f);
+			osc1.setDetune(detune/1000.f);
 		if (id == 2)
-			osc2.setDetune(detune/100.f);
+			osc2.setDetune(detune/1000.f);
 		if (id == 3)
-			osc3.setDetune(detune/100.f);
+			osc3.setDetune(detune/1000.f);
+	}
+
+	void setMix(int mixVal, int id) {
+		mix[id-1] = mixVal / 100.f;
 	}
 
 private:
@@ -81,4 +85,5 @@ private:
 	Oscillator osc1;
 	Oscillator osc2;
 	Oscillator osc3;
+	float mix[3] = {1, 1, 1};
 };

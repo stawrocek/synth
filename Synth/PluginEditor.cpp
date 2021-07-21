@@ -6,7 +6,6 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	scopeComponent(p.audioBufferQueue), osc1Component(p, 1), osc2Component(p, 2), osc3Component(p, 3)
 {
 	setSize(800, 600);
-
 	addAndMakeVisible(osc1Component);
 	addAndMakeVisible(osc2Component);
 	addAndMakeVisible(osc3Component);
