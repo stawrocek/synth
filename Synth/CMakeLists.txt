@@ -12,10 +12,13 @@ target_sources(SynthPlugin
         PluginProcessor.cpp
 		PluginProcessor.h
 		SynthVoice.h
+		SynthVoice.cpp
 		SynthSound.h
 		AudioBufferQueue.h
 		ScopeComponent.h
 		ScopeDataCollector.h
 		OscillatorComponent.h
 		OscillatorComponent.cpp
+		Config.h
+		Styles.h
 )

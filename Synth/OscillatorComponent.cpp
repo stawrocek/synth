@@ -1,18 +1,19 @@
 #include "OscillatorComponent.h"
 #include "PluginEditor.h"
+#include "Styles.h"
 
 OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int identifier)
 	:processor(processor_), id(identifier),
 	name("osc"+std::to_string(id)),
-	btnOscSine("btn_sin_"+name, juce::Colours::orange, juce::Colours::yellow, juce::Colours::grey),
-	btnOscRect("btn_rect_" + name, juce::Colours::orange, juce::Colours::yellow, juce::Colours::grey),
-	btnOscTriangle("btn_triangle_" + name, juce::Colours::orange, juce::Colours::yellow, juce::Colours::grey),
-	btnOscSawtooth("btn_sawtooth_" + name, juce::Colours::orange, juce::Colours::yellow, juce::Colours::grey)
+	btnOscSine("btn_sin_"+name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
+	btnOscRect("btn_rect_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
+	btnOscTriangle("btn_triangle_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
+	btnOscSawtooth("btn_sawtooth_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour)
 {
-	labelName.setText("osc"+std::to_string(id), juce::NotificationType::dontSendNotification);
+	labelName.setText("oscillator "+std::to_string(id), juce::NotificationType::dontSendNotification);
 	labelName.setJustificationType(juce::Justification::centred);
-	labelName.setColour(juce::Label::backgroundColourId, juce::Colours::black);
-	labelName.setColour(juce::Label::textColourId, juce::Colours::white);
+	labelName.setColour(juce::Label::backgroundColourId, componentHeaderColour);
+	labelName.setColour(juce::Label::textColourId, componentHeaderFontColour);
 	addAndMakeVisible(labelName);
 
 	btnOscSine.addListener(this);
@@ -20,7 +21,6 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	btnOscTriangle.addListener(this);
 	btnOscSawtooth.addListener(this);
 	generateOscillatorSelectionButtonsShapes();
-	//btnOscSine.setOutline(juce::Colours::green, 1);
 	addAndMakeVisible(btnOscSine);
 	addAndMakeVisible(btnOscRect);
 	addAndMakeVisible(btnOscTriangle);
@@ -47,13 +47,13 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 
 void OscillatorComponent::paint(juce::Graphics& g)
 {
-	g.setColour(juce::Colours::black);
+	g.setColour(componentBorderColour);
 
 	auto area = getLocalBounds();
 	auto h = area.getHeight();
 	auto w = area.getWidth();
 
-	g.drawRect(0, 0, w, h, 2);
+	g.drawRect(0, 0, w, h, componentBorderSize);
 }
 
 void OscillatorComponent::resized() {

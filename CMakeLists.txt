@@ -41,7 +41,7 @@ juce_add_plugin(SynthPlugin
     VERSION 1.0.1                               # Set this if the plugin version is different to the project version
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
-    COMPANY_NAME Staszkosoft                    # Specify the name of the plugin's author
+    COMPANY_NAME SynthCompanyName               # Specify the name of the plugin's author
     IS_SYNTH TRUE                               # Is this a synth or an effect?
     NEEDS_MIDI_INPUT TRUE                       # Does the plugin need midi input?
     NEEDS_MIDI_OUTPUT FALSE                     # Does the plugin need midi output?
@@ -88,8 +88,6 @@ target_compile_definitions(SynthPlugin
         JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
         JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
         JUCE_VST3_CAN_REPLACE_VST2=0
-	PRIVATE
-		cxx_std_14
 		)
 
 # If your target needs extra binary assets, you can add them here. The first argument is the name of

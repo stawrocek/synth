@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 
+#include "Config.h"
+
 SynthAudioProcessor::SynthAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
 	: AudioProcessor(BusesProperties()
@@ -14,28 +16,28 @@ SynthAudioProcessor::SynthAudioProcessor()
 		.withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
 	), tree(*this, nullptr, "SynthAudioProcessorParameters", {
-		std::make_unique<juce::AudioParameterInt>("WAVEFORM1", "waveform1", 0, 3, 0),
-		std::make_unique<juce::AudioParameterInt>("WAVEFORM2", "waveform2", 0, 3, 0),
-		std::make_unique<juce::AudioParameterInt>("WAVEFORM3", "waveform3", 0, 3, 0),
-		std::make_unique<juce::AudioParameterInt>("OSC1DETUNE", "osc1detune", -100, 100, 0),
-		std::make_unique<juce::AudioParameterInt>("OSC2DETUNE", "osc2detune", -100, 100, 0),
-		std::make_unique<juce::AudioParameterInt>("OSC3DETUNE", "osc3detune", -100, 100, 0),
-		std::make_unique<juce::AudioParameterInt>("OSC1MIX", "osc1mix", 0, 100, 100),
-		std::make_unique<juce::AudioParameterInt>("OSC2MIX", "osc2mix", 0, 100, 100),
-		std::make_unique<juce::AudioParameterInt>("OSC3MIX", "osc3mix", 0, 100, 100)
+		std::make_unique<juce::AudioParameterInt>(osc1WaveTypeParamId, osc1WaveTypeParamName, 0, 3, 0),
+		std::make_unique<juce::AudioParameterInt>(osc2WaveTypeParamId, osc2WaveTypeParamName, 0, 3, 0),
+		std::make_unique<juce::AudioParameterInt>(osc3WaveTypeParamId, osc3WaveTypeParamName, 0, 3, 0),
+		std::make_unique<juce::AudioParameterInt>(osc1DetuneParamId, osc1DetuneParamName, -100, 100, 0),
+		std::make_unique<juce::AudioParameterInt>(osc2DetuneParamId, osc2DetuneParamName, -100, 100, 0),
+		std::make_unique<juce::AudioParameterInt>(osc3DetuneParamId, osc3DetuneParamName, -100, 100, 0),
+		std::make_unique<juce::AudioParameterInt>(osc1MixParamId, osc1MixParamName, 0, 100, 100),
+		std::make_unique<juce::AudioParameterInt>(osc2MixParamId, osc2MixParamName, 0, 100, 100),
+		std::make_unique<juce::AudioParameterInt>(osc3MixParamId, osc3MixParamName, 0, 100, 100)
 		
 	})
 #endif
 {
-	tree.addParameterListener("WAVEFORM1", this);
-	tree.addParameterListener("WAVEFORM2", this);
-	tree.addParameterListener("WAVEFORM3", this);
-	tree.addParameterListener("OSC1DETUNE", this);
-	tree.addParameterListener("OSC2DETUNE", this);
-	tree.addParameterListener("OSC3DETUNE", this);
-	tree.addParameterListener("OSC1MIX", this);
-	tree.addParameterListener("OSC2MIX", this);
-	tree.addParameterListener("OSC3MIX", this);
+	tree.addParameterListener(osc1WaveTypeParamId, this);
+	tree.addParameterListener(osc2WaveTypeParamId, this);
+	tree.addParameterListener(osc3WaveTypeParamId, this);
+	tree.addParameterListener(osc1DetuneParamId, this);
+	tree.addParameterListener(osc2DetuneParamId, this);
+	tree.addParameterListener(osc3DetuneParamId, this);
+	tree.addParameterListener(osc1MixParamId, this);
+	tree.addParameterListener(osc2MixParamId, this);
+	tree.addParameterListener(osc3MixParamId, this);
 
 	synth.clearVoices();
 	for (int i = 0; i < 5; i++) {
@@ -184,24 +186,24 @@ void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes
 
 void SynthAudioProcessor::parameterChanged(const String& parameterID, float newValue) {
 	for (SynthVoice* synthVoice : voices) {
-		if (parameterID == "WAVEFORM1")
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue("WAVEFORM1")), 1);
-		else if (parameterID == "WAVEFORM2")
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue("WAVEFORM2")), 2);
-		else if (parameterID == "WAVEFORM3")
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue("WAVEFORM3")), 3);
-		else if (parameterID == "OSC1DETUNE")
-			synthVoice->setDetune((int)*tree.getRawParameterValue("OSC1DETUNE"), 1);
-		else if (parameterID == "OSC2DETUNE")
-			synthVoice->setDetune((int)*tree.getRawParameterValue("OSC2DETUNE"), 2);
-		else if (parameterID == "OSC3DETUNE")
-			synthVoice->setDetune((int)*tree.getRawParameterValue("OSC3DETUNE"), 3);
-		else if (parameterID == "OSC1MIX")
-			synthVoice->setMix((int)*tree.getRawParameterValue("OSC1MIX"), 1);
-		else if (parameterID == "OSC2MIX")
-			synthVoice->setMix((int)*tree.getRawParameterValue("OSC2MIX"), 2);
-		else if (parameterID == "OSC3MIX")
-			synthVoice->setMix((int)*tree.getRawParameterValue("OSC3MIX"), 3);
+		if (parameterID == osc1WaveTypeParamId)
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc1WaveTypeParamId)), 1);
+		else if (parameterID == osc2WaveTypeParamId)
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc2WaveTypeParamId)), 2);
+		else if (parameterID == osc3WaveTypeParamId)
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc3WaveTypeParamId)), 3);
+		else if (parameterID == osc1DetuneParamId)
+			synthVoice->setDetune((int)*tree.getRawParameterValue(osc1DetuneParamId), 1);
+		else if (parameterID == osc2DetuneParamId)
+			synthVoice->setDetune((int)*tree.getRawParameterValue(osc2DetuneParamId), 2);
+		else if (parameterID == osc3DetuneParamId)
+			synthVoice->setDetune((int)*tree.getRawParameterValue(osc3DetuneParamId), 3);
+		else if (parameterID == osc1MixParamId)
+			synthVoice->setMix((int)*tree.getRawParameterValue(osc1MixParamId), 1);
+		else if (parameterID == osc2MixParamId)
+			synthVoice->setMix((int)*tree.getRawParameterValue(osc2MixParamId), 2);
+		else if (parameterID == osc3MixParamId)
+			synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);
 	}
 }
 
