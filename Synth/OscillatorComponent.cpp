@@ -1,5 +1,4 @@
 #include "OscillatorComponent.h"
-#include "PluginEditor.h"
 #include "Styles.h"
 
 OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int identifier)

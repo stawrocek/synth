@@ -24,7 +24,11 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterInt>(osc3DetuneParamId, osc3DetuneParamName, -100, 100, 0),
 		std::make_unique<juce::AudioParameterInt>(osc1MixParamId, osc1MixParamName, 0, 100, 100),
 		std::make_unique<juce::AudioParameterInt>(osc2MixParamId, osc2MixParamName, 0, 100, 100),
-		std::make_unique<juce::AudioParameterInt>(osc3MixParamId, osc3MixParamName, 0, 100, 100)
+		std::make_unique<juce::AudioParameterInt>(osc3MixParamId, osc3MixParamName, 0, 100, 100),
+		std::make_unique<juce::AudioParameterInt>(adsrAttackParamId, adsrAttackParamName, 0, 100, 100),
+		std::make_unique<juce::AudioParameterInt>(adsrDecayParamId, adsrDecayParamName, 0, 100, 100),
+		std::make_unique<juce::AudioParameterInt>(adsrSustainParamId, adsrSustainParamName, 0, 100, 100),
+		std::make_unique<juce::AudioParameterInt>(adsrReleaseParamId, adsrReleaseParamName, 0, 100, 100)
 		
 	})
 #endif

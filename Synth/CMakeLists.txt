@@ -19,6 +19,8 @@ target_sources(SynthPlugin
 		ScopeDataCollector.h
 		OscillatorComponent.h
 		OscillatorComponent.cpp
+		ADSRComponent.h
+		ADSRComponent.cpp
 		Config.h
 		Styles.h
 )

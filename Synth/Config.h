@@ -2,22 +2,32 @@
 
 #include <JuceHeader.h>
 
-juce::String osc1WaveTypeParamId = "WAVEFORM1";
-juce::String osc2WaveTypeParamId = "WAVEFORM2";
-juce::String osc3WaveTypeParamId = "WAVEFORM3";
-juce::String osc1DetuneParamId = "OSC1DETUNE";
-juce::String osc2DetuneParamId = "OSC2DETUNE";
-juce::String osc3DetuneParamId = "OSC3DETUNE";
-juce::String osc1MixParamId = "OSC1MIX";
-juce::String osc2MixParamId = "OSC2MIX";
-juce::String osc3MixParamId = "OSC3MIX";
+const juce::String osc1WaveTypeParamId = "WAVEFORM1";
+const juce::String osc2WaveTypeParamId = "WAVEFORM2";
+const juce::String osc3WaveTypeParamId = "WAVEFORM3";
+const juce::String osc1DetuneParamId = "OSC1DETUNE";
+const juce::String osc2DetuneParamId = "OSC2DETUNE";
+const juce::String osc3DetuneParamId = "OSC3DETUNE";
+const juce::String osc1MixParamId = "OSC1MIX";
+const juce::String osc2MixParamId = "OSC2MIX";
+const juce::String osc3MixParamId = "OSC3MIX";
 
-juce::String osc1WaveTypeParamName = "waveform1";
-juce::String osc2WaveTypeParamName = "waveform2";
-juce::String osc3WaveTypeParamName = "waveform3";
-juce::String osc1DetuneParamName = "osc1detune";
-juce::String osc2DetuneParamName = "osc2detune";
-juce::String osc3DetuneParamName = "osc3detune";
-juce::String osc1MixParamName = "osc1mix";
-juce::String osc2MixParamName = "osc2mix";
-juce::String osc3MixParamName = "osc3mix";
+const juce::String osc1WaveTypeParamName = "waveform1";
+const juce::String osc2WaveTypeParamName = "waveform2";
+const juce::String osc3WaveTypeParamName = "waveform3";
+const juce::String osc1DetuneParamName = "osc1detune";
+const juce::String osc2DetuneParamName = "osc2detune";
+const juce::String osc3DetuneParamName = "osc3detune";
+const juce::String osc1MixParamName = "osc1mix";
+const juce::String osc2MixParamName = "osc2mix";
+const juce::String osc3MixParamName = "osc3mix";
+
+const juce::String adsrAttackParamId = "ADSR_ATTACK";
+const juce::String adsrDecayParamId = "ADSR_DECAY";
+const juce::String adsrSustainParamId = "ADSR_SUSTAIN";
+const juce::String adsrReleaseParamId = "ADSR_RELEASE";
+
+const juce::String adsrAttackParamName = "Attack";
+const juce::String adsrDecayParamName = "Decay";
+const juce::String adsrSustainParamName = "Sustain";
+const juce::String adsrReleaseParamName = "Release";

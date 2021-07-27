@@ -4,6 +4,7 @@
 #include "OscillatorComponent.h"
 #include "PluginProcessor.h"
 #include "ScopeComponent.h"
+#include "ADSRComponent.h"
 
 class SynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
 								   private juce::Slider::Listener
@@ -25,6 +26,8 @@ private:
 	OscillatorComponent osc1Component;
 	OscillatorComponent osc2Component;
 	OscillatorComponent osc3Component;
+
+	ADSRComponent adsrComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessorEditor)
 };
