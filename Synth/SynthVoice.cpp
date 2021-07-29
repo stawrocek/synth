@@ -29,10 +29,11 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
 void SynthVoice::stopNote(float velocity, bool allowTailoff)
 {
 	adsr.noteOff();
-	if (velocity < 0.00001 && allowTailoff == false)
+	//if (velocity < 0.00001 && allowTailoff == false)
 	//if (velocity < 0.00001)
+	if(!allowTailoff)
 		clearCurrentNote();
-	level = 0;
+	level = velocity;
 }
 
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
@@ -44,9 +45,10 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 		double signal2 = osc2.generateWave(frequency) * mix[1];
 		double signal3 = osc3.generateWave(frequency) * mix[2];
 
-		double signal = (signal1 * level + signal2 * level + signal3 * level)/3.0;
+		double signal = (signal1 * level + signal2 * level + signal3 * level);// / 3.0;
 		//double signal = signal1 * level;
 		signal = adsr.getNextSample() * signal;
+		signal *= level;
 		for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
 		{
 			outputBuffer.addSample(channel, startSample, signal);

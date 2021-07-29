@@ -162,6 +162,23 @@ bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
 
 void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+	//for (SynthVoice* synthVoice : voices) {
+	for(int i = 0; i < synth.getNumVoices(); i++) {
+		SynthVoice* synthVoice;
+		if ((synthVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))) {
+			synthVoice->setAdsrAttack(tree.getParameterAsValue(adsrAttackParamId).getValue());
+				synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
+				synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
+				synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
+				synthVoice->setDetune((int)*tree.getRawParameterValue(osc1DetuneParamId), 1);
+				synthVoice->setDetune((int)*tree.getRawParameterValue(osc2DetuneParamId), 2);
+				synthVoice->setDetune((int)*tree.getRawParameterValue(osc3DetuneParamId), 3);
+				synthVoice->setMix((int)*tree.getRawParameterValue(osc1MixParamId), 1);
+				synthVoice->setMix((int)*tree.getRawParameterValue(osc2MixParamId), 2);
+				synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);
+		}
+	}
+
 	midiMessageCollector.removeNextBlockOfMessages(midiMessages, buffer.getNumSamples());
 
 	buffer.clear();
@@ -201,7 +218,7 @@ void SynthAudioProcessor::parameterChanged(const String& parameterID, float newV
 			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc2WaveTypeParamId)), 2);
 		else if (parameterID == osc3WaveTypeParamId)
 			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc3WaveTypeParamId)), 3);
-		else if (parameterID == osc1DetuneParamId)
+		/*else if (parameterID == osc1DetuneParamId)
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc1DetuneParamId), 1);
 		else if (parameterID == osc2DetuneParamId)
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc2DetuneParamId), 2);
@@ -213,6 +230,7 @@ void SynthAudioProcessor::parameterChanged(const String& parameterID, float newV
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc2MixParamId), 2);
 		else if (parameterID == osc3MixParamId)
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);
+		
 		else if (parameterID == adsrAttackParamId)
 			synthVoice->setAdsrAttack(tree.getParameterAsValue(adsrAttackParamId).getValue());
 		else if (parameterID == adsrDecayParamId)
@@ -221,6 +239,7 @@ void SynthAudioProcessor::parameterChanged(const String& parameterID, float newV
 			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
 		else if (parameterID == adsrReleaseParamId)
 			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
+			*/
 	}
 }
 
