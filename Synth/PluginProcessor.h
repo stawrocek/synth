@@ -51,7 +51,6 @@ public:
 
 private:
 	juce::Synthesiser synth;
-	double lastSampleRate;
 	
 	std::vector<SynthVoice*> voices;
 	

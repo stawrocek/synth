@@ -31,3 +31,8 @@ const juce::String adsrAttackParamName = "Attack";
 const juce::String adsrDecayParamName = "Decay";
 const juce::String adsrSustainParamName = "Sustain";
 const juce::String adsrReleaseParamName = "Release";
+
+const float adsrInitialAttack = 0.5;
+const float adsrInitialDecay = 0.2;
+const float adsrInitialSustain = 1.0;
+const float adsrInitialRelease = 0.5;

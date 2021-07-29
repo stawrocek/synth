@@ -4,14 +4,13 @@
 
 #include "PluginProcessor.h"
 
-class ADSRComponent : public juce::Component, juce::Button::Listener
+class ADSRComponent : public juce::Component
 {
 public:
 	ADSRComponent(SynthAudioProcessor& processor);
 
 	void paint(juce::Graphics& g) override;
 	void resized() override;
-	void buttonClicked(juce::Button* button) override;
 
 private:
 	SynthAudioProcessor& processor;

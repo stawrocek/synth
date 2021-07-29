@@ -25,10 +25,10 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterInt>(osc1MixParamId, osc1MixParamName, 0, 100, 100),
 		std::make_unique<juce::AudioParameterInt>(osc2MixParamId, osc2MixParamName, 0, 100, 100),
 		std::make_unique<juce::AudioParameterInt>(osc3MixParamId, osc3MixParamName, 0, 100, 100),
-		std::make_unique<juce::AudioParameterInt>(adsrAttackParamId, adsrAttackParamName, 0, 100, 100),
-		std::make_unique<juce::AudioParameterInt>(adsrDecayParamId, adsrDecayParamName, 0, 100, 100),
-		std::make_unique<juce::AudioParameterInt>(adsrSustainParamId, adsrSustainParamName, 0, 100, 100),
-		std::make_unique<juce::AudioParameterInt>(adsrReleaseParamId, adsrReleaseParamName, 0, 100, 100)
+		std::make_unique<juce::AudioParameterFloat>(adsrAttackParamId, adsrAttackParamName, 0, 5, adsrInitialAttack),
+		std::make_unique<juce::AudioParameterFloat>(adsrDecayParamId, adsrDecayParamName, 0, 2, adsrInitialDecay),
+		std::make_unique<juce::AudioParameterFloat>(adsrSustainParamId, adsrSustainParamName, 0, 1, adsrInitialSustain),
+		std::make_unique<juce::AudioParameterFloat>(adsrReleaseParamId, adsrReleaseParamName, 0, 2, adsrInitialRelease)
 		
 	})
 #endif
@@ -42,6 +42,10 @@ SynthAudioProcessor::SynthAudioProcessor()
 	tree.addParameterListener(osc1MixParamId, this);
 	tree.addParameterListener(osc2MixParamId, this);
 	tree.addParameterListener(osc3MixParamId, this);
+	tree.addParameterListener(adsrAttackParamId, this);
+	tree.addParameterListener(adsrDecayParamId, this);
+	tree.addParameterListener(adsrSustainParamId, this);
+	tree.addParameterListener(adsrReleaseParamId, this);
 
 	synth.clearVoices();
 	for (int i = 0; i < 5; i++) {
@@ -118,9 +122,10 @@ void SynthAudioProcessor::changeProgramName (int index, const juce::String& newN
 void SynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
 	juce::ignoreUnused(samplesPerBlock);
-	lastSampleRate = sampleRate;
-	synth.setCurrentPlaybackSampleRate(lastSampleRate);
+	synth.setCurrentPlaybackSampleRate(sampleRate);
 	midiMessageCollector.reset(sampleRate);
+	for (SynthVoice* synthVoice : voices)
+		synthVoice->setSampleRate(sampleRate);
 }
 
 void SynthAudioProcessor::releaseResources()
@@ -208,6 +213,14 @@ void SynthAudioProcessor::parameterChanged(const String& parameterID, float newV
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc2MixParamId), 2);
 		else if (parameterID == osc3MixParamId)
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);
+		else if (parameterID == adsrAttackParamId)
+			synthVoice->setAdsrAttack(tree.getParameterAsValue(adsrAttackParamId).getValue());
+		else if (parameterID == adsrDecayParamId)
+			synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
+		else if (parameterID == adsrSustainParamId)
+			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
+		else if (parameterID == adsrReleaseParamId)
+			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
 	}
 }
 

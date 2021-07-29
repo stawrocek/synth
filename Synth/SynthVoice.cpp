@@ -3,6 +3,15 @@
 #include <JuceHeader.h>
 
 #include "SynthVoice.h"
+#include "Config.h"
+
+SynthVoice::SynthVoice() {
+	params.attack = adsrInitialAttack;
+	params.decay = adsrInitialDecay;
+	params.sustain = adsrInitialSustain;
+	params.release = adsrInitialRelease;
+	adsr.setParameters(params);
+}
 
 bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
 {
@@ -12,12 +21,14 @@ bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
 void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound,
 	int currentPitchWheelPosition) 
 {
+	adsr.noteOn();
 	level = velocity;
 	frequency = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
 }
 
 void SynthVoice::stopNote(float velocity, bool allowTailoff)
 {
+	adsr.noteOff();
 	if (velocity < 0.00001 && allowTailoff == false)
 	//if (velocity < 0.00001)
 		clearCurrentNote();
@@ -26,6 +37,7 @@ void SynthVoice::stopNote(float velocity, bool allowTailoff)
 
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
+	adsr.setParameters(params);
 	for (int sample = 0; sample < numSamples; sample++)
 	{
 		double signal1 = osc1.generateWave(frequency) * mix[0];
@@ -34,6 +46,7 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 
 		double signal = (signal1 * level + signal2 * level + signal3 * level)/3.0;
 		//double signal = signal1 * level;
+		signal = adsr.getNextSample() * signal;
 		for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
 		{
 			outputBuffer.addSample(channel, startSample, signal);
@@ -73,4 +86,24 @@ void SynthVoice::setDetune(int detune, int id) {
 
 void SynthVoice::setMix(int mixVal, int id) {
 	mix[id-1] = mixVal / 100.f;
+}
+
+void SynthVoice::setSampleRate(int sampleRate_) {
+	adsr.setSampleRate(sampleRate_);
+}
+
+void SynthVoice::setAdsrAttack(float attack) {
+	params.attack = attack;
+}
+
+void SynthVoice::setAdsrDecay(float decay) {
+	params.decay = decay;
+}
+
+void SynthVoice::setAdsrSustain(float sustain) {
+	params.sustain = sustain;
+}
+
+void SynthVoice::setAdsrRelease(float release) {
+	params.release = release;
 }
