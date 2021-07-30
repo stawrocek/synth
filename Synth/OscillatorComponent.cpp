@@ -9,7 +9,7 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	btnOscTriangle("btn_triangle_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscSawtooth("btn_sawtooth_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour)
 {
-	labelName.setText("oscillator "+std::to_string(id), juce::NotificationType::dontSendNotification);
+	labelName.setText("Oscillator "+std::to_string(id), juce::NotificationType::dontSendNotification);
 	labelName.setJustificationType(juce::Justification::centred);
 	labelName.setColour(juce::Label::backgroundColourId, componentHeaderColour);
 	labelName.setColour(juce::Label::textColourId, componentHeaderFontColour);

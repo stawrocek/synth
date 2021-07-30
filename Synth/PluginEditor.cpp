@@ -4,7 +4,7 @@
 SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
 	scopeComponent(p.audioBufferQueue), osc1Component(p, 1), osc2Component(p, 2), osc3Component(p, 3),
-	adsrComponent(p)
+	adsrComponent(p), filterComponent(p)
 {
 	setSize(800, 600);
 	addAndMakeVisible(osc1Component);
@@ -12,6 +12,8 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	addAndMakeVisible(osc3Component);
 
 	addAndMakeVisible(adsrComponent);
+
+	addAndMakeVisible(filterComponent);
 
 	if (JUCEApplication::isStandaloneApp())
 		addAndMakeVisible(midiKeyboardComponent);
@@ -44,6 +46,7 @@ void SynthAudioProcessorEditor::resized()
 	osc3Component.setBounds(osc1Component.getBounds().withY(h*0.4));
 
 	adsrComponent.setBounds(osc1Component.getBounds().withX(w*0.33));
+	filterComponent.setBounds(osc2Component.getBounds().withX(w*0.33));
 
 	scopeComponent.setBounds(0, h*0.6, w, h*0.3);
 

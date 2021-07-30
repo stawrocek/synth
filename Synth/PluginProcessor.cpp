@@ -28,7 +28,9 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(adsrAttackParamId, adsrAttackParamName, 0, 5, adsrInitialAttack),
 		std::make_unique<juce::AudioParameterFloat>(adsrDecayParamId, adsrDecayParamName, 0, 2, adsrInitialDecay),
 		std::make_unique<juce::AudioParameterFloat>(adsrSustainParamId, adsrSustainParamName, 0, 1, adsrInitialSustain),
-		std::make_unique<juce::AudioParameterFloat>(adsrReleaseParamId, adsrReleaseParamName, 0, 2, adsrInitialRelease)
+		std::make_unique<juce::AudioParameterFloat>(adsrReleaseParamId, adsrReleaseParamName, 0, 2, adsrInitialRelease),
+		std::make_unique<juce::AudioParameterFloat>(filterCutoffParamId, filterCutoffParamName, 0, 2, filterInitialCutoff),
+		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0, 2, filterInitialResonance)
 		
 	})
 #endif

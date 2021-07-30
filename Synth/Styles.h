@@ -1,5 +1,4 @@
-#ifndef asdasd
-#define asdasd
+#pragma once
 
 #include <JuceHeader.h>
 
@@ -11,5 +10,3 @@ const int componentBorderSize                = 2;
 const juce::Colour oscNormalShapeColour      = juce::Colours::orange;
 const juce::Colour oscOverShapeColour        = juce::Colours::yellow;
 const juce::Colour oscDownShapeColour        = juce::Colours::grey;
-
-#endif asdasd

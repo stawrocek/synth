@@ -21,6 +21,8 @@ target_sources(SynthPlugin
 		OscillatorComponent.cpp
 		ADSRComponent.h
 		ADSRComponent.cpp
+		FilterComponent.h
+		FilterComponent.cpp
 		Config.h
 		Styles.h
 )
