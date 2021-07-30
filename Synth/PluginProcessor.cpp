@@ -58,7 +58,21 @@ SynthAudioProcessor::SynthAudioProcessor()
 	synth.addSound(new SynthSound());
 }
 
-SynthAudioProcessor::~SynthAudioProcessor() {}
+SynthAudioProcessor::~SynthAudioProcessor() {
+	tree.removeParameterListener(osc1WaveTypeParamId, this);
+	tree.removeParameterListener(osc2WaveTypeParamId, this);
+	tree.removeParameterListener(osc3WaveTypeParamId, this);
+	tree.removeParameterListener(osc1DetuneParamId, this);
+	tree.removeParameterListener(osc2DetuneParamId, this);
+	tree.removeParameterListener(osc3DetuneParamId, this);
+	tree.removeParameterListener(osc1MixParamId, this);
+	tree.removeParameterListener(osc2MixParamId, this);
+	tree.removeParameterListener(osc3MixParamId, this);
+	tree.removeParameterListener(adsrAttackParamId, this);
+	tree.removeParameterListener(adsrDecayParamId, this);
+	tree.removeParameterListener(adsrSustainParamId, this);
+	tree.removeParameterListener(adsrReleaseParamId, this);
+}
 
 const juce::String SynthAudioProcessor::getName() const
 {
