@@ -29,8 +29,8 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(adsrDecayParamId, adsrDecayParamName, 0, 2, adsrInitialDecay),
 		std::make_unique<juce::AudioParameterFloat>(adsrSustainParamId, adsrSustainParamName, 0, 1, adsrInitialSustain),
 		std::make_unique<juce::AudioParameterFloat>(adsrReleaseParamId, adsrReleaseParamName, 0, 2, adsrInitialRelease),
-		std::make_unique<juce::AudioParameterFloat>(filterCutoffParamId, filterCutoffParamName, 0, 2, filterInitialCutoff),
-		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0, 2, filterInitialResonance)
+		std::make_unique<juce::AudioParameterFloat>(filterCutoffParamId, filterCutoffParamName, 20, 1000, filterInitialCutoff),
+		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0, 10, filterInitialResonance)
 		
 	})
 #endif
@@ -192,6 +192,8 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 				synthVoice->setMix((int)*tree.getRawParameterValue(osc1MixParamId), 1);
 				synthVoice->setMix((int)*tree.getRawParameterValue(osc2MixParamId), 2);
 				synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);
+				synthVoice->setFilterCutoff(tree.getParameterAsValue(filterCutoffParamId).getValue());
+				synthVoice->setFilterResonance(tree.getParameterAsValue(filterResonanceParamId).getValue());
 		}
 	}
 

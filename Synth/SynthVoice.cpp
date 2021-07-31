@@ -3,12 +3,16 @@
 #include "SynthVoice.h"
 #include "Config.h"
 
-SynthVoice::SynthVoice() {
+SynthVoice::SynthVoice() 
+{
 	params.attack = adsrInitialAttack;
 	params.decay = adsrInitialDecay;
 	params.sustain = adsrInitialSustain;
 	params.release = adsrInitialRelease;
 	adsr.setParameters(params);
+	filterCutoff = filterInitialCutoff;
+	filterResonance = filterInitialResonance;
+	filterType = filterInitialType;
 }
 
 bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
@@ -37,6 +41,7 @@ void SynthVoice::stopNote(float velocity, bool allowTailoff)
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
 	adsr.setParameters(params);
+	updateFilter();
 	for (int sample = 0; sample < numSamples; sample++)
 	{
 		double signal1 = osc1.generateWave(frequency) * mix[0];
@@ -46,12 +51,13 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 		double signal = (signal1 * level + signal2 * level + signal3 * level);// / 3.0;
 		//double signal = signal1 * level;
 		signal = adsr.getNextSample() * signal;
+		signal = iirFilter.processSingleSampleRaw(signal);
 		signal *= level;
+
 		for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
 		{
 			outputBuffer.addSample(channel, startSample, signal);
 		}
-
 		++startSample;
 	}
 }
@@ -64,6 +70,12 @@ void SynthVoice::pitchWheelMoved(int newPitchWheel)
 void SynthVoice::controllerMoved(int controllerNumber, int newControllerValue)
 {
 
+}
+
+
+void SynthVoice::setSampleRate(int sampleRate_) {
+	sampleRate = sampleRate_;
+	adsr.setSampleRate(sampleRate);
 }
 
 void SynthVoice::setOscillator(OscillatorType oscillatorType, int id) {
@@ -88,10 +100,6 @@ void SynthVoice::setMix(int mixVal, int id) {
 	mix[id-1] = mixVal / 100.f;
 }
 
-void SynthVoice::setSampleRate(int sampleRate_) {
-	adsr.setSampleRate(sampleRate_);
-}
-
 void SynthVoice::setAdsrAttack(float attack) {
 	params.attack = attack;
 }
@@ -106,4 +114,26 @@ void SynthVoice::setAdsrSustain(float sustain) {
 
 void SynthVoice::setAdsrRelease(float release) {
 	params.release = release;
+}
+
+void SynthVoice::setFilterCutoff(float cutoff) {
+	filterCutoff = cutoff;
+}
+
+void SynthVoice::setFilterResonance(float resonance) {
+	filterResonance = resonance;
+}
+
+void SynthVoice::setFilterType(FilterType filterType_) {
+	filterType = filterType_;
+}
+
+void SynthVoice::updateFilter() {
+	if (filterType == FilterType::LowPassFilter) {
+		filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, filterCutoff, filterResonance);
+	}
+	else if (filterType == FilterType::HighPassFilter) {
+		filterCoefficients = IIRCoefficients::makeHighPass(sampleRate, filterCutoff, filterResonance);
+	}
+	iirFilter.setCoefficients(filterCoefficients);
 }

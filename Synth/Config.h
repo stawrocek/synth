@@ -42,5 +42,7 @@ const float adsrInitialAttack = 0.5;
 const float adsrInitialDecay = 0.2;
 const float adsrInitialSustain = 1.0;
 const float adsrInitialRelease = 0.5;
-const float filterInitialCutoff = 0.4;
-const float filterInitialResonance = 0.5;
+
+const float filterInitialCutoff = 440;
+const float filterInitialResonance = 2;
+const FilterType filterInitialType = FilterType::LowPassFilter;

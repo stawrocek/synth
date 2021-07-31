@@ -13,23 +13,24 @@ FilterComponent::FilterComponent(SynthAudioProcessor& processor_)
 	addAndMakeVisible(labelName);
 
 	sliderCutoff.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderCutoff.setRange(0, 5.0, 0.1);
+	sliderCutoff.setRange(20, 1000, 1);
 	sliderCutoff.setValue(filterInitialCutoff);
 	sliderCutoff.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
 	sliderCutoff.setTooltip("Cutoff");
 	sliderCutoff.setNumDecimalPlacesToDisplay(2);
+	sliderCutoff.setSkewFactorFromMidPoint(1000.);
 	sliderAttachmentCutoff = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, filterCutoffParamId, sliderCutoff);
 	
 	addAndMakeVisible(sliderCutoff);
 
 	sliderResonance.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderResonance.setRange(0, 5.0, 0.1);
+	sliderResonance.setRange(0, 10.0, 0.1);
 	sliderResonance.setValue(filterInitialResonance);
 	sliderResonance.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
 	sliderResonance.setTooltip("Resonance");
 	sliderResonance.setNumDecimalPlacesToDisplay(2);
-	sliderAttachmentCutoff = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+	sliderAttachmentResonance = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, filterResonanceParamId, sliderResonance);
 
 	addAndMakeVisible(sliderResonance);
