@@ -30,7 +30,8 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(adsrSustainParamId, adsrSustainParamName, 0, 1, adsrInitialSustain),
 		std::make_unique<juce::AudioParameterFloat>(adsrReleaseParamId, adsrReleaseParamName, 0, 2, adsrInitialRelease),
 		std::make_unique<juce::AudioParameterFloat>(filterCutoffParamId, filterCutoffParamName, 20, 1000, filterInitialCutoff),
-		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0, 10, filterInitialResonance)
+		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0, 10, filterInitialResonance),
+		std::make_unique<juce::AudioParameterInt>(filterTypeParamId, filterTypeParamName, 0, 1, 0)
 		
 	})
 #endif
@@ -194,6 +195,7 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 				synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);
 				synthVoice->setFilterCutoff(tree.getParameterAsValue(filterCutoffParamId).getValue());
 				synthVoice->setFilterResonance(tree.getParameterAsValue(filterResonanceParamId).getValue());
+				synthVoice->setFilterType((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue());
 		}
 	}
 
@@ -236,7 +238,7 @@ void SynthAudioProcessor::parameterChanged(const String& parameterID, float newV
 			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc2WaveTypeParamId)), 2);
 		else if (parameterID == osc3WaveTypeParamId)
 			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc3WaveTypeParamId)), 3);
-		/*else if (parameterID == osc1DetuneParamId)
+		else if (parameterID == osc1DetuneParamId)
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc1DetuneParamId), 1);
 		else if (parameterID == osc2DetuneParamId)
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc2DetuneParamId), 2);
@@ -257,7 +259,7 @@ void SynthAudioProcessor::parameterChanged(const String& parameterID, float newV
 			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
 		else if (parameterID == adsrReleaseParamId)
 			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
-			*/
+			
 	}
 }
 

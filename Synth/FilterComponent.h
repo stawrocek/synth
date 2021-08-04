@@ -15,11 +15,11 @@ public:
 private:
 	SynthAudioProcessor& processor;
 	juce::Label labelName;
-	juce::TextButton buttonLPF;
-	juce::TextButton buttonHPF;
+	juce::ComboBox comboboxFilterType;
 	juce::Slider sliderCutoff;
 	juce::Slider sliderResonance;
 
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> filterTypeAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentCutoff;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentResonance;
 };

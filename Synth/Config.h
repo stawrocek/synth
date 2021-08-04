@@ -34,9 +34,11 @@ const juce::String adsrReleaseParamName = "Release";
 
 const juce::String filterCutoffParamId = "CUTOFF";
 const juce::String filterResonanceParamId = "RESONANCE";
+const juce::String filterTypeParamId = "FILTER_TYPE";
 
 const juce::String filterCutoffParamName = "cutoff";
 const juce::String filterResonanceParamName = "resonance";
+const juce::String filterTypeParamName = "filter type";
 
 const float adsrInitialAttack = 0.5;
 const float adsrInitialDecay = 0.2;

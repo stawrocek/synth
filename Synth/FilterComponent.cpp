@@ -12,6 +12,19 @@ FilterComponent::FilterComponent(SynthAudioProcessor& processor_)
 	labelName.setColour(juce::Label::textColourId, componentHeaderFontColour);
 	addAndMakeVisible(labelName);
 
+	comboboxFilterType.setTextWhenNoChoicesAvailable("No waveform selected :(");
+	juce::StringArray waveforms{ "lpf", "hpf" };
+	comboboxFilterType.addItemList(waveforms, 1);
+	comboboxFilterType.setSelectedItemIndex(0, juce::dontSendNotification);
+	comboboxFilterType.addSeparator();
+	filterTypeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+		processor.tree, filterTypeParamId, comboboxFilterType);
+
+	addAndMakeVisible(comboboxFilterType);
+
+
+
+
 	sliderCutoff.setSliderStyle(juce::Slider::SliderStyle::Rotary);
 	sliderCutoff.setRange(20, 1000, 1);
 	sliderCutoff.setValue(filterInitialCutoff);
@@ -53,6 +66,7 @@ void FilterComponent::resized() {
 	auto w = area.getWidth();
 	labelName.setBounds(0, 0, w, h * 0.1);
 
-	sliderCutoff.setBounds(juce::Rectangle<int>(w * 0.5, h * 0.1, w * 0.25, h * 0.9).reduced(3, 3));
+	comboboxFilterType.setBounds(juce::Rectangle<int>(0, h * 0.4, w * 0.25, h * 0.2).reduced(3, 3));
+	sliderCutoff.setBounds(juce::Rectangle<int>(w * 0.25, h * 0.1, w * 0.5, h * 0.9).reduced(3, 3));
 	sliderResonance.setBounds(juce::Rectangle<int>(w * 0.75, h * 0.1, w * 0.25, h * 0.9).reduced(3, 3));
 }
