@@ -4,14 +4,8 @@
 #include "Styles.h"
 
 ADSRComponent::ADSRComponent(SynthAudioProcessor& processor_)
-	:processor(processor_)
+	:SynthComponent(processor_, "ADSR")
 {
-	labelName.setText("ADSR", juce::NotificationType::dontSendNotification);
-	labelName.setJustificationType(juce::Justification::centred);
-	labelName.setColour(juce::Label::backgroundColourId, componentHeaderColour);
-	labelName.setColour(juce::Label::textColourId, componentHeaderFontColour);
-	addAndMakeVisible(labelName);
-
 	sliderAttack.setSliderStyle(juce::Slider::SliderStyle::Rotary);
 	sliderAttack.setRange(0, 5.0, 0.1);
 	sliderAttack.setValue(adsrInitialAttack);
@@ -54,25 +48,15 @@ ADSRComponent::ADSRComponent(SynthAudioProcessor& processor_)
 	addAndMakeVisible(sliderRelease);
 }
 
-void ADSRComponent::paint(juce::Graphics& g)
-{
-	g.setColour(componentBorderColour);
-
-	auto area = getLocalBounds();
-	auto h = area.getHeight();
-	auto w = area.getWidth();
-
-	g.drawRect(0, 0, w, h, componentBorderSize);
-}
-
 void ADSRComponent::resized() {
 	auto area = getLocalBounds();
 	auto h = area.getHeight();
 	auto w = area.getWidth();
-	labelName.setBounds(0, 0, w, h * 0.1);
 
-	sliderAttack.setBounds(juce::Rectangle<int>(       0, h * 0.1, w * 0.25, h * 0.9).reduced(3, 3));
-	sliderDecay.setBounds(juce::Rectangle<int>(w * 0.25, h * 0.1, w * 0.25, h * 0.9).reduced(3, 3));
-	sliderSustain.setBounds(juce::Rectangle<int>(w *  0.5, h * 0.1, w * 0.25, h * 0.9).reduced(3, 3));
-	sliderRelease.setBounds(juce::Rectangle<int>(w * 0.75, h * 0.1, w * 0.25, h * 0.9).reduced(3, 3));
+	sliderAttack.setBounds(juce::Rectangle<int>(       0,  0, w * 0.25, h).reduced(3, 3));
+	sliderDecay.setBounds(juce::Rectangle<int>(w * 0.25,   0, w * 0.25, h).reduced(3, 3));
+	sliderSustain.setBounds(juce::Rectangle<int>(w *  0.5, 0, w * 0.25, h).reduced(3, 3));
+	sliderRelease.setBounds(juce::Rectangle<int>(w * 0.75, 0, w * 0.25, h).reduced(3, 3));
+
+	SynthComponent::resized();
 }

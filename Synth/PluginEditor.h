@@ -6,6 +6,7 @@
 #include "ScopeComponent.h"
 #include "ADSRComponent.h"
 #include "FilterComponent.h"
+#include "SynthComponent.h"
 
 class SynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
 								   private juce::Slider::Listener

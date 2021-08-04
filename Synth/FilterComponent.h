@@ -3,18 +3,16 @@
 #include <JuceHeader.h>
 
 #include "PluginProcessor.h"
+#include "SynthComponent.h"
 
-class FilterComponent : public juce::Component
+class FilterComponent : public SynthComponent
 {
 public:
 	FilterComponent(SynthAudioProcessor& processor);
 
-	void paint(juce::Graphics& g) override;
 	void resized() override;
 
 private:
-	SynthAudioProcessor& processor;
-	juce::Label labelName;
 	juce::ComboBox comboboxFilterType;
 	juce::Slider sliderCutoff;
 	juce::Slider sliderResonance;

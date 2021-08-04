@@ -21,7 +21,7 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	midiKeyboardState.addListener(&audioProcessor.midiMessageCollector);
 
 	
-	addAndMakeVisible(scopeComponent);	
+	addAndMakeVisible(scopeComponent);
 }
 
 SynthAudioProcessorEditor::~SynthAudioProcessorEditor()

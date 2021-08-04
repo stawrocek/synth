@@ -2,19 +2,13 @@
 #include "Styles.h"
 
 OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int identifier)
-	:processor(processor_), id(identifier),
+	:SynthComponent(processor_, "Oscillator " + std::to_string(identifier)), id(identifier),
 	name("osc"+std::to_string(id)),
 	btnOscSine("btn_sin_"+name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscRect("btn_rect_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscTriangle("btn_triangle_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscSawtooth("btn_sawtooth_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour)
 {
-	labelName.setText("Oscillator "+std::to_string(id), juce::NotificationType::dontSendNotification);
-	labelName.setJustificationType(juce::Justification::centred);
-	labelName.setColour(juce::Label::backgroundColourId, componentHeaderColour);
-	labelName.setColour(juce::Label::textColourId, componentHeaderFontColour);
-	addAndMakeVisible(labelName);
-
 	btnOscSine.addListener(this);
 	btnOscRect.addListener(this);
 	btnOscTriangle.addListener(this);
@@ -44,22 +38,10 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	startTimer(100);
 }
 
-void OscillatorComponent::paint(juce::Graphics& g)
-{
-	g.setColour(componentBorderColour);
-
-	auto area = getLocalBounds();
-	auto h = area.getHeight();
-	auto w = area.getWidth();
-
-	g.drawRect(0, 0, w, h, componentBorderSize);
-}
-
 void OscillatorComponent::resized() {
 	auto area = getLocalBounds();
 	auto h = area.getHeight();
 	auto w = area.getWidth();
-	labelName.setBounds(0, 0, w, h * 0.1);
 
 	btnOscSine.setBorderSize(juce::BorderSize<int>(1));
 	btnOscRect.setBorderSize(juce::BorderSize<int>(1));
@@ -77,10 +59,10 @@ void OscillatorComponent::resized() {
 	gridWaves.items = { juce::GridItem(btnOscSine), juce::GridItem(btnOscRect), 
 		juce::GridItem(btnOscTriangle), juce::GridItem(btnOscSawtooth) };
 
-	gridWaves.performLayout(juce::Rectangle<int>(0, h*0.1, w*0.25, h*0.9));
+	gridWaves.performLayout(juce::Rectangle<int>(0, 0, w*0.25, h));
 
-	sliderDetune.setBounds(juce::Rectangle<int>(w*0.25, h*0.1, w*0.25, h*0.9).reduced(3, 3));
-	sliderMix.setBounds(juce::Rectangle<int>(w*0.5, h*0.1, w*0.25, h*0.9).reduced(3, 3));
+	sliderDetune.setBounds(juce::Rectangle<int>(w*0.25, 0, w*0.25, h).reduced(3, 3));
+	sliderMix.setBounds(juce::Rectangle<int>(w*0.5, 0, w*0.25, h).reduced(3, 3));
 }
 
 void OscillatorComponent::buttonClicked(juce::Button* button) {

@@ -25,4 +25,6 @@ target_sources(SynthPlugin
 		FilterComponent.cpp
 		Config.h
 		Styles.h
+		SynthComponent.h
+		SynthComponent.cpp
 )

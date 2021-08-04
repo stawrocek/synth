@@ -3,18 +3,16 @@
 #include <JuceHeader.h>
 
 #include "PluginProcessor.h"
+#include "SynthComponent.h"
 
-class ADSRComponent : public juce::Component
+class ADSRComponent : public SynthComponent
 {
 public:
 	ADSRComponent(SynthAudioProcessor& processor);
 
-	void paint(juce::Graphics& g) override;
 	void resized() override;
 
 private:
-	SynthAudioProcessor& processor;
-	juce::Label labelName;
 	juce::Slider sliderAttack;
 	juce::Slider sliderDecay;
 	juce::Slider sliderSustain;
