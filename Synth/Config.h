@@ -40,6 +40,18 @@ const juce::String filterCutoffParamName = "cutoff";
 const juce::String filterResonanceParamName = "resonance";
 const juce::String filterTypeParamName = "filter type";
 
+const juce::String reverbRoomSizeParamId = "REVERB_ROOM_SIZE";
+const juce::String reverbDampingParamId = "REVERB_DAMPING";
+const juce::String reverbWetLevelParamId = "REVERB_WET_LEVEL";
+const juce::String reverbWidthParamId = "REVERB_WIDTH";
+const juce::String reverbFreezeModeParamId = "REVERB_FREEZE_MODE";
+
+const juce::String reverbRoomSizeParamName = "room size";
+const juce::String reverbDampingParamName = "damping";
+const juce::String reverbWetLevelParamName = "wet level";
+const juce::String reverbWidthParamName = "width";
+const juce::String reverbFreezeModeParamName = "freeze mode";
+
 const float adsrInitialAttack = 0.5;
 const float adsrInitialDecay = 0.2;
 const float adsrInitialSustain = 1.0;
@@ -48,3 +60,9 @@ const float adsrInitialRelease = 0.5;
 const float filterInitialCutoff = 440;
 const float filterInitialResonance = 2;
 const FilterType filterInitialType = FilterType::LowPassFilter;
+
+const float reverbInitialRoomSize   = 0.5f;
+const float reverbInitialDamping    = 0.5f;
+const float reverbInitialWetLevel   = 0.33f;
+const float reverbInitialWidth      = 1.0f;
+const float reverbInitialFreezeMode = 0.0f;

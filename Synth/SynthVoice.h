@@ -46,7 +46,7 @@ private:
 	Oscillator osc3;
 	float mix[3] = {1, 1, 1};
 	juce::ADSR adsr;
-	juce::ADSR::Parameters params;
+	juce::ADSR::Parameters adsrParams;
 	IIRFilter iirFilter;
 	float filterCutoff;
 	float filterResonance;

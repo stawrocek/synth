@@ -27,4 +27,6 @@ target_sources(SynthPlugin
 		Styles.h
 		SynthComponent.h
 		SynthComponent.cpp
+		ReverbComponent.h
+		ReverbComponent.cpp
 )

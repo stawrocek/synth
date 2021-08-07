@@ -6,7 +6,7 @@
 #include "ScopeComponent.h"
 #include "ADSRComponent.h"
 #include "FilterComponent.h"
-#include "SynthComponent.h"
+#include "ReverbComponent.h"
 
 class SynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
 								   private juce::Slider::Listener
@@ -32,6 +32,8 @@ private:
 	ADSRComponent adsrComponent;
 
 	FilterComponent filterComponent;
+
+	ReverbComponent reverbComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessorEditor)
 };

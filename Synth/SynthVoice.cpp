@@ -5,11 +5,11 @@
 
 SynthVoice::SynthVoice() 
 {
-	params.attack = adsrInitialAttack;
-	params.decay = adsrInitialDecay;
-	params.sustain = adsrInitialSustain;
-	params.release = adsrInitialRelease;
-	adsr.setParameters(params);
+	adsrParams.attack = adsrInitialAttack;
+	adsrParams.decay = adsrInitialDecay;
+	adsrParams.sustain = adsrInitialSustain;
+	adsrParams.release = adsrInitialRelease;
+	adsr.setParameters(adsrParams);
 	filterCutoff = filterInitialCutoff;
 	filterResonance = filterInitialResonance;
 	filterType = filterInitialType;
@@ -40,7 +40,7 @@ void SynthVoice::stopNote(float velocity, bool allowTailoff)
 
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
-	adsr.setParameters(params);
+	adsr.setParameters(adsrParams);
 	updateFilter();
 	for (int sample = 0; sample < numSamples; sample++)
 	{
@@ -101,19 +101,19 @@ void SynthVoice::setMix(int mixVal, int id) {
 }
 
 void SynthVoice::setAdsrAttack(float attack) {
-	params.attack = attack;
+	adsrParams.attack = attack;
 }
 
 void SynthVoice::setAdsrDecay(float decay) {
-	params.decay = decay;
+	adsrParams.decay = decay;
 }
 
 void SynthVoice::setAdsrSustain(float sustain) {
-	params.sustain = sustain;
+	adsrParams.sustain = sustain;
 }
 
 void SynthVoice::setAdsrRelease(float release) {
-	params.release = release;
+	adsrParams.release = release;
 }
 
 void SynthVoice::setFilterCutoff(float cutoff) {
