@@ -47,9 +47,14 @@ public:
 	ScopeDataCollector<float> scopeDataCollector{ audioBufferQueue };
 
 private:
+	double sampleRate;
 	juce::Synthesiser synth;
 	
 	std::vector<SynthVoice*> voices;
+
+	IIRFilter filterLeft;
+	IIRFilter filterRight;
+	juce::IIRCoefficients filterCoefficients;
 
 	juce::dsp::Reverb leftReverb;
 	juce::dsp::Reverb rightReverb;

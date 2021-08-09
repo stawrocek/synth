@@ -33,10 +33,6 @@ public:
 	void setAdsrSustain(float sustain);
 	void setAdsrRelease(float release);
 
-	void setFilterCutoff(float cutoff);
-	void setFilterResonance(float resonance);
-	void setFilterType(FilterType filterType);
-
 private:
 	double level;
 	double frequency;
@@ -47,11 +43,6 @@ private:
 	float mix[3] = {1, 1, 1};
 	juce::ADSR adsr;
 	juce::ADSR::Parameters adsrParams;
-	IIRFilter iirFilter;
-	float filterCutoff;
-	float filterResonance;
-	FilterType filterType;
-	juce::IIRCoefficients filterCoefficients;
 
 	void updateFilter();
 };

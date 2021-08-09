@@ -115,8 +115,9 @@ void SynthAudioProcessor::changeProgramName (int index, const juce::String& newN
 {
 }
 
-void SynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void SynthAudioProcessor::prepareToPlay (double sampleRate_, int samplesPerBlock)
 {
+	sampleRate = sampleRate_;
 	juce::ignoreUnused(samplesPerBlock);
 
 	juce::dsp::ProcessSpec spec;
@@ -177,6 +178,19 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	leftReverb.setParameters(reverbParams);
 	rightReverb.setParameters(reverbParams);
 
+	float filterCutoff = tree.getParameterAsValue(filterCutoffParamId).getValue();
+	float filterResonance = tree.getParameterAsValue(filterResonanceParamId).getValue();
+
+	if (((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue() == FilterType::LowPassFilter)) {
+		filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, filterCutoff, filterResonance);
+	}
+	else if (((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue() == FilterType::HighPassFilter)) {
+		filterCoefficients = IIRCoefficients::makeHighPass(sampleRate, filterCutoff, filterResonance);
+	}
+
+	filterLeft.setCoefficients(filterCoefficients);
+	filterRight.setCoefficients(filterCoefficients);
+
 	for(int i = 0; i < synth.getNumVoices(); i++) {
 		SynthVoice* synthVoice;
 		if ((synthVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))) {
@@ -193,9 +207,6 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 			synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
 			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
 			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
-			synthVoice->setFilterCutoff(tree.getParameterAsValue(filterCutoffParamId).getValue());
-			synthVoice->setFilterResonance(tree.getParameterAsValue(filterResonanceParamId).getValue());
-			synthVoice->setFilterType((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue());
 		}
 	}
 
@@ -204,6 +215,12 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	buffer.clear();
 	int numSamples = buffer.getNumSamples();
 	synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
+
+	float* dataLeft = buffer.getWritePointer(0);
+	float* dataRight = buffer.getWritePointer(1);
+
+	filterLeft.processSamples(dataLeft, numSamples);
+	filterRight.processSamples(dataRight, numSamples);
 
 	juce::dsp::AudioBlock<float> block(buffer);
 

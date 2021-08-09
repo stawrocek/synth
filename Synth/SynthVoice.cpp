@@ -10,9 +10,6 @@ SynthVoice::SynthVoice()
 	adsrParams.sustain = adsrInitialSustain;
 	adsrParams.release = adsrInitialRelease;
 	adsr.setParameters(adsrParams);
-	filterCutoff = filterInitialCutoff;
-	filterResonance = filterInitialResonance;
-	filterType = filterInitialType;
 }
 
 bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
@@ -41,7 +38,6 @@ void SynthVoice::stopNote(float velocity, bool allowTailoff)
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
 	adsr.setParameters(adsrParams);
-	updateFilter();
 	for (int sample = 0; sample < numSamples; sample++)
 	{
 		double signal1 = osc1.generateWave(frequency) * mix[0];
@@ -51,7 +47,6 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 		double signal = (signal1 * level + signal2 * level + signal3 * level);// / 3.0;
 		//double signal = signal1 * level;
 		signal = adsr.getNextSample() * signal;
-		signal = iirFilter.processSingleSampleRaw(signal);
 		signal *= level;
 
 		for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
@@ -114,26 +109,4 @@ void SynthVoice::setAdsrSustain(float sustain) {
 
 void SynthVoice::setAdsrRelease(float release) {
 	adsrParams.release = release;
-}
-
-void SynthVoice::setFilterCutoff(float cutoff) {
-	filterCutoff = cutoff;
-}
-
-void SynthVoice::setFilterResonance(float resonance) {
-	filterResonance = resonance;
-}
-
-void SynthVoice::setFilterType(FilterType filterType_) {
-	filterType = filterType_;
-}
-
-void SynthVoice::updateFilter() {
-	if (filterType == FilterType::LowPassFilter) {
-		filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, filterCutoff, filterResonance);
-	}
-	else if (filterType == FilterType::HighPassFilter) {
-		filterCoefficients = IIRCoefficients::makeHighPass(sampleRate, filterCutoff, filterResonance);
-	}
-	iirFilter.setCoefficients(filterCoefficients);
 }
