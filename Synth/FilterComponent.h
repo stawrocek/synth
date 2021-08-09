@@ -5,6 +5,8 @@
 #include "PluginProcessor.h"
 #include "SynthComponent.h"
 
+#include "RotarySlider.h"
+
 class FilterComponent : public SynthComponent
 {
 public:
@@ -14,8 +16,11 @@ public:
 
 private:
 	juce::ComboBox comboboxFilterType;
-	juce::Slider sliderCutoff;
-	juce::Slider sliderResonance;
+	//juce::Slider sliderCutoff;
+	//juce::Slider sliderResonance;
+
+	RotarySlider sliderCutoff;
+	RotarySlider sliderResonance;
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> filterTypeAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentCutoff;

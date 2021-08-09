@@ -29,4 +29,8 @@ target_sources(SynthPlugin
 		SynthComponent.cpp
 		ReverbComponent.h
 		ReverbComponent.cpp
+		RotarySlider.h
+		RotarySlider.cpp
+		RotarySliderLookAndFeel.h
+		RotarySliderLookAndFeel.cpp
 )

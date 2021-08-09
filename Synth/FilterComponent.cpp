@@ -4,7 +4,9 @@
 #include "Styles.h"
 
 FilterComponent::FilterComponent(SynthAudioProcessor& processor_)
-	:SynthComponent(processor_, "Filter")
+	:SynthComponent(processor_, "Filter"),
+	sliderCutoff(20, 1000, 1, filterInitialCutoff, "Cutoff"),
+	sliderResonance(0, 10.0, 0.1, filterInitialResonance, "Resonance")
 {
 	comboboxFilterType.setTextWhenNoChoicesAvailable("No waveform selected :(");
 	juce::StringArray waveforms{ "lpf", "hpf" };
@@ -13,31 +15,14 @@ FilterComponent::FilterComponent(SynthAudioProcessor& processor_)
 	comboboxFilterType.addSeparator();
 	filterTypeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
 		processor.tree, filterTypeParamId, comboboxFilterType);
-
 	addAndMakeVisible(comboboxFilterType);
 
-
-	sliderCutoff.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderCutoff.setRange(20, 1000, 1);
-	sliderCutoff.setValue(filterInitialCutoff);
-	sliderCutoff.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-	sliderCutoff.setTooltip("Cutoff");
-	sliderCutoff.setNumDecimalPlacesToDisplay(2);
-	sliderCutoff.setSkewFactorFromMidPoint(1000.);
 	sliderAttachmentCutoff = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, filterCutoffParamId, sliderCutoff);
-	
 	addAndMakeVisible(sliderCutoff);
 
-	sliderResonance.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderResonance.setRange(0, 10.0, 0.1);
-	sliderResonance.setValue(filterInitialResonance);
-	sliderResonance.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-	sliderResonance.setTooltip("Resonance");
-	sliderResonance.setNumDecimalPlacesToDisplay(2);
 	sliderAttachmentResonance = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, filterResonanceParamId, sliderResonance);
-
 	addAndMakeVisible(sliderResonance);
 }
 
@@ -46,9 +31,9 @@ void FilterComponent::resized() {
 	auto h = area.getHeight();
 	auto w = area.getWidth();
 
-	comboboxFilterType.setBounds(juce::Rectangle<int>(0, h * 0.4, w * 0.25, h * 0.2).reduced(3, 3));
-	sliderCutoff.setBounds(juce::Rectangle<int>(w * 0.25, 0.0, w * 0.5, h).reduced(3, 3));
-	sliderResonance.setBounds(juce::Rectangle<int>(w * 0.75, 0.0, w * 0.25, h).reduced(3, 3));
+	comboboxFilterType.setBounds(juce::Rectangle<int>(0, h * 0.4, w * 0.25, h * 0.2).reduced(componentElementSpacer));
+	sliderCutoff.setBounds(juce::Rectangle<int>(w * 0.25, 0.0, w * 0.5, h).reduced(componentElementSpacer));
+	sliderResonance.setBounds(juce::Rectangle<int>(w * 0.75, 0.0, w * 0.25, h).reduced(componentElementSpacer));
 
 	SynthComponent::resized();
 }
