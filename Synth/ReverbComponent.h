@@ -4,6 +4,7 @@
 
 #include "PluginProcessor.h"
 #include "SynthComponent.h"
+#include "RotarySlider.h"
 
 class ReverbComponent : public SynthComponent
 {
@@ -13,11 +14,11 @@ public:
 	void resized() override;
 
 private:
-	juce::Slider sliderRoomSize;
-	juce::Slider sliderDamping;
-	juce::Slider sliderWetLevel;
-	juce::Slider sliderWidth;
-	juce::Slider sliderFreezeMode;
+	RotarySlider sliderRoomSize;
+	RotarySlider sliderDamping;
+	RotarySlider sliderWetLevel;
+	RotarySlider sliderWidth;
+	RotarySlider sliderFreezeMode;
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentRoomSize;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentDamping;

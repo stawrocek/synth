@@ -4,6 +4,7 @@
 
 #include "PluginProcessor.h"
 #include "SynthComponent.h"
+#include "RotarySlider.h"
 
 class ADSRComponent : public SynthComponent
 {
@@ -13,10 +14,10 @@ public:
 	void resized() override;
 
 private:
-	juce::Slider sliderAttack;
-	juce::Slider sliderDecay;
-	juce::Slider sliderSustain;
-	juce::Slider sliderRelease;
+	RotarySlider sliderAttack;
+	RotarySlider sliderDecay;
+	RotarySlider sliderSustain;
+	RotarySlider sliderRelease;
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentAttack;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentDecay;

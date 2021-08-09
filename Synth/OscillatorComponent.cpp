@@ -7,7 +7,9 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	btnOscSine("btn_sin_"+name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscRect("btn_rect_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscTriangle("btn_triangle_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
-	btnOscSawtooth("btn_sawtooth_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour)
+	btnOscSawtooth("btn_sawtooth_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
+	sliderDetune(-100, 100, 1.0, 0, "detune"),
+	sliderMix(0, 100, 1.0, 100, "mix")
 {
 	btnOscSine.addListener(this);
 	btnOscRect.addListener(this);
@@ -19,18 +21,10 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	addAndMakeVisible(btnOscTriangle);
 	addAndMakeVisible(btnOscSawtooth);
 
-	sliderDetune.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderDetune.setRange(-100, 100.0, 1.0);
-	sliderDetune.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-	sliderDetune.setTooltip("detune");
-    sliderDetuneAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+	sliderDetuneAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, "OSC"+std::to_string(id)+"DETUNE", sliderDetune);
 	addAndMakeVisible(sliderDetune);
 
-	sliderMix.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderMix.setRange(0, 100.0, 1.0);
-	sliderMix.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-	sliderMix.setTooltip("mix");
 	sliderMixAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, "OSC" + std::to_string(id) + "MIX", sliderMix);
 	addAndMakeVisible(sliderMix);

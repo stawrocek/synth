@@ -5,6 +5,7 @@
 #include "Oscillator.h"
 #include "PluginProcessor.h"
 #include "SynthComponent.h"
+#include "RotarySlider.h"
 
 class OscillatorComponent : public SynthComponent, juce::Button::Listener,
 	private juce::Timer
@@ -22,8 +23,8 @@ private:
 	juce::ShapeButton btnOscRect;
 	juce::ShapeButton btnOscTriangle;
 	juce::ShapeButton btnOscSawtooth;
-	juce::Slider sliderDetune;
-	juce::Slider sliderMix;
+	RotarySlider sliderDetune;
+	RotarySlider sliderMix;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderDetuneAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderMixAttachment;
 	void timerCallback() override;

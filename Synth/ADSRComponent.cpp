@@ -4,45 +4,24 @@
 #include "Styles.h"
 
 ADSRComponent::ADSRComponent(SynthAudioProcessor& processor_)
-	:SynthComponent(processor_, "ADSR")
+	:SynthComponent(processor_, "ADSR"),
+	sliderAttack(0, 5.0, 0.1, adsrInitialAttack, "attack"),
+	sliderDecay(0, 2, 0.1, adsrInitialDecay, "decay"),
+	sliderSustain(0, 1, 0.05, adsrInitialSustain, "sustain"),
+	sliderRelease(0, 2, 0.1, adsrInitialRelease, "release")
 {
-	sliderAttack.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderAttack.setRange(0, 5.0, 0.1);
-	sliderAttack.setValue(adsrInitialAttack);
-	sliderAttack.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-	sliderAttack.setTooltip("attack");
-	sliderAttack.setNumDecimalPlacesToDisplay(2);
 	sliderAttachmentAttack = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, adsrAttackParamId, sliderAttack);
-	
 	addAndMakeVisible(sliderAttack);
 
-	sliderDecay.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderDecay.setRange(0, 2, 0.1);
-	sliderDecay.setValue(adsrInitialDecay);
-	sliderDecay.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-	sliderDecay.setTooltip("decay");
-	sliderDecay.setNumDecimalPlacesToDisplay(2);
 	sliderAttachmentDecay = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, adsrDecayParamId, sliderDecay);
 	addAndMakeVisible(sliderDecay);
 
-	sliderSustain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderSustain.setRange(0, 1, 0.05);
-	sliderSustain.setValue(adsrInitialSustain);
-	sliderSustain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-	sliderSustain.setTooltip("sustain");
-	sliderSustain.setNumDecimalPlacesToDisplay(2);
 	sliderAttachmentSustain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, adsrSustainParamId, sliderSustain);
 	addAndMakeVisible(sliderSustain);
 
-	sliderRelease.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-	sliderRelease.setRange(0.0, 2.0, 0.1);
-	sliderRelease.setValue(adsrInitialRelease);
-	sliderRelease.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 40, 20);
-	sliderRelease.setTooltip("release");
-	sliderRelease.setNumDecimalPlacesToDisplay(2);
 	sliderAttachmentRelease = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, adsrReleaseParamId, sliderRelease);
 	addAndMakeVisible(sliderRelease);
