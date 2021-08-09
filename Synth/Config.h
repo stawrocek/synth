@@ -12,15 +12,15 @@ const juce::String osc1MixParamId = "OSC1MIX";
 const juce::String osc2MixParamId = "OSC2MIX";
 const juce::String osc3MixParamId = "OSC3MIX";
 
-const juce::String osc1WaveTypeParamName = "waveform1";
-const juce::String osc2WaveTypeParamName = "waveform2";
-const juce::String osc3WaveTypeParamName = "waveform3";
-const juce::String osc1DetuneParamName = "osc1detune";
-const juce::String osc2DetuneParamName = "osc2detune";
-const juce::String osc3DetuneParamName = "osc3detune";
-const juce::String osc1MixParamName = "osc1mix";
-const juce::String osc2MixParamName = "osc2mix";
-const juce::String osc3MixParamName = "osc3mix";
+const juce::String osc1WaveTypeParamName = "Waveform1";
+const juce::String osc2WaveTypeParamName = "Waveform2";
+const juce::String osc3WaveTypeParamName = "Waveform3";
+const juce::String osc1DetuneParamName = "Detune";
+const juce::String osc2DetuneParamName = "Detune";
+const juce::String osc3DetuneParamName = "Detune";
+const juce::String osc1MixParamName = "Mix";
+const juce::String osc2MixParamName = "Mix";
+const juce::String osc3MixParamName = "Mix";
 
 const juce::String adsrAttackParamId = "ADSR_ATTACK";
 const juce::String adsrDecayParamId = "ADSR_DECAY";
@@ -36,9 +36,9 @@ const juce::String filterCutoffParamId = "CUTOFF";
 const juce::String filterResonanceParamId = "RESONANCE";
 const juce::String filterTypeParamId = "FILTER_TYPE";
 
-const juce::String filterCutoffParamName = "cutoff";
-const juce::String filterResonanceParamName = "resonance";
-const juce::String filterTypeParamName = "filter type";
+const juce::String filterCutoffParamName = "Cutoff";
+const juce::String filterResonanceParamName = "Resonance";
+const juce::String filterTypeParamName = "Filter type";
 
 const juce::String reverbRoomSizeParamId = "REVERB_ROOM_SIZE";
 const juce::String reverbDampingParamId = "REVERB_DAMPING";
@@ -46,11 +46,11 @@ const juce::String reverbWetLevelParamId = "REVERB_WET_LEVEL";
 const juce::String reverbWidthParamId = "REVERB_WIDTH";
 const juce::String reverbFreezeModeParamId = "REVERB_FREEZE_MODE";
 
-const juce::String reverbRoomSizeParamName = "room size";
-const juce::String reverbDampingParamName = "damping";
-const juce::String reverbWetLevelParamName = "wet level";
-const juce::String reverbWidthParamName = "width";
-const juce::String reverbFreezeModeParamName = "freeze mode";
+const juce::String reverbRoomSizeParamName = "Room";
+const juce::String reverbDampingParamName = "Damping";
+const juce::String reverbWetLevelParamName = "Wet/Dry";
+const juce::String reverbWidthParamName = "Width";
+const juce::String reverbFreezeModeParamName = "Freeze";
 
 const float adsrInitialAttack = 0.5;
 const float adsrInitialDecay = 0.2;

@@ -55,6 +55,12 @@ void RotarySliderLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, 
 	g.fillPath(thumb, juce::AffineTransform::rotation(valueAngle + 3.14159f).translated(bounds.getCentre()));
 	
 	g.fillEllipse(bounds.reduced(8.0f));
+
+	g.setColour(sliderFillColour);
+	g.setFont(sliderFontSize);
+	const int textHeight = sliderFontSize + sliderSpacer;
+	g.drawText(tooltip, bounds.getX(), bounds.getY() - textHeight,
+		bounds.getWidth(), textHeight, juce::Justification::centredBottom, true);
 }
 
 juce::Label* RotarySliderLookAndFeel::createSliderTextBox(juce::Slider& slider)
@@ -79,4 +85,8 @@ juce::Font RotarySliderLookAndFeel::getTextButtonFont(juce::TextButton&, int but
 void RotarySliderLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
 	bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
 {
+}
+
+void RotarySliderLookAndFeel::setTooltip(juce::String tooltip_) {
+	tooltip = tooltip_;
 }

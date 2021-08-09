@@ -5,11 +5,11 @@
 
 ReverbComponent::ReverbComponent(SynthAudioProcessor& processor_)
 	:SynthComponent(processor_, "Reverb"),
-	sliderRoomSize(0, 1.0, 0.01, reverbInitialRoomSize, "Room Size"),
-	sliderDamping(0, 1.0, 0.01, reverbInitialDamping, "Damping"),
-	sliderWetLevel(0, 1.0, 0.01, reverbInitialWetLevel, "Wet/Dry"),
-	sliderWidth(0, 1.0, 0.01, reverbInitialWidth, "Width"),
-	sliderFreezeMode(0, 1.0, 0.01, reverbInitialFreezeMode, "Freeze")
+	sliderRoomSize(0, 1.0, 0.01, reverbInitialRoomSize, reverbRoomSizeParamName),
+	sliderDamping(0, 1.0, 0.01, reverbInitialDamping, reverbDampingParamName),
+	sliderWetLevel(0, 1.0, 0.01, reverbInitialWetLevel, reverbWetLevelParamName),
+	sliderWidth(0, 1.0, 0.01, reverbInitialWidth, reverbWidthParamName),
+	sliderFreezeMode(0, 1.0, 0.01, reverbInitialFreezeMode, reverbFreezeModeParamName)
 
 {
 	sliderAttachmentRoomSize = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
@@ -38,12 +38,14 @@ void ReverbComponent::resized() {
 	auto h = area.getHeight();
 	auto w = area.getWidth();
 
+	int off = (sliderFontSize + sliderSpacer);
+
 	const float w_ = w / 5.0;
-	sliderRoomSize.setBounds(juce::Rectangle<int>  (       0, 0, w_, h).reduced(3, 3));
-	sliderDamping.setBounds(juce::Rectangle<int>   (      w_, 0, w_, h).reduced(3, 3));
-	sliderWetLevel.setBounds(juce::Rectangle<int>  (2.f * w_, 0, w_, h).reduced(3, 3));
-	sliderWidth.setBounds(juce::Rectangle<int>     (3.f * w_, 0, w_, h).reduced(3, 3));
-	sliderFreezeMode.setBounds(juce::Rectangle<int>(4.f * w_, 0, w_, h).reduced(3, 3));
+	sliderRoomSize.setBounds(juce::Rectangle<int>  (       0, off, w_, h - off).reduced(componentElementSpacer));
+	sliderDamping.setBounds(juce::Rectangle<int>   (      w_, off, w_, h - off).reduced(componentElementSpacer));
+	sliderWetLevel.setBounds(juce::Rectangle<int>  (2.f * w_, off, w_, h - off).reduced(componentElementSpacer));
+	sliderWidth.setBounds(juce::Rectangle<int>     (3.f * w_, off, w_, h - off).reduced(componentElementSpacer));
+	sliderFreezeMode.setBounds(juce::Rectangle<int>(4.f * w_, off, w_, h - off).reduced(componentElementSpacer));
 
 	SynthComponent::resized();
 }

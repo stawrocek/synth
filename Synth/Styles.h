@@ -18,4 +18,6 @@ const juce::Colour sliderTextBoxOutlineColour = juce::Colours::grey;
 const juce::Colour sliderBorderColour = juce::Colours::black;
 
 const int componentElementSpacer = 5;
+const int sliderFontSize = 12;
+const int sliderSpacer = 5;
 

@@ -5,8 +5,8 @@
 
 FilterComponent::FilterComponent(SynthAudioProcessor& processor_)
 	:SynthComponent(processor_, "Filter"),
-	sliderCutoff(20, 1000, 1, filterInitialCutoff, "Cutoff"),
-	sliderResonance(0, 10.0, 0.1, filterInitialResonance, "Resonance")
+	sliderCutoff(20, 1000, 1, filterInitialCutoff, filterCutoffParamName),
+	sliderResonance(0, 10.0, 0.1, filterInitialResonance, filterResonanceParamName)
 {
 	comboboxFilterType.setTextWhenNoChoicesAvailable("No waveform selected :(");
 	juce::StringArray waveforms{ "lpf", "hpf" };
@@ -31,9 +31,11 @@ void FilterComponent::resized() {
 	auto h = area.getHeight();
 	auto w = area.getWidth();
 
-	comboboxFilterType.setBounds(juce::Rectangle<int>(0, h * 0.4, w * 0.25, h * 0.2).reduced(componentElementSpacer));
-	sliderCutoff.setBounds(juce::Rectangle<int>(w * 0.25, 0.0, w * 0.5, h).reduced(componentElementSpacer));
-	sliderResonance.setBounds(juce::Rectangle<int>(w * 0.75, 0.0, w * 0.25, h).reduced(componentElementSpacer));
+	int off = (sliderFontSize + sliderSpacer);
+
+	comboboxFilterType.setBounds(juce::Rectangle<int>(0, h * 0.4+off/2, w * 0.25, h * 0.2).reduced(componentElementSpacer));
+	sliderCutoff.setBounds(juce::Rectangle<int>(w * 0.25, off, w * 0.33, h-off).reduced(componentElementSpacer));
+	sliderResonance.setBounds(juce::Rectangle<int>(w * 0.75, off, w * 0.25, h-off).reduced(componentElementSpacer));
 
 	SynthComponent::resized();
 }

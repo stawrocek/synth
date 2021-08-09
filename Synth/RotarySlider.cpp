@@ -29,6 +29,10 @@ RotarySlider::RotarySlider(double minimum, double maximum, double step, double i
 		else
 			setNumDecimalPlacesToDisplay(0);
 	};
+
+	setBounds(getX(), getY(), getWidth(), getHeight());
+
+	rotarySliderLookAndFeel.setTooltip(tooltip);
 }
 
 RotarySlider::~RotarySlider()

@@ -8,7 +8,8 @@
 class RotarySlider : public juce::Slider
 {
 public:
-	RotarySlider(double minimum, double maximum, double step, double initial, juce::String tooltip);
+	RotarySlider(double minimum, double maximum, double step, double initial, 
+		juce::String tooltip);
 	~RotarySlider() override;
 
 	void paint(juce::Graphics& g) override;

@@ -1,5 +1,6 @@
 #include "OscillatorComponent.h"
 #include "Styles.h"
+#include "Config.h"
 
 OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int identifier)
 	:SynthComponent(processor_, "Oscillator " + std::to_string(identifier)), id(identifier),
@@ -8,8 +9,8 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	btnOscRect("btn_rect_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscTriangle("btn_triangle_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscSawtooth("btn_sawtooth_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
-	sliderDetune(-100, 100, 1.0, 0, "detune"),
-	sliderMix(0, 100, 1.0, 100, "mix")
+	sliderDetune(-100, 100, 1.0, 0, osc1DetuneParamName),
+	sliderMix(0, 100, 1.0, 100, osc1MixParamName)
 {
 	btnOscSine.addListener(this);
 	btnOscRect.addListener(this);
@@ -37,6 +38,8 @@ void OscillatorComponent::resized() {
 	auto h = area.getHeight();
 	auto w = area.getWidth();
 
+	int off = (sliderFontSize + sliderSpacer);
+
 	btnOscSine.setBorderSize(juce::BorderSize<int>(1));
 	btnOscRect.setBorderSize(juce::BorderSize<int>(1));
 	btnOscTriangle.setBorderSize(juce::BorderSize<int>(1));
@@ -55,8 +58,8 @@ void OscillatorComponent::resized() {
 
 	gridWaves.performLayout(juce::Rectangle<int>(0, 0, w*0.25, h));
 
-	sliderDetune.setBounds(juce::Rectangle<int>(w*0.25, 0, w*0.25, h).reduced(3, 3));
-	sliderMix.setBounds(juce::Rectangle<int>(w*0.5, 0, w*0.25, h).reduced(3, 3));
+	sliderDetune.setBounds(juce::Rectangle<int>(w*0.25, off, w*0.25, h-off).reduced(componentElementSpacer));
+	sliderMix.setBounds(juce::Rectangle<int>(w*0.5, off, w*0.25, h-off).reduced(componentElementSpacer));
 }
 
 void OscillatorComponent::buttonClicked(juce::Button* button) {
