@@ -41,20 +41,6 @@ SynthAudioProcessor::SynthAudioProcessor()
 	})
 #endif
 {
-	tree.addParameterListener(osc1WaveTypeParamId, this);
-	tree.addParameterListener(osc2WaveTypeParamId, this);
-	tree.addParameterListener(osc3WaveTypeParamId, this);
-	tree.addParameterListener(osc1DetuneParamId, this);
-	tree.addParameterListener(osc2DetuneParamId, this);
-	tree.addParameterListener(osc3DetuneParamId, this);
-	tree.addParameterListener(osc1MixParamId, this);
-	tree.addParameterListener(osc2MixParamId, this);
-	tree.addParameterListener(osc3MixParamId, this);
-	tree.addParameterListener(adsrAttackParamId, this);
-	tree.addParameterListener(adsrDecayParamId, this);
-	tree.addParameterListener(adsrSustainParamId, this);
-	tree.addParameterListener(adsrReleaseParamId, this);
-
 	synth.clearVoices();
 	for (int i = 0; i < 5; i++) {
 		voices.push_back(new SynthVoice());
@@ -65,19 +51,7 @@ SynthAudioProcessor::SynthAudioProcessor()
 }
 
 SynthAudioProcessor::~SynthAudioProcessor() {
-	tree.removeParameterListener(osc1WaveTypeParamId, this);
-	tree.removeParameterListener(osc2WaveTypeParamId, this);
-	tree.removeParameterListener(osc3WaveTypeParamId, this);
-	tree.removeParameterListener(osc1DetuneParamId, this);
-	tree.removeParameterListener(osc2DetuneParamId, this);
-	tree.removeParameterListener(osc3DetuneParamId, this);
-	tree.removeParameterListener(osc1MixParamId, this);
-	tree.removeParameterListener(osc2MixParamId, this);
-	tree.removeParameterListener(osc3MixParamId, this);
-	tree.removeParameterListener(adsrAttackParamId, this);
-	tree.removeParameterListener(adsrDecayParamId, this);
-	tree.removeParameterListener(adsrSustainParamId, this);
-	tree.removeParameterListener(adsrReleaseParamId, this);
+
 }
 
 const juce::String SynthAudioProcessor::getName() const
@@ -206,16 +180,19 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	for(int i = 0; i < synth.getNumVoices(); i++) {
 		SynthVoice* synthVoice;
 		if ((synthVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))) {
-			synthVoice->setAdsrAttack(tree.getParameterAsValue(adsrAttackParamId).getValue());
-			synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
-			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
-			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc1WaveTypeParamId)), 1);
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc2WaveTypeParamId)), 2);
+			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc3WaveTypeParamId)), 3);
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc1DetuneParamId), 1);
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc2DetuneParamId), 2);
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc3DetuneParamId), 3);
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc1MixParamId), 1);
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc2MixParamId), 2);
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);
+			synthVoice->setAdsrAttack(tree.getParameterAsValue(adsrAttackParamId).getValue());
+			synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
+			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
+			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
 			synthVoice->setFilterCutoff(tree.getParameterAsValue(filterCutoffParamId).getValue());
 			synthVoice->setFilterResonance(tree.getParameterAsValue(filterResonanceParamId).getValue());
 			synthVoice->setFilterType((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue());
@@ -263,39 +240,6 @@ void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-}
-
-void SynthAudioProcessor::parameterChanged(const String& parameterID, float newValue) {
-	for (SynthVoice* synthVoice : voices) {
-		if (parameterID == osc1WaveTypeParamId)
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc1WaveTypeParamId)), 1);
-		else if (parameterID == osc2WaveTypeParamId)
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc2WaveTypeParamId)), 2);
-		else if (parameterID == osc3WaveTypeParamId)
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc3WaveTypeParamId)), 3);
-		else if (parameterID == osc1DetuneParamId)
-			synthVoice->setDetune((int)*tree.getRawParameterValue(osc1DetuneParamId), 1);
-		else if (parameterID == osc2DetuneParamId)
-			synthVoice->setDetune((int)*tree.getRawParameterValue(osc2DetuneParamId), 2);
-		else if (parameterID == osc3DetuneParamId)
-			synthVoice->setDetune((int)*tree.getRawParameterValue(osc3DetuneParamId), 3);
-		else if (parameterID == osc1MixParamId)
-			synthVoice->setMix((int)*tree.getRawParameterValue(osc1MixParamId), 1);
-		else if (parameterID == osc2MixParamId)
-			synthVoice->setMix((int)*tree.getRawParameterValue(osc2MixParamId), 2);
-		else if (parameterID == osc3MixParamId)
-			synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);
-		
-		else if (parameterID == adsrAttackParamId)
-			synthVoice->setAdsrAttack(tree.getParameterAsValue(adsrAttackParamId).getValue());
-		else if (parameterID == adsrDecayParamId)
-			synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
-		else if (parameterID == adsrSustainParamId)
-			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
-		else if (parameterID == adsrReleaseParamId)
-			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
-			
-	}
 }
 
 // This creates new instances of the plugin.

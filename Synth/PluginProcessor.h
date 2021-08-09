@@ -7,8 +7,7 @@
 #include "AudioBufferQueue.h"
 #include "ScopeDataCollector.h"
 
-class SynthAudioProcessor  : public juce::AudioProcessor,
-							 public AudioProcessorValueTreeState::Listener
+class SynthAudioProcessor  : public juce::AudioProcessor
 {
 public:
     SynthAudioProcessor();
@@ -41,8 +40,6 @@ public:
 
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-
-	void parameterChanged(const String& parameterID, float newValue) override;
 
 	AudioProcessorValueTreeState tree;
 	juce::MidiMessageCollector midiMessageCollector;
