@@ -7,7 +7,8 @@
 #include "SynthComponent.h"
 #include "RotarySlider.h"
 
-class OscillatorComponent : public SynthComponent, juce::Button::Listener,
+class OscillatorComponent : public SynthComponent, 
+							public juce::Button::Listener,
 	private juce::Timer
 {
 public:

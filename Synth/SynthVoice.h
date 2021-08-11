@@ -33,6 +33,9 @@ public:
 	void setAdsrSustain(float sustain);
 	void setAdsrRelease(float release);
 
+	void setOscEnabled(bool enable, int index);
+	void setADSREnabled(bool enable);
+
 private:
 	double level;
 	double frequency;
@@ -44,5 +47,8 @@ private:
 	juce::ADSR adsr;
 	juce::ADSR::Parameters adsrParams;
 
-	void updateFilter();
+	bool osc1Enabled = true;
+	bool osc2Enabled = true;
+	bool osc3Enabled = true;
+	bool adsrEnabled = true;
 };

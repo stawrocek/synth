@@ -3,7 +3,8 @@
 #include "Config.h"
 
 OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int identifier)
-	:SynthComponent(processor_, "Oscillator " + std::to_string(identifier)), id(identifier),
+	:SynthComponent(processor_, "Oscillator " + std::to_string(identifier), 
+		"OSC" + std::to_string(identifier)+"ENABLED"), id(identifier),
 	name("osc"+std::to_string(id)),
 	btnOscSine("btn_sin_"+name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
 	btnOscRect("btn_rect_" + name, oscNormalShapeColour, oscOverShapeColour, oscDownShapeColour),
@@ -75,6 +76,8 @@ void OscillatorComponent::buttonClicked(juce::Button* button) {
 	else if (button == &btnOscSawtooth) {
 		processor.tree.getParameterAsValue("WAVEFORM"+std::to_string(id)).setValue(3);
 	}
+
+	SynthComponent::buttonClicked(button);
 }
 
 void OscillatorComponent::generateOscillatorSelectionButtonsShapes() {

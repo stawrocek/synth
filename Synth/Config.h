@@ -52,6 +52,19 @@ const juce::String reverbWetLevelParamName = "Wet/Dry";
 const juce::String reverbWidthParamName = "Width";
 const juce::String reverbFreezeModeParamName = "Freeze";
 
+const juce::String osc1EnabledParamId = "OSC1ENABLED";
+const juce::String osc1EnabledParamName = "Osc enabled";
+const juce::String osc2EnabledParamId = "OSC2ENABLED";
+const juce::String osc2EnabledParamName = "Osc2 enabled";
+const juce::String osc3EnabledParamId = "OSC3ENABLED";
+const juce::String osc3EnabledParamName = "Osc3 enabled";
+const juce::String adsrEnabledParamId = "ADSRENABLED";
+const juce::String adsrEnabledParamName = "Adsr enabled";
+const juce::String filterEnabledParamId = "FILTERENABLED";
+const juce::String filterEnabledParamName = "Filter Enabled";
+const juce::String reverbEnabledParamId = "REVERBENABLED";
+const juce::String reverbEnabledParamName = "Reverb Enabled";
+
 const float adsrInitialAttack = 0.5;
 const float adsrInitialDecay = 0.2;
 const float adsrInitialSustain = 1.0;

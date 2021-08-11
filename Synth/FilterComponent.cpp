@@ -4,9 +4,9 @@
 #include "Styles.h"
 
 FilterComponent::FilterComponent(SynthAudioProcessor& processor_)
-	:SynthComponent(processor_, "Filter"),
+	:SynthComponent(processor_, "Filter", filterEnabledParamId),
 	sliderCutoff(20, 1000, 1, filterInitialCutoff, filterCutoffParamName),
-	sliderResonance(0, 10.0, 0.1, filterInitialResonance, filterResonanceParamName)
+	sliderResonance(0.1, 10.0, 0.1, filterInitialResonance, filterResonanceParamName)
 {
 	comboboxFilterType.setTextWhenNoChoicesAvailable("No waveform selected :(");
 	juce::StringArray waveforms{ "lpf", "hpf" };

@@ -13,7 +13,6 @@ public:
 	~RotarySlider() override;
 
 	void paint(juce::Graphics& g) override;
-	//void resized() override;
 
 	void mouseDown(const juce::MouseEvent& event) override;
 	void mouseUp(const juce::MouseEvent& event) override;

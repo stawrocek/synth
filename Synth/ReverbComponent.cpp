@@ -4,7 +4,7 @@
 #include "Styles.h"
 
 ReverbComponent::ReverbComponent(SynthAudioProcessor& processor_)
-	:SynthComponent(processor_, "Reverb"),
+	:SynthComponent(processor_, "Reverb", reverbEnabledParamId),
 	sliderRoomSize(0, 1.0, 0.01, reverbInitialRoomSize, reverbRoomSizeParamName),
 	sliderDamping(0, 1.0, 0.01, reverbInitialDamping, reverbDampingParamName),
 	sliderWetLevel(0, 1.0, 0.01, reverbInitialWetLevel, reverbWetLevelParamName),

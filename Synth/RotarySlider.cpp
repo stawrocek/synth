@@ -19,7 +19,6 @@ RotarySlider::RotarySlider(double minimum, double maximum, double step, double i
 		true);
 	setTooltip(tooltip);
 	setWantsKeyboardFocus(true);
-	//setTextValueSuffix(" %");
 	onValueChange = [&]()
 	{
 		if (getValue() < 10)
@@ -88,7 +87,3 @@ void RotarySlider::mouseUp(const juce::MouseEvent& event)
 	juce::Desktop::getInstance().getMainMouseSource().setScreenPosition(event.source.getLastMouseDownPosition());
 	setMouseCursor(juce::MouseCursor::NormalCursor);
 }
-
-/*void RotarySlider::resized() {
-
-}*/

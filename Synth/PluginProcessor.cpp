@@ -30,14 +30,20 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(adsrSustainParamId, adsrSustainParamName, 0, 1, adsrInitialSustain),
 		std::make_unique<juce::AudioParameterFloat>(adsrReleaseParamId, adsrReleaseParamName, 0, 2, adsrInitialRelease),
 		std::make_unique<juce::AudioParameterFloat>(filterCutoffParamId, filterCutoffParamName, 20, 1000, filterInitialCutoff),
-		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0, 10, filterInitialResonance),
+		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0.1, 10, filterInitialResonance),
 		std::make_unique<juce::AudioParameterInt>(filterTypeParamId, filterTypeParamName, 0, 1, 0),
 		std::make_unique<juce::AudioParameterFloat>(reverbRoomSizeParamId, reverbRoomSizeParamName, 0, 1, reverbInitialRoomSize),
 		std::make_unique<juce::AudioParameterFloat>(reverbDampingParamId, reverbDampingParamName, 0, 1, reverbInitialDamping),
 		std::make_unique<juce::AudioParameterFloat>(reverbWetLevelParamId, reverbWetLevelParamName, 0, 1, reverbInitialWetLevel),
 		std::make_unique<juce::AudioParameterFloat>(reverbWidthParamId, reverbWidthParamName, 0, 1, reverbInitialWidth),
-		std::make_unique<juce::AudioParameterFloat>(reverbFreezeModeParamId, reverbFreezeModeParamName, 0, 1, reverbInitialFreezeMode)
-		
+		std::make_unique<juce::AudioParameterFloat>(reverbFreezeModeParamId, reverbFreezeModeParamName, 0, 1, reverbInitialFreezeMode),
+
+		std::make_unique<juce::AudioParameterBool>(osc1EnabledParamId, osc1EnabledParamName, true),
+		std::make_unique<juce::AudioParameterBool>(osc2EnabledParamId, osc2EnabledParamName, true),
+		std::make_unique<juce::AudioParameterBool>(osc3EnabledParamId, osc3EnabledParamName, true),
+		std::make_unique<juce::AudioParameterBool>(adsrEnabledParamId, adsrEnabledParamName, true),
+		std::make_unique<juce::AudioParameterBool>(filterEnabledParamId, filterEnabledParamName, true),
+		std::make_unique<juce::AudioParameterBool>(reverbEnabledParamId, reverbEnabledParamName, true)
 	})
 #endif
 {
@@ -168,29 +174,31 @@ bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
 
 void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-	reverbParams.roomSize = tree.getParameterAsValue(reverbRoomSizeParamId).getValue();
-	reverbParams.damping = tree.getParameterAsValue(reverbDampingParamId).getValue();
-	reverbParams.wetLevel = tree.getParameterAsValue(reverbWetLevelParamId).getValue();
-	reverbParams.dryLevel = 1.0 - (float)tree.getParameterAsValue(reverbWetLevelParamId).getValue();
-	reverbParams.width = tree.getParameterAsValue(reverbWidthParamId).getValue();
-	reverbParams.freezeMode = tree.getParameterAsValue(reverbFreezeModeParamId).getValue();
+	if (tree.getParameterAsValue(reverbEnabledParamId).getValue()) {
+		reverbParams.roomSize = tree.getParameterAsValue(reverbRoomSizeParamId).getValue();
+		reverbParams.damping = tree.getParameterAsValue(reverbDampingParamId).getValue();
+		reverbParams.wetLevel = tree.getParameterAsValue(reverbWetLevelParamId).getValue();
+		reverbParams.dryLevel = 1.0 - (float)tree.getParameterAsValue(reverbWetLevelParamId).getValue();
+		reverbParams.width = tree.getParameterAsValue(reverbWidthParamId).getValue();
+		reverbParams.freezeMode = tree.getParameterAsValue(reverbFreezeModeParamId).getValue();
 
-	leftReverb.setParameters(reverbParams);
-	rightReverb.setParameters(reverbParams);
-
-	float filterCutoff = tree.getParameterAsValue(filterCutoffParamId).getValue();
-	float filterResonance = tree.getParameterAsValue(filterResonanceParamId).getValue();
-
-	if (((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue() == FilterType::LowPassFilter)) {
-		filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, filterCutoff, filterResonance);
+		leftReverb.setParameters(reverbParams);
+		rightReverb.setParameters(reverbParams);
 	}
-	else if (((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue() == FilterType::HighPassFilter)) {
-		filterCoefficients = IIRCoefficients::makeHighPass(sampleRate, filterCutoff, filterResonance);
+	if (tree.getParameterAsValue(filterEnabledParamId).getValue()) {
+		float filterCutoff = tree.getParameterAsValue(filterCutoffParamId).getValue();
+		float filterResonance = tree.getParameterAsValue(filterResonanceParamId).getValue();
+
+		if (((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue() == FilterType::LowPassFilter)) {
+			filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, filterCutoff, filterResonance);
+		}
+		else if (((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue() == FilterType::HighPassFilter)) {
+			filterCoefficients = IIRCoefficients::makeHighPass(sampleRate, filterCutoff, filterResonance);
+		}
+
+		filterLeft.setCoefficients(filterCoefficients);
+		filterRight.setCoefficients(filterCoefficients);
 	}
-
-	filterLeft.setCoefficients(filterCoefficients);
-	filterRight.setCoefficients(filterCoefficients);
-
 	for(int i = 0; i < synth.getNumVoices(); i++) {
 		SynthVoice* synthVoice;
 		if ((synthVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))) {
@@ -207,6 +215,10 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 			synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
 			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
 			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
+			synthVoice->setOscEnabled(tree.getParameterAsValue(osc1EnabledParamId).getValue(), 1);
+			synthVoice->setOscEnabled(tree.getParameterAsValue(osc2EnabledParamId).getValue(), 2);
+			synthVoice->setOscEnabled(tree.getParameterAsValue(osc3EnabledParamId).getValue(), 3);
+			synthVoice->setADSREnabled(tree.getParameterAsValue(adsrEnabledParamId).getValue());
 		}
 	}
 
@@ -216,23 +228,26 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	int numSamples = buffer.getNumSamples();
 	synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
 
-	float* dataLeft = buffer.getWritePointer(0);
-	float* dataRight = buffer.getWritePointer(1);
+	if (tree.getParameterAsValue(filterEnabledParamId).getValue()) {
+		float* dataLeft = buffer.getWritePointer(0);
+		float* dataRight = buffer.getWritePointer(1);
 
-	filterLeft.processSamples(dataLeft, numSamples);
-	filterRight.processSamples(dataRight, numSamples);
+		filterLeft.processSamples(dataLeft, numSamples);
+		filterRight.processSamples(dataRight, numSamples);
+	}
 
-	juce::dsp::AudioBlock<float> block(buffer);
+	if (tree.getParameterAsValue(reverbEnabledParamId).getValue()) {
+		juce::dsp::AudioBlock<float> block(buffer);
 
-	auto leftBlock = block.getSingleChannelBlock(0);
-	auto rightBlock = block.getSingleChannelBlock(1);
+		auto leftBlock = block.getSingleChannelBlock(0);
+		auto rightBlock = block.getSingleChannelBlock(1);
 
-	juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
-	juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
+		juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
+		juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
 
-	leftReverb.process(leftContext);
-	rightReverb.process(rightContext);
-
+		leftReverb.process(leftContext);
+		rightReverb.process(rightContext);
+	}
 	scopeDataCollector.process(buffer.getReadPointer(0), (size_t)buffer.getNumSamples());
 }
 

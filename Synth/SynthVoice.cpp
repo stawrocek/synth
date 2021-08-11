@@ -28,9 +28,10 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
 void SynthVoice::stopNote(float velocity, bool allowTailoff)
 {
 	adsr.noteOff();
-	//if (velocity < 0.00001 && allowTailoff == false)
+	if (!adsrEnabled)
+		clearCurrentNote();
 	//if (velocity < 0.00001)
-	if(!allowTailoff)
+	else if(!allowTailoff)
 		clearCurrentNote();
 	level = velocity;
 }
@@ -40,13 +41,14 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 	adsr.setParameters(adsrParams);
 	for (int sample = 0; sample < numSamples; sample++)
 	{
-		double signal1 = osc1.generateWave(frequency) * mix[0];
-		double signal2 = osc2.generateWave(frequency) * mix[1];
-		double signal3 = osc3.generateWave(frequency) * mix[2];
+		double signal1 = osc1Enabled ? osc1.generateWave(frequency) * mix[0] : 0;
+		double signal2 = osc2Enabled ? osc2.generateWave(frequency) * mix[1] : 0;
+		double signal3 = osc3Enabled ? osc3.generateWave(frequency) * mix[2] : 0;
 
 		double signal = (signal1 * level + signal2 * level + signal3 * level);// / 3.0;
-		//double signal = signal1 * level;
-		signal = adsr.getNextSample() * signal;
+		double nextAdsr = adsr.getNextSample();
+		if (adsrEnabled)
+			signal = nextAdsr * signal;
 		signal *= level;
 
 		for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
@@ -109,4 +111,13 @@ void SynthVoice::setAdsrSustain(float sustain) {
 
 void SynthVoice::setAdsrRelease(float release) {
 	adsrParams.release = release;
+}
+
+void SynthVoice::setOscEnabled(bool enable, int index) {
+	if (index == 1) osc1Enabled = enable;
+	if (index == 2) osc2Enabled = enable;
+	if (index == 3) osc3Enabled = enable;
+}
+void SynthVoice::setADSREnabled(bool enable) {
+	adsrEnabled = enable;
 }
