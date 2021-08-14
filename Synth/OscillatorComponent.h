@@ -6,35 +6,26 @@
 #include "PluginProcessor.h"
 #include "SynthComponent.h"
 #include "RotarySlider.h"
+#include "WaveformButton.h"
 
-class OscillatorComponent : public SynthComponent, 
-							public juce::Button::Listener,
-	private juce::Timer
+class OscillatorComponent : public SynthComponent
 {
 public:
 	OscillatorComponent(SynthAudioProcessor& processor, int identifier);
 
 	void resized() override;
-	void buttonClicked(juce::Button* button) override;
 
 private:
 	int id;
 	juce::String name;
-	juce::ShapeButton btnOscSine;
-	juce::ShapeButton btnOscRect;
-	juce::ShapeButton btnOscTriangle;
-	juce::ShapeButton btnOscSawtooth;
+	WaveformButton btnOscSine;
+	WaveformButton btnOscRect;
+	WaveformButton btnOscTriangle;
+	WaveformButton btnOscSawtooth;
 	RotarySlider sliderDetune;
 	RotarySlider sliderMix;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderDetuneAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderMixAttachment;
-	void timerCallback() override;
-	float offsetSine = 0.0;
-	float offsetRect = 0.0;
-	float offsetTriangle = 0.0;
-	float offsetSaw = 0.0;
-
-	void generateOscillatorSelectionButtonsShapes();
 };
 
 

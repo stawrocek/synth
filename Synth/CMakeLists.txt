@@ -33,4 +33,7 @@ target_sources(SynthPlugin
 		RotarySlider.cpp
 		RotarySliderLookAndFeel.h
 		RotarySliderLookAndFeel.cpp
+		WaveformButton.h
+		WaveformButton.cpp
+		
 )

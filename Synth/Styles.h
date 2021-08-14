@@ -10,9 +10,10 @@ const juce::Colour groupComponentOutlineOnColor = juce::Colours::lightgrey.darke
 const juce::Colour groupComponentOutlineOffColor = juce::Colours::darkred;
 
 
-const juce::Colour oscNormalShapeColour      = juce::Colours::orange;
+const juce::Colour oscNormalShapeColour      = juce::Colours::grey;
 const juce::Colour oscOverShapeColour        = juce::Colours::yellow;
-const juce::Colour oscDownShapeColour        = juce::Colours::grey;
+const juce::Colour oscDownShapeColour        = juce::Colours::lightblue;
+const juce::Colour oscActivatedShapeColour   = juce::Colours::orange;
 
 const juce::Colour sliderFillColour = juce::Colours::lightgrey.darker(0.2);
 const juce::Colour sliderArcColour = juce::Colours::grey;
