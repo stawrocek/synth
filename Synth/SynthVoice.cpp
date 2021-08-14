@@ -31,6 +31,7 @@ void SynthVoice::stopNote(float velocity, bool allowTailoff)
 {
 	if (allowTailoff && !tailOff)
 	{
+		stopNoteVelocity = velocity;
 		tailOff = true;
 		if (adsrEnabled)
 			adsr.noteOff();
@@ -38,11 +39,20 @@ void SynthVoice::stopNote(float velocity, bool allowTailoff)
 	else
 	{
 		clearCurrentNote();
+		stopNoteVelocity = 0.0;
 	}
 }
 
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
+	if (!adsrEnabled && tailOff) {
+		if (stopNoteVelocity < 0.01) {
+			clearCurrentNote();
+			return;
+		}
+
+		stopNoteVelocity *= 0.99;
+	}
 	if (adsrEnabled) {
 		adsr.setParameters(adsrParams);
 	}
@@ -57,6 +67,9 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 		if (adsrEnabled) {
 			double nextAdsr = adsr.getNextSample();
 			signal = nextAdsr * signal;
+		}
+		else if (tailOff && !adsrEnabled){
+			signal *= stopNoteVelocity;
 		}
 		signal *= level;
 

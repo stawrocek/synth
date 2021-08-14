@@ -53,4 +53,5 @@ private:
 	bool adsrEnabled = true;
 
 	bool tailOff = false;
+	float stopNoteVelocity = 0.0;
 };
