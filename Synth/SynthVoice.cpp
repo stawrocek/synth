@@ -20,35 +20,44 @@ bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
 void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound,
 	int currentPitchWheelPosition) 
 {
-	adsr.noteOn();
+	tailOff = false;
+	if(adsrEnabled)
+		adsr.noteOn();
 	level = velocity;
 	frequency = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
 }
 
 void SynthVoice::stopNote(float velocity, bool allowTailoff)
 {
-	adsr.noteOff();
-	if (!adsrEnabled)
+	if (allowTailoff && !tailOff)
+	{
+		tailOff = true;
+		if (adsrEnabled)
+			adsr.noteOff();
+	}
+	else
+	{
 		clearCurrentNote();
-	//if (velocity < 0.00001)
-	else if(!allowTailoff)
-		clearCurrentNote();
-	level = velocity;
+	}
 }
 
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
-	adsr.setParameters(adsrParams);
+	if (adsrEnabled) {
+		adsr.setParameters(adsrParams);
+	}
 	for (int sample = 0; sample < numSamples; sample++)
 	{
 		double signal1 = osc1Enabled ? osc1.generateWave(frequency) * mix[0] : 0;
 		double signal2 = osc2Enabled ? osc2.generateWave(frequency) * mix[1] : 0;
 		double signal3 = osc3Enabled ? osc3.generateWave(frequency) * mix[2] : 0;
 
-		double signal = (signal1 * level + signal2 * level + signal3 * level);// / 3.0;
-		double nextAdsr = adsr.getNextSample();
-		if (adsrEnabled)
+		double signal = (signal1 + signal2 + signal3);// / 3.0;
+		
+		if (adsrEnabled) {
+			double nextAdsr = adsr.getNextSample();
 			signal = nextAdsr * signal;
+		}
 		signal *= level;
 
 		for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)

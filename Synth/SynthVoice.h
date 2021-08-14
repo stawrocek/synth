@@ -51,4 +51,6 @@ private:
 	bool osc2Enabled = true;
 	bool osc3Enabled = true;
 	bool adsrEnabled = true;
+
+	bool tailOff = false;
 };
