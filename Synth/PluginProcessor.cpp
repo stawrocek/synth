@@ -37,13 +37,19 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(reverbWetLevelParamId, reverbWetLevelParamName, 0, 1, reverbInitialWetLevel),
 		std::make_unique<juce::AudioParameterFloat>(reverbWidthParamId, reverbWidthParamName, 0, 1, reverbInitialWidth),
 		std::make_unique<juce::AudioParameterFloat>(reverbFreezeModeParamId, reverbFreezeModeParamName, 0, 1, reverbInitialFreezeMode),
-
+		std::make_unique<juce::AudioParameterInt>(lfoWaveformTypeParamId, lfoWaveformTypeParamName, 0, 3, 0),
+		std::make_unique<juce::AudioParameterFloat>(lfoRateParamId, lfoRateParamName, 0.1, 5, lfoInitialRate),
+		std::make_unique<juce::AudioParameterFloat>(lfoIntensityParamId, lfoIntensityParamName, 0.01, 2.0, lfoInitialIntensity),
+		std::make_unique<juce::AudioParameterBool>(lfoTarget1ActiveParamId, lfoTarget1ActiveParamName, false),
+		std::make_unique<juce::AudioParameterBool>(lfoTarget2ActiveParamId, lfoTarget2ActiveParamName, false),
+		std::make_unique<juce::AudioParameterBool>(lfoTarget3ActiveParamId, lfoTarget3ActiveParamName, false),
 		std::make_unique<juce::AudioParameterBool>(osc1EnabledParamId, osc1EnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(osc2EnabledParamId, osc2EnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(osc3EnabledParamId, osc3EnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(adsrEnabledParamId, adsrEnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(filterEnabledParamId, filterEnabledParamName, true),
-		std::make_unique<juce::AudioParameterBool>(reverbEnabledParamId, reverbEnabledParamName, true)
+		std::make_unique<juce::AudioParameterBool>(reverbEnabledParamId, reverbEnabledParamName, true),
+		std::make_unique<juce::AudioParameterBool>(lfoEnabledParamId, lfoEnabledParamName, true)
 	})
 #endif
 {

@@ -52,6 +52,19 @@ const juce::String reverbWetLevelParamName = "Wet/Dry";
 const juce::String reverbWidthParamName = "Width";
 const juce::String reverbFreezeModeParamName = "Freeze";
 
+const juce::String lfoWaveformTypeParamId = "LFO_WAVEFORM_TYPE";
+const juce::String lfoRateParamId = "LFO_RATE";
+const juce::String lfoIntensityParamId = "LFO_INTENSITY";
+const juce::String lfoWaveformTypeParamName = "Waveform type";
+const juce::String lfoRateParamName = "Rate";
+const juce::String lfoIntensityParamName = "Intensity";
+const juce::String lfoTarget1ActiveParamId = "LFO_TARGET_1_ACTIVE";
+const juce::String lfoTarget1ActiveParamName = "LFO cutoff";
+const juce::String lfoTarget2ActiveParamId = "LFO_TARGET_2_ACTIVE";
+const juce::String lfoTarget2ActiveParamName = "LFO detune";
+const juce::String lfoTarget3ActiveParamId = "LFO_TARGET_3_ACTIVE";
+const juce::String lfoTarget3ActiveParamName = "LFO volume";
+
 const juce::String osc1EnabledParamId = "OSC1ENABLED";
 const juce::String osc1EnabledParamName = "Osc enabled";
 const juce::String osc2EnabledParamId = "OSC2ENABLED";
@@ -64,6 +77,8 @@ const juce::String filterEnabledParamId = "FILTERENABLED";
 const juce::String filterEnabledParamName = "Filter Enabled";
 const juce::String reverbEnabledParamId = "REVERBENABLED";
 const juce::String reverbEnabledParamName = "Reverb Enabled";
+const juce::String lfoEnabledParamId = "LFOENABLED";
+const juce::String lfoEnabledParamName = "LFO Enabled";
 
 const float adsrInitialAttack = 0.5;
 const float adsrInitialDecay = 0.2;
@@ -79,3 +94,6 @@ const float reverbInitialDamping    = 0.5f;
 const float reverbInitialWetLevel   = 0.33f;
 const float reverbInitialWidth      = 1.0f;
 const float reverbInitialFreezeMode = 0.0f;
+
+const float lfoInitialRate = 0.0;
+const float lfoInitialIntensity = 0.0;

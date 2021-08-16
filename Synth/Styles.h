@@ -15,6 +15,9 @@ const juce::Colour oscOverShapeColour        = juce::Colours::yellow;
 const juce::Colour oscDownShapeColour        = juce::Colours::lightblue;
 const juce::Colour oscActivatedShapeColour   = juce::Colours::orange;
 
+const juce::Colour lfoTargetOn = juce::Colours::orange;
+const juce::Colour lfoTargetOff = juce::Colours::transparentBlack;
+
 const juce::Colour sliderFillColour = juce::Colours::lightgrey.darker(0.2);
 const juce::Colour sliderArcColour = juce::Colours::grey;
 const juce::Colour sliderTextBoxTextColour = juce::Colour::fromFloatRGBA(0.2f, 0.2f, 0.2f, 1.0f);

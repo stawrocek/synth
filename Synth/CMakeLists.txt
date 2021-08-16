@@ -35,5 +35,7 @@ target_sources(SynthPlugin
 		RotarySliderLookAndFeel.cpp
 		WaveformButton.h
 		WaveformButton.cpp
+		LFOComponent.h
+		LFOComponent.cpp
 		
 )

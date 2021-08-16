@@ -57,11 +57,6 @@ void OscillatorComponent::resized() {
 
 	int off = (sliderFontSize + sliderSpacer);
 
-	btnOscSine.setBorderSize(juce::BorderSize<int>(1));
-	btnOscRect.setBorderSize(juce::BorderSize<int>(1));
-	btnOscTriangle.setBorderSize(juce::BorderSize<int>(1));
-	btnOscSawtooth.setBorderSize(juce::BorderSize<int>(1));
-
 	juce::Rectangle<int> grid(0, 13, w / 2.0, h - 13);
 	grid.reduce(componentBorderSize + 8, componentBorderSize + 8);
 	if (grid.getWidth() > grid.getHeight())

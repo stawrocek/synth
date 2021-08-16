@@ -7,6 +7,7 @@
 #include "ADSRComponent.h"
 #include "FilterComponent.h"
 #include "ReverbComponent.h"
+#include "LFOComponent.h"
 
 class SynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
 								   private juce::Slider::Listener
@@ -28,12 +29,10 @@ private:
 	OscillatorComponent osc1Component;
 	OscillatorComponent osc2Component;
 	OscillatorComponent osc3Component;
-
 	ADSRComponent adsrComponent;
-
 	FilterComponent filterComponent;
-
 	ReverbComponent reverbComponent;
+	LFOComponent lfoComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessorEditor)
 };

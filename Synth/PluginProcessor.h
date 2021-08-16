@@ -59,7 +59,7 @@ private:
 	juce::dsp::Reverb leftReverb;
 	juce::dsp::Reverb rightReverb;
 	juce::Reverb::Parameters reverbParams;
-	
+	Oscillator oscLFO;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessor)
 };
