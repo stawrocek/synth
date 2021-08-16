@@ -130,7 +130,7 @@ void SynthAudioProcessor::changeProgramName (int index, const juce::String& newN
 void SynthAudioProcessor::prepareToPlay (double sampleRate_, int samplesPerBlock)
 {
 	sampleRate = sampleRate_;
-	juce::ignoreUnused(samplesPerBlock);
+	Oscillator::sampleRate = sampleRate;
 
 	juce::dsp::ProcessSpec spec;
 

@@ -11,7 +11,7 @@ double Oscillator::sampleRate = 44100.;
 double Oscillator::generateSinWave(double frequency) {
 	double result = sin(phase * 2.0 * PI);
 	if (phase >= 1.) {
-		phase -= 2.;
+		phase -= 1.;
 	}
 	phase += frequency / sampleRate;
 	return result;
