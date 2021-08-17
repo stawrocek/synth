@@ -38,8 +38,8 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(reverbWidthParamId, reverbWidthParamName, 0, 1, reverbInitialWidth),
 		std::make_unique<juce::AudioParameterFloat>(reverbFreezeModeParamId, reverbFreezeModeParamName, 0, 1, reverbInitialFreezeMode),
 		std::make_unique<juce::AudioParameterInt>(lfoWaveformTypeParamId, lfoWaveformTypeParamName, 0, 3, 0),
-		std::make_unique<juce::AudioParameterFloat>(lfoRateParamId, lfoRateParamName, 0.1, 5, lfoInitialRate),
-		std::make_unique<juce::AudioParameterFloat>(lfoIntensityParamId, lfoIntensityParamName, 0.01, 2.0, lfoInitialIntensity),
+		std::make_unique<juce::AudioParameterFloat>(lfoRateParamId, lfoRateParamName, 0.1, 10, lfoInitialRate),
+		std::make_unique<juce::AudioParameterFloat>(lfoIntensityParamId, lfoIntensityParamName, 0.01, 1.0, lfoInitialIntensity),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget1ActiveParamId, lfoTarget1ActiveParamName, false),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget2ActiveParamId, lfoTarget2ActiveParamName, false),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget3ActiveParamId, lfoTarget3ActiveParamName, false),
@@ -221,10 +221,16 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 			synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
 			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
 			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
+			synthVoice->setLFORate(tree.getParameterAsValue(lfoRateParamId).getValue());
+			synthVoice->setLFOIntensity(tree.getParameterAsValue(lfoIntensityParamId).getValue());
+			synthVoice->setLFOWavetype(static_cast<OscillatorType>((int)*tree.getRawParameterValue(lfoWaveformTypeParamId)));
+			synthVoice->setLFOTargetDetune(tree.getParameterAsValue(lfoTarget2ActiveParamId).getValue());
+			synthVoice->setLFOTargetVolume(tree.getParameterAsValue(lfoTarget3ActiveParamId).getValue());
 			synthVoice->setOscEnabled(tree.getParameterAsValue(osc1EnabledParamId).getValue(), 1);
 			synthVoice->setOscEnabled(tree.getParameterAsValue(osc2EnabledParamId).getValue(), 2);
 			synthVoice->setOscEnabled(tree.getParameterAsValue(osc3EnabledParamId).getValue(), 3);
 			synthVoice->setADSREnabled(tree.getParameterAsValue(adsrEnabledParamId).getValue());
+			synthVoice->setLFOEnabled(tree.getParameterAsValue(lfoEnabledParamId).getValue());
 		}
 	}
 

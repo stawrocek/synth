@@ -33,8 +33,15 @@ public:
 	void setAdsrSustain(float sustain);
 	void setAdsrRelease(float release);
 
+	void setLFORate(float rate);
+	void setLFOIntensity(float intensity);
+	void setLFOWavetype(OscillatorType type);
+	void setLFOTargetDetune(bool targetDetune);
+	void setLFOTargetVolume(bool targetVolume);
+
 	void setOscEnabled(bool enable, int index);
 	void setADSREnabled(bool enable);
+	void setLFOEnabled(bool enable);
 
 private:
 	double level;
@@ -43,15 +50,22 @@ private:
 	Oscillator osc1;
 	Oscillator osc2;
 	Oscillator osc3;
+	float detune1, detune2, detune3;
 	float mix[3] = {1, 1, 1};
 	juce::ADSR adsr;
 	juce::ADSR::Parameters adsrParams;
+	float lfoRate;
+	float lfoIntensity;
+	bool lfoTargetDetune = false;
+	bool lfoTargetVolume = false;
 
 	bool osc1Enabled = true;
 	bool osc2Enabled = true;
 	bool osc3Enabled = true;
 	bool adsrEnabled = true;
+	bool lfoEnabled  = true;
 
 	bool tailOff = false;
 	float stopNoteVelocity = 0.0;
+	Oscillator lfo;
 };

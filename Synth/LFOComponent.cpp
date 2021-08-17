@@ -10,8 +10,8 @@ LFOComponent::LFOComponent(SynthAudioProcessor& processor_)
 	btnOscRect("btn_rect_lfo", OscillatorType::OscSquare, 101),
 	btnOscTriangle("btn_triangle_lfo", OscillatorType::OscTriangle, 101),
 	btnOscSawtooth("btn_sawtooth_lfo", OscillatorType::OscSawtooth, 101),
-	sliderLFORate(0.1, 5, 0.01, lfoInitialRate, lfoRateParamName),
-	sliderLFOIntensity(0.01, 2.0, 0.01, lfoInitialIntensity, lfoIntensityParamName),
+	sliderLFORate(0.1, 10, 0.01, lfoInitialRate, lfoRateParamName),
+	sliderLFOIntensity(0.0, 1.0, 0.01, lfoInitialIntensity, lfoIntensityParamName),
 	lfoTargets("LFO Targets", "Targets"),
 	lfoTargetFilterCutoff("Cutoff"),
 	lfoTargetDetune("Detune"),
@@ -49,7 +49,7 @@ LFOComponent::LFOComponent(SynthAudioProcessor& processor_)
 		processor.tree, lfoRateParamId, sliderLFORate);
 	addAndMakeVisible(sliderLFORate);
 
-	sliderAttachmentRate = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+	sliderAttachmentIntensity = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, lfoIntensityParamId, sliderLFOIntensity);
 	addAndMakeVisible(sliderLFOIntensity);
 

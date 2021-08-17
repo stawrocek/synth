@@ -6,7 +6,7 @@ Oscillator::Oscillator()
 
 }
 
-double Oscillator::sampleRate = 44100.;
+double Oscillator::sampleRate = 48000.;
 
 double Oscillator::generateSinWave(double frequency) {
 	double result = sin(phase * 2.0 * PI);

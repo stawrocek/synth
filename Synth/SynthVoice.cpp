@@ -56,8 +56,21 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 	if (adsrEnabled) {
 		adsr.setParameters(adsrParams);
 	}
+	
 	for (int sample = 0; sample < numSamples; sample++)
 	{
+		double detuneLFO = 0;
+		double levelLFO = 1.0;
+		double lfoVar = lfo.generateWave(lfoRate);
+		if (lfoEnabled) {
+			if (lfoTargetDetune)
+				detuneLFO = lfoVar * lfoIntensity * 200.0;
+			if (lfoTargetVolume)
+				levelLFO = lfoVar * lfoIntensity;
+		}
+		osc1.setDetune((detune1+detuneLFO)/1000.);
+		osc2.setDetune((detune2+detuneLFO)/1000.);
+		osc3.setDetune((detune3+detuneLFO)/1000.);
 		double signal1 = osc1Enabled ? osc1.generateWave(frequency) * mix[0] : 0;
 		double signal2 = osc2Enabled ? osc2.generateWave(frequency) * mix[1] : 0;
 		double signal3 = osc3Enabled ? osc3.generateWave(frequency) * mix[2] : 0;
@@ -72,6 +85,7 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 			signal *= stopNoteVelocity;
 		}
 		signal *= level;
+		signal *= (1.0+levelLFO);
 
 		for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
 		{
@@ -108,11 +122,11 @@ void SynthVoice::setOscillator(OscillatorType oscillatorType, int id) {
 
 void SynthVoice::setDetune(int detune, int id) {
 	if (id == 1)
-		osc1.setDetune(detune/1000.f);
+		detune1 = detune;
 	if (id == 2)
-		osc2.setDetune(detune/1000.f);
+		detune2 = detune;
 	if (id == 3)
-		osc3.setDetune(detune/1000.f);
+		detune3 = detune;
 }
 
 void SynthVoice::setMix(int mixVal, int id) {
@@ -135,6 +149,26 @@ void SynthVoice::setAdsrRelease(float release) {
 	adsrParams.release = release;
 }
 
+void SynthVoice::setLFORate(float rate) {
+	lfoRate = rate;
+}
+
+void SynthVoice::setLFOIntensity(float intensity) {
+	lfoIntensity = intensity;
+}
+
+void SynthVoice::setLFOWavetype(OscillatorType type) {
+	lfo.setType(type);
+}
+
+void SynthVoice::setLFOTargetDetune(bool targetDetune) {
+	lfoTargetDetune = targetDetune;
+}
+
+void SynthVoice::setLFOTargetVolume(bool targetVolume) {
+	lfoTargetVolume = targetVolume;
+}
+
 void SynthVoice::setOscEnabled(bool enable, int index) {
 	if (index == 1) osc1Enabled = enable;
 	if (index == 2) osc2Enabled = enable;
@@ -142,4 +176,8 @@ void SynthVoice::setOscEnabled(bool enable, int index) {
 }
 void SynthVoice::setADSREnabled(bool enable) {
 	adsrEnabled = enable;
+}
+
+void SynthVoice::setLFOEnabled(bool enable) {
+	lfoEnabled = enable;
 }
