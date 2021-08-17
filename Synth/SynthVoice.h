@@ -33,9 +33,14 @@ public:
 	void setAdsrSustain(float sustain);
 	void setAdsrRelease(float release);
 
+	void setFilterCutoff(float cutoff);
+	void setFilterResonance(float resonance);
+	void setFilterType(FilterType filterType);
+
 	void setLFORate(float rate);
 	void setLFOIntensity(float intensity);
 	void setLFOWavetype(OscillatorType type);
+	void setLFOTargetCutoff(bool targetCutoff);
 	void setLFOTargetDetune(bool targetDetune);
 	void setLFOTargetVolume(bool targetVolume);
 
@@ -54,8 +59,17 @@ private:
 	float mix[3] = {1, 1, 1};
 	juce::ADSR adsr;
 	juce::ADSR::Parameters adsrParams;
+
+	IIRFilter filterLeft;
+	IIRFilter filterRight;
+	float filterCutoff;
+	float filterResonance;
+	FilterType filterType;
+	juce::IIRCoefficients filterCoefficients;
+
 	float lfoRate;
 	float lfoIntensity;
+	bool lfoTargetCutoff = false;
 	bool lfoTargetDetune = false;
 	bool lfoTargetVolume = false;
 

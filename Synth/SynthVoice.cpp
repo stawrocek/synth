@@ -9,6 +9,9 @@ SynthVoice::SynthVoice()
 	adsrParams.decay = adsrInitialDecay;
 	adsrParams.sustain = adsrInitialSustain;
 	adsrParams.release = adsrInitialRelease;
+	filterCutoff = filterInitialCutoff;
+	filterResonance = filterInitialResonance;
+	filterType = filterInitialType;
 	adsr.setParameters(adsrParams);
 }
 
@@ -56,21 +59,34 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 	if (adsrEnabled) {
 		adsr.setParameters(adsrParams);
 	}
-	
 	for (int sample = 0; sample < numSamples; sample++)
 	{
 		double detuneLFO = 0;
 		double levelLFO = 1.0;
 		double lfoVar = lfo.generateWave(lfoRate);
+		double cutoffFreq = filterCutoff;
 		if (lfoEnabled) {
+			if (lfoTargetCutoff)
+				cutoffFreq = jmax(0.1, filterCutoff + lfoVar * lfoIntensity * 300.0);
 			if (lfoTargetDetune)
 				detuneLFO = lfoVar * lfoIntensity * 200.0;
 			if (lfoTargetVolume)
 				levelLFO = lfoVar * lfoIntensity;
+			
 		}
 		osc1.setDetune((detune1+detuneLFO)/1000.);
 		osc2.setDetune((detune2+detuneLFO)/1000.);
 		osc3.setDetune((detune3+detuneLFO)/1000.);
+
+		if (filterType == FilterType::LowPassFilter) {
+			filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, cutoffFreq, filterResonance);
+		}
+		else if (filterType == FilterType::HighPassFilter) {
+			filterCoefficients = IIRCoefficients::makeHighPass(sampleRate, cutoffFreq, filterResonance);
+		}
+		filterLeft.setCoefficients(filterCoefficients);
+		filterRight.setCoefficients(filterCoefficients);
+
 		double signal1 = osc1Enabled ? osc1.generateWave(frequency) * mix[0] : 0;
 		double signal2 = osc2Enabled ? osc2.generateWave(frequency) * mix[1] : 0;
 		double signal3 = osc3Enabled ? osc3.generateWave(frequency) * mix[2] : 0;
@@ -85,12 +101,11 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 			signal *= stopNoteVelocity;
 		}
 		signal *= level;
+		//TODO przeniesc do processora
 		signal *= (1.0+levelLFO);
 
-		for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
-		{
-			outputBuffer.addSample(channel, startSample, signal);
-		}
+		outputBuffer.addSample(0, startSample, filterLeft.processSingleSampleRaw(signal));
+		outputBuffer.addSample(1, startSample, filterRight.processSingleSampleRaw(signal));
 		++startSample;
 	}
 }
@@ -153,12 +168,28 @@ void SynthVoice::setLFORate(float rate) {
 	lfoRate = rate;
 }
 
+void SynthVoice::setFilterCutoff(float cutoff) {
+	filterCutoff = cutoff;
+}
+
+void SynthVoice::setFilterResonance(float resonance) {
+	filterResonance = resonance;
+}
+
+void SynthVoice::setFilterType(FilterType filterType_) {
+	filterType = filterType_;
+}
+
 void SynthVoice::setLFOIntensity(float intensity) {
 	lfoIntensity = intensity;
 }
 
 void SynthVoice::setLFOWavetype(OscillatorType type) {
 	lfo.setType(type);
+}
+
+void SynthVoice::setLFOTargetCutoff(bool targetCutoff) {
+	lfoTargetCutoff = targetCutoff;
 }
 
 void SynthVoice::setLFOTargetDetune(bool targetDetune) {

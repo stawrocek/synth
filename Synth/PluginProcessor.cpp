@@ -191,20 +191,6 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 		leftReverb.setParameters(reverbParams);
 		rightReverb.setParameters(reverbParams);
 	}
-	if (tree.getParameterAsValue(filterEnabledParamId).getValue()) {
-		float filterCutoff = tree.getParameterAsValue(filterCutoffParamId).getValue();
-		float filterResonance = tree.getParameterAsValue(filterResonanceParamId).getValue();
-
-		if (((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue() == FilterType::LowPassFilter)) {
-			filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, filterCutoff, filterResonance);
-		}
-		else if (((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue() == FilterType::HighPassFilter)) {
-			filterCoefficients = IIRCoefficients::makeHighPass(sampleRate, filterCutoff, filterResonance);
-		}
-
-		filterLeft.setCoefficients(filterCoefficients);
-		filterRight.setCoefficients(filterCoefficients);
-	}
 	for(int i = 0; i < synth.getNumVoices(); i++) {
 		SynthVoice* synthVoice;
 		if ((synthVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))) {
@@ -221,9 +207,13 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 			synthVoice->setAdsrDecay(tree.getParameterAsValue(adsrDecayParamId).getValue());
 			synthVoice->setAdsrSustain(tree.getParameterAsValue(adsrSustainParamId).getValue());
 			synthVoice->setAdsrRelease(tree.getParameterAsValue(adsrReleaseParamId).getValue());
+			synthVoice->setFilterCutoff(tree.getParameterAsValue(filterCutoffParamId).getValue());
+			synthVoice->setFilterResonance(tree.getParameterAsValue(filterResonanceParamId).getValue());
+			synthVoice->setFilterType((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue());
 			synthVoice->setLFORate(tree.getParameterAsValue(lfoRateParamId).getValue());
 			synthVoice->setLFOIntensity(tree.getParameterAsValue(lfoIntensityParamId).getValue());
 			synthVoice->setLFOWavetype(static_cast<OscillatorType>((int)*tree.getRawParameterValue(lfoWaveformTypeParamId)));
+			synthVoice->setLFOTargetCutoff(tree.getParameterAsValue(lfoTarget1ActiveParamId).getValue());
 			synthVoice->setLFOTargetDetune(tree.getParameterAsValue(lfoTarget2ActiveParamId).getValue());
 			synthVoice->setLFOTargetVolume(tree.getParameterAsValue(lfoTarget3ActiveParamId).getValue());
 			synthVoice->setOscEnabled(tree.getParameterAsValue(osc1EnabledParamId).getValue(), 1);
@@ -239,14 +229,6 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	buffer.clear();
 	int numSamples = buffer.getNumSamples();
 	synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
-
-	if (tree.getParameterAsValue(filterEnabledParamId).getValue()) {
-		float* dataLeft = buffer.getWritePointer(0);
-		float* dataRight = buffer.getWritePointer(1);
-
-		filterLeft.processSamples(dataLeft, numSamples);
-		filterRight.processSamples(dataRight, numSamples);
-	}
 
 	if (tree.getParameterAsValue(reverbEnabledParamId).getValue()) {
 		juce::dsp::AudioBlock<float> block(buffer);

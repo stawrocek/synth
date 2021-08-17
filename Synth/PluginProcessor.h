@@ -52,10 +52,6 @@ private:
 	
 	std::vector<SynthVoice*> voices;
 
-	IIRFilter filterLeft;
-	IIRFilter filterRight;
-	juce::IIRCoefficients filterCoefficients;
-
 	juce::dsp::Reverb leftReverb;
 	juce::dsp::Reverb rightReverb;
 	juce::Reverb::Parameters reverbParams;
