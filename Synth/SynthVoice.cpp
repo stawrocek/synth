@@ -72,7 +72,6 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 				detuneLFO = lfoVar * lfoIntensity * 200.0;
 			if (lfoTargetVolume)
 				levelLFO = lfoVar * lfoIntensity;
-			
 		}
 		osc1.setDetune((detune1+detuneLFO)/1000.);
 		osc2.setDetune((detune2+detuneLFO)/1000.);
@@ -101,24 +100,23 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 			signal *= stopNoteVelocity;
 		}
 		signal *= noteOnLevel;
+		signal *= (1.0 + levelLFO);
 
-		if (ampEnabled) {
-			signal = distortion.processSingleSample(signal);
-		}
-
-		//TODO przeniesc do processora
-		signal *= (1.0+levelLFO);
-
-		float leftFilterOutput = signal;
-		float rightFilterOutput = signal;
+		float leftSignal = signal;
+		float rightSignal = signal;
 
 		if (filterEnabled) {
-			leftFilterOutput = filterLeft.processSingleSampleRaw(signal);
-			rightFilterOutput = filterRight.processSingleSampleRaw(signal);
+			leftSignal = filterLeft.processSingleSampleRaw(signal);
+			rightSignal = filterRight.processSingleSampleRaw(signal);
 		}
 
-		outputBuffer.addSample(0, startSample, leftFilterOutput);
-		outputBuffer.addSample(1, startSample, rightFilterOutput);
+		if (ampEnabled) {
+			leftSignal = distortion.processSingleSample(leftSignal);
+			rightSignal = distortion.processSingleSample(rightSignal);
+		}
+
+		outputBuffer.addSample(0, startSample, leftSignal);
+		outputBuffer.addSample(1, startSample, rightSignal);
 
 		++startSample;
 	}
