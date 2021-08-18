@@ -37,5 +37,7 @@ target_sources(SynthPlugin
 		WaveformButton.cpp
 		LFOComponent.h
 		LFOComponent.cpp
+		AmpComponent.h
+		AmpComponent.cpp
 		
 )

@@ -65,6 +65,15 @@ const juce::String lfoTarget2ActiveParamName = "LFO detune";
 const juce::String lfoTarget3ActiveParamId = "LFO_TARGET_3_ACTIVE";
 const juce::String lfoTarget3ActiveParamName = "LFO volume";
 
+const juce::String ampGainParamId = "AMP_GAIN";
+const juce::String ampWetLevelParamId = "AMP_WET_LEVEL";
+const juce::String ampVolumeParamId = "AMP_VOLUME";
+const juce::String ampDistortionTypeParamId = "AMP_DISTORTION_TYPE";
+const juce::String ampGainParamName = "Gain";
+const juce::String ampWetLevelParamName = "Wet/Dry";
+const juce::String ampVolumeParamName = "Volume";
+const juce::String ampDistortionTypeParamName = "Distortion type";
+
 const juce::String osc1EnabledParamId = "OSC1ENABLED";
 const juce::String osc1EnabledParamName = "Osc enabled";
 const juce::String osc2EnabledParamId = "OSC2ENABLED";
@@ -79,6 +88,8 @@ const juce::String reverbEnabledParamId = "REVERBENABLED";
 const juce::String reverbEnabledParamName = "Reverb Enabled";
 const juce::String lfoEnabledParamId = "LFOENABLED";
 const juce::String lfoEnabledParamName = "LFO Enabled";
+const juce::String ampEnabledParamId = "AMPENABLED";
+const juce::String ampEnabledParamName = "Amp Enabled";
 
 const float adsrInitialAttack = 0.5;
 const float adsrInitialDecay = 0.2;
@@ -94,6 +105,10 @@ const float reverbInitialDamping    = 0.5f;
 const float reverbInitialWetLevel   = 0.33f;
 const float reverbInitialWidth      = 1.0f;
 const float reverbInitialFreezeMode = 0.0f;
+
+const float ampInitialGain = 0.5;
+const float ampInitialWetLevel = 0.0;
+const float ampInitialVolume = 1.0;
 
 const float lfoInitialRate = 0.0;
 const float lfoInitialIntensity = 0.0;

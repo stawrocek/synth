@@ -4,6 +4,7 @@
 
 #include "SynthSound.h"
 #include "Oscillator.h"
+#include "Distortion.h"
 
 enum class FilterType {
 	LowPassFilter = 0,
@@ -47,9 +48,15 @@ public:
 	void setOscEnabled(bool enable, int index);
 	void setADSREnabled(bool enable);
 	void setLFOEnabled(bool enable);
+	void setFilterEnabled(bool enable);
+	void setAmpEnabled(bool enable);
+
+	void setDistortionType(DistortionType distortionType);
+	void setDistortionGain(float gain);
+	void setDistortionWetLevel(float wetLevel);
 
 private:
-	double level;
+	double noteOnLevel;
 	double frequency;
 	float sampleRate;
 	Oscillator osc1;
@@ -66,6 +73,7 @@ private:
 	float filterResonance;
 	FilterType filterType;
 	juce::IIRCoefficients filterCoefficients;
+	Distortion distortion;
 
 	float lfoRate;
 	float lfoIntensity;
@@ -78,6 +86,8 @@ private:
 	bool osc3Enabled = true;
 	bool adsrEnabled = true;
 	bool lfoEnabled  = true;
+	bool filterEnabled  = true;
+	bool ampEnabled;
 
 	bool tailOff = false;
 	float stopNoteVelocity = 0.0;

@@ -26,7 +26,7 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
 	tailOff = false;
 	if(adsrEnabled)
 		adsr.noteOn();
-	level = velocity;
+	noteOnLevel = velocity;
 	frequency = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
 }
 
@@ -91,7 +91,7 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 		double signal2 = osc2Enabled ? osc2.generateWave(frequency) * mix[1] : 0;
 		double signal3 = osc3Enabled ? osc3.generateWave(frequency) * mix[2] : 0;
 
-		double signal = (signal1 + signal2 + signal3);// / 3.0;
+		double signal = (signal1 + signal2 + signal3) / 3.0;
 		
 		if (adsrEnabled) {
 			double nextAdsr = adsr.getNextSample();
@@ -100,12 +100,26 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 		else if (tailOff && !adsrEnabled){
 			signal *= stopNoteVelocity;
 		}
-		signal *= level;
+		signal *= noteOnLevel;
+
+		if (ampEnabled) {
+			signal = distortion.processSingleSample(signal);
+		}
+
 		//TODO przeniesc do processora
 		signal *= (1.0+levelLFO);
 
-		outputBuffer.addSample(0, startSample, filterLeft.processSingleSampleRaw(signal));
-		outputBuffer.addSample(1, startSample, filterRight.processSingleSampleRaw(signal));
+		float leftFilterOutput = signal;
+		float rightFilterOutput = signal;
+
+		if (filterEnabled) {
+			leftFilterOutput = filterLeft.processSingleSampleRaw(signal);
+			rightFilterOutput = filterRight.processSingleSampleRaw(signal);
+		}
+
+		outputBuffer.addSample(0, startSample, leftFilterOutput);
+		outputBuffer.addSample(1, startSample, rightFilterOutput);
+
 		++startSample;
 	}
 }
@@ -200,6 +214,18 @@ void SynthVoice::setLFOTargetVolume(bool targetVolume) {
 	lfoTargetVolume = targetVolume;
 }
 
+void SynthVoice::setDistortionType(DistortionType distortionType) {
+	distortion.setType(distortionType);
+}
+
+void SynthVoice::setDistortionGain(float gain) {
+	distortion.setGain(gain);
+}
+
+void SynthVoice::setDistortionWetLevel(float wetLevel) {
+	distortion.setWetLevel(wetLevel);
+}
+
 void SynthVoice::setOscEnabled(bool enable, int index) {
 	if (index == 1) osc1Enabled = enable;
 	if (index == 2) osc2Enabled = enable;
@@ -211,4 +237,12 @@ void SynthVoice::setADSREnabled(bool enable) {
 
 void SynthVoice::setLFOEnabled(bool enable) {
 	lfoEnabled = enable;
+}
+
+void SynthVoice::setFilterEnabled(bool enable) {
+	filterEnabled = enable;
+}
+
+void SynthVoice::setAmpEnabled(bool enable) {
+	ampEnabled = enable;
 }

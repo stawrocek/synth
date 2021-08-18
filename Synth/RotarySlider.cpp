@@ -36,6 +36,7 @@ RotarySlider::RotarySlider(double minimum, double maximum, double step, double i
 
 RotarySlider::~RotarySlider()
 {
+
 }
 
 void RotarySlider::paint(juce::Graphics& g)
@@ -50,7 +51,6 @@ void RotarySlider::paint(juce::Graphics& g)
 		float y = 0;
 		auto length = getHeight() > 15 ? 5.0f : 4.0f;
 		auto thick = getHeight() > 15 ? 2.0f : 1.5f;
-		
 		
 		auto b = juce::Rectangle<float>(x, y + (height - width) / 2, width, width).reduced(6.0f);
 		if (width > height)
@@ -86,4 +86,22 @@ void RotarySlider::mouseUp(const juce::MouseEvent& event)
 
 	juce::Desktop::getInstance().getMainMouseSource().setScreenPosition(event.source.getLastMouseDownPosition());
 	setMouseCursor(juce::MouseCursor::NormalCursor);
+}
+
+void RotarySlider::makeRect() {
+	int x = getX();
+	int y = getY();
+	int w = getWidth();
+	int h = getHeight();
+
+	//const int textHeight = sliderFontSize + sliderSpacer;
+
+	if (h > w) {
+		//setBounds(x, y, w, h - w - textHeight);
+		float newH = w;// +textHeight;
+		float newY = y + (h-newH)/2.0;
+		//float newY = y + h / 2 - w / 2 - textHeight / 2;
+		setBounds(x, newY, w, newH);
+	}
+	
 }

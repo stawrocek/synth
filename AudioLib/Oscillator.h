@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cmath>
-#include <string>
 
 #ifndef PI
 #define PI  3.141592653589793

@@ -8,6 +8,7 @@
 #include "FilterComponent.h"
 #include "ReverbComponent.h"
 #include "LFOComponent.h"
+#include "AmpComponent.h"
 
 class SynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
 								   private juce::Slider::Listener
@@ -33,6 +34,7 @@ private:
 	FilterComponent filterComponent;
 	ReverbComponent reverbComponent;
 	LFOComponent lfoComponent;
+	AmpComponent ampComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessorEditor)
 };

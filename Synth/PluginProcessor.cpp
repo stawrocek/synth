@@ -32,6 +32,10 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(filterCutoffParamId, filterCutoffParamName, 20, 1000, filterInitialCutoff),
 		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0.1, 10, filterInitialResonance),
 		std::make_unique<juce::AudioParameterInt>(filterTypeParamId, filterTypeParamName, 0, 1, 0),
+		std::make_unique<juce::AudioParameterFloat>(ampGainParamId, ampGainParamName, 0.01, 10, ampInitialGain),
+		std::make_unique<juce::AudioParameterFloat>(ampWetLevelParamId, ampWetLevelParamName, 0, 1, ampInitialWetLevel),
+		std::make_unique<juce::AudioParameterFloat>(ampVolumeParamId, ampVolumeParamName, 0, 1, ampInitialVolume),
+		std::make_unique<juce::AudioParameterInt>(ampDistortionTypeParamId, ampDistortionTypeParamName, 0, 1, 0),
 		std::make_unique<juce::AudioParameterFloat>(reverbRoomSizeParamId, reverbRoomSizeParamName, 0, 1, reverbInitialRoomSize),
 		std::make_unique<juce::AudioParameterFloat>(reverbDampingParamId, reverbDampingParamName, 0, 1, reverbInitialDamping),
 		std::make_unique<juce::AudioParameterFloat>(reverbWetLevelParamId, reverbWetLevelParamName, 0, 1, reverbInitialWetLevel),
@@ -49,7 +53,8 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterBool>(adsrEnabledParamId, adsrEnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(filterEnabledParamId, filterEnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(reverbEnabledParamId, reverbEnabledParamName, true),
-		std::make_unique<juce::AudioParameterBool>(lfoEnabledParamId, lfoEnabledParamName, true)
+		std::make_unique<juce::AudioParameterBool>(lfoEnabledParamId, lfoEnabledParamName, true),
+		std::make_unique<juce::AudioParameterBool>(ampEnabledParamId, ampEnabledParamName, true)
 	})
 #endif
 {
@@ -210,6 +215,9 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 			synthVoice->setFilterCutoff(tree.getParameterAsValue(filterCutoffParamId).getValue());
 			synthVoice->setFilterResonance(tree.getParameterAsValue(filterResonanceParamId).getValue());
 			synthVoice->setFilterType((FilterType)(int)tree.getParameterAsValue(filterTypeParamId).getValue());
+			synthVoice->setDistortionGain(tree.getParameterAsValue(ampGainParamId).getValue());
+			synthVoice->setDistortionWetLevel(tree.getParameterAsValue(ampWetLevelParamId).getValue());
+			synthVoice->setDistortionType((DistortionType)(int)tree.getParameterAsValue(ampDistortionTypeParamId).getValue());
 			synthVoice->setLFORate(tree.getParameterAsValue(lfoRateParamId).getValue());
 			synthVoice->setLFOIntensity(tree.getParameterAsValue(lfoIntensityParamId).getValue());
 			synthVoice->setLFOWavetype(static_cast<OscillatorType>((int)*tree.getRawParameterValue(lfoWaveformTypeParamId)));
@@ -221,6 +229,8 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 			synthVoice->setOscEnabled(tree.getParameterAsValue(osc3EnabledParamId).getValue(), 3);
 			synthVoice->setADSREnabled(tree.getParameterAsValue(adsrEnabledParamId).getValue());
 			synthVoice->setLFOEnabled(tree.getParameterAsValue(lfoEnabledParamId).getValue());
+			synthVoice->setFilterEnabled(tree.getParameterAsValue(filterEnabledParamId).getValue());
+			synthVoice->setAmpEnabled(tree.getParameterAsValue(ampEnabledParamId).getValue());
 		}
 	}
 
@@ -242,6 +252,8 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 		leftReverb.process(leftContext);
 		rightReverb.process(rightContext);
 	}
+	if (tree.getParameterAsValue(ampEnabledParamId).getValue())
+		buffer.applyGain(tree.getParameterAsValue(ampVolumeParamId).getValue());
 	scopeDataCollector.process(buffer.getReadPointer(0), (size_t)buffer.getNumSamples());
 }
 
