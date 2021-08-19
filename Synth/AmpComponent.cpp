@@ -37,15 +37,12 @@ void AmpComponent::resized() {
 
 	int off = (sliderFontSize + sliderSpacer);
 
-	sliderGain.setBounds(juce::Rectangle<int>(0, 0, w * 0.25, h));// .reduced(componentElementSpacer));
-	//sliderGain.setBounds(juce::Rectangle<int>(0, 0, w * 0.25, h));// .reduced(componentElementSpacer));
+	sliderGain.setBounds(juce::Rectangle<int>(0, off, w * 0.25, h-off).reduced(componentElementSpacer));
 	sliderWetLevel.setBounds(juce::Rectangle<int>(w*0.25, off, w * 0.25, h-off).reduced(componentElementSpacer));
-	sliderVolume.setBounds(juce::Rectangle<int>(w*0.5, off, w * 0.25, h-off).reduced(componentElementSpacer));
-	distortionType.setBounds(juce::Rectangle<int>(sliderGain.getX(), sliderGain.getBottom()-2
+	sliderVolume.setBounds(juce::Rectangle<int>(w*0.5, off, w * 0.5, h-off).reduced(2*componentElementSpacer));
+	distortionType.setBounds(juce::Rectangle<int>(sliderGain.getX(), sliderGain.getBottom()-5
 		- abs((sliderGain.getHeight() - sliderGain.getWidth()) / 2),
-		sliderWetLevel.getRight() - sliderGain.getX(), 20));
-
-	sliderGain.makeRect();
+		sliderWetLevel.getRight() - sliderGain.getX(), h*0.2).reduced(componentElementSpacer));
 
 	SynthComponent::resized();
 }

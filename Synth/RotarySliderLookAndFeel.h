@@ -25,10 +25,5 @@ public:
 		bool shouldDrawButtonAsHighlighted,
 		bool shouldDrawButtonAsDown) override;
 
-	void setTooltip(juce::String tooltip);
-
-protected:
-	juce::String tooltip;
-
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotarySliderLookAndFeel);
 };

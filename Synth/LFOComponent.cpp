@@ -105,4 +105,6 @@ void LFOComponent::resized() {
 	lfoTargetFilterCutoff.setBounds(8, 20, lfoTargets.getWidth()-16, 20);
 	lfoTargetDetune.setBounds(lfoTargetFilterCutoff.getBounds().translated(0, 25));
 	lfoTargetVolume.setBounds(lfoTargetDetune.getBounds().translated(0, 25));
+
+	SynthComponent::resized();
 }

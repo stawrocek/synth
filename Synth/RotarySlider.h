@@ -16,7 +16,7 @@ public:
 
 	void mouseDown(const juce::MouseEvent& event) override;
 	void mouseUp(const juce::MouseEvent& event) override;
-	void makeRect();
+	void squareLayout();
 
 private:
 	RotarySliderLookAndFeel rotarySliderLookAndFeel;

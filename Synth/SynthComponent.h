@@ -13,11 +13,13 @@ public:
 	~SynthComponent();
 	void paint(Graphics& g) override;
 	void buttonClicked(Button*) override;
+	void resized() override;
 
 protected:
 	class NameButtonLookAndFeel : public LookAndFeel_V4 {
 		Font getTextButtonFont(TextButton&, int buttonHeight) override;
 	};
+	void squareLayout();
 
 	SynthAudioProcessor& processor;
 	juce::TextButton buttonName;

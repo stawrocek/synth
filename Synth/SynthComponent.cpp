@@ -2,6 +2,7 @@
 
 #include "Config.h"
 #include "Styles.h"
+#include "RotarySlider.h"
 
 SynthComponent::SynthComponent(SynthAudioProcessor& processor_, const juce::String& name_,
 	const juce::String& buttonNameParamId)
@@ -76,6 +77,18 @@ void SynthComponent::paint(Graphics& g) {
 
 	buttonName.setBounds(roundToInt(x+textX), 2,
 		roundToInt(textW), roundToInt(textH));
+
+	auto children = getChildren();
+	for (auto child : children) {
+		RotarySlider* slider = dynamic_cast<RotarySlider*>(child);
+		if (slider != nullptr) {
+			g.setColour(sliderFillColour);
+			g.setFont(sliderFontSize);
+			const int textHeight = sliderFontSize + sliderSpacer;
+			g.drawText(slider->getTooltip(), slider->getX(), slider->getY() - textHeight,
+				slider->getWidth(), textHeight, juce::Justification::centredBottom, true);
+		}
+	}
 }
 
 void SynthComponent::buttonClicked(Button* button) {
@@ -94,4 +107,18 @@ void SynthComponent::buttonClicked(Button* button) {
 Font SynthComponent::NameButtonLookAndFeel::getTextButtonFont(TextButton&, int buttonHeight) 
 {
 	return { jmin(16.0f, (float)buttonHeight * 0.8f) };
+}
+
+void SynthComponent::squareLayout() {
+	auto children = getChildren();
+	for (auto child : children) {
+		RotarySlider* slider = dynamic_cast<RotarySlider*>(child);
+		if (slider != nullptr) {
+			slider->squareLayout();
+		}
+	}
+}
+
+void SynthComponent::resized() {
+	squareLayout();
 }

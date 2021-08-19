@@ -30,8 +30,6 @@ RotarySlider::RotarySlider(double minimum, double maximum, double step, double i
 	};
 
 	setBounds(getX(), getY(), getWidth(), getHeight());
-
-	rotarySliderLookAndFeel.setTooltip(tooltip);
 }
 
 RotarySlider::~RotarySlider()
@@ -88,19 +86,15 @@ void RotarySlider::mouseUp(const juce::MouseEvent& event)
 	setMouseCursor(juce::MouseCursor::NormalCursor);
 }
 
-void RotarySlider::makeRect() {
+void RotarySlider::squareLayout() {
 	int x = getX();
 	int y = getY();
 	int w = getWidth();
 	int h = getHeight();
 
-	//const int textHeight = sliderFontSize + sliderSpacer;
-
 	if (h > w) {
-		//setBounds(x, y, w, h - w - textHeight);
-		float newH = w;// +textHeight;
+		float newH = w;
 		float newY = y + (h-newH)/2.0;
-		//float newY = y + h / 2 - w / 2 - textHeight / 2;
 		setBounds(x, newY, w, newH);
 	}
 	

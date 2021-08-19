@@ -71,4 +71,6 @@ void OscillatorComponent::resized() {
 
 	sliderDetune.setBounds(juce::Rectangle<int>(w*0.5, off, w*0.25, h-off).reduced(componentElementSpacer));
 	sliderMix.setBounds(juce::Rectangle<int>(w*0.75, off, w*0.25, h-off).reduced(componentElementSpacer));
+
+	SynthComponent::resized();
 }
