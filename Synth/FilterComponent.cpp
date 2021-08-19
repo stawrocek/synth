@@ -33,9 +33,9 @@ void FilterComponent::resized() {
 
 	int off = (sliderFontSize + sliderSpacer);
 
-	comboboxFilterType.setBounds(juce::Rectangle<int>(0, h * 0.4+off/2, w * 0.25, h * 0.2).reduced(componentElementSpacer));
-	sliderCutoff.setBounds(juce::Rectangle<int>(w * 0.25, off, w * 0.5, h-off).reduced(2*componentElementSpacer));
-	sliderResonance.setBounds(juce::Rectangle<int>(w * 0.75, off, w * 0.25, h-off).reduced(componentElementSpacer));
+	comboboxFilterType.setBounds(juce::Rectangle<int>(0, h * 0.8, w * 0.33, h * 0.2).reduced(componentElementSpacer));
+	sliderCutoff.setBounds(juce::Rectangle<int>(w * 0.33, off, w * 0.66, h-off).reduced(componentElementSpacer));
+	sliderResonance.setBounds(juce::Rectangle<int>(0, off, w * 0.33, h-off).reduced(componentElementSpacer));
 
 	SynthComponent::resized();
 }

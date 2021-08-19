@@ -47,11 +47,11 @@ void SynthAudioProcessorEditor::resized()
 	osc3Component.setBounds(osc1Component.getBounds().withY(h*0.4));
 
 	adsrComponent.setBounds(osc1Component.getBounds().withX(w*0.33));
-	filterComponent.setBounds(osc2Component.getBounds().withX(w*0.33));
+	filterComponent.setBounds(osc2Component.getBounds().withX(w*0.33).withWidth(w*0.22));
 	lfoComponent.setBounds(osc3Component.getBounds().withX(w*0.33));
 	
 	ampComponent.setBounds(osc1Component.getBounds().withX(w * 0.66));
-	reverbComponent.setBounds(osc3Component.getBounds().withX(w * 0.66));
+	reverbComponent.setBounds(osc2Component.getBounds().withX(w * 0.55).withWidth(w*0.45));
 
 	scopeComponent.setBounds(0, h*0.6, w, h*0.3);
 
