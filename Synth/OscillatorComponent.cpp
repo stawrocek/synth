@@ -10,7 +10,8 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	btnOscRect("btn_rect_" + name, OscillatorType::OscSquare, identifier),
 	btnOscTriangle("btn_triangle_" + name, OscillatorType::OscTriangle, identifier),
 	btnOscSawtooth("btn_sawtooth_" + name, OscillatorType::OscSawtooth, identifier),
-	sliderDetune(-100, 100, 1.0, 0, osc1DetuneParamName),
+	sliderDetuneCents(-100, 100, 1.0, 0, osc1DetuneParamName),
+	sliderDetuneSteps(-12, 12, 1.0, 0, osc1DetuneStepsParamName),
 	sliderMix(0, 100, 1.0, 100, osc1MixParamName)
 {
 	btnOscSine.triggerClick();
@@ -41,9 +42,13 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	addAndMakeVisible(btnOscTriangle);
 	addAndMakeVisible(btnOscSawtooth);
 
-	sliderDetuneAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-		processor.tree, "OSC"+std::to_string(id)+"DETUNE", sliderDetune);
-	addAndMakeVisible(sliderDetune);
+	sliderDetuneStepsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+		processor.tree, "OSC" + std::to_string(id) + "DETUNESTEPS", sliderDetuneSteps);
+	addAndMakeVisible(sliderDetuneSteps);
+
+	sliderDetuneCentsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+		processor.tree, "OSC"+std::to_string(id)+"DETUNE", sliderDetuneCents);
+	addAndMakeVisible(sliderDetuneCents);
 
 	sliderMixAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, "OSC" + std::to_string(id) + "MIX", sliderMix);
@@ -57,7 +62,7 @@ void OscillatorComponent::resized() {
 
 	int off = (sliderFontSize + sliderSpacer);
 
-	juce::Rectangle<int> grid(0, 13, w / 2.0, h - 13);
+	juce::Rectangle<int> grid(0, 13, w / 3, h - 8);
 	grid.reduce(componentBorderSize + 8, componentBorderSize + 8);
 	if (grid.getWidth() > grid.getHeight())
 		grid.setWidth(grid.getHeight());
@@ -69,8 +74,11 @@ void OscillatorComponent::resized() {
 	btnOscTriangle.setBounds(juce::Rectangle<int>(grid.getX(), grid.getY()+grid.getHeight() / 2, grid.getWidth() / 2, grid.getHeight() / 2));
 	btnOscSawtooth.setBounds(juce::Rectangle<int>(grid.getX()+ grid.getWidth() / 2, grid.getY() + grid.getHeight() / 2, grid.getWidth() / 2, grid.getHeight() / 2));
 
-	sliderDetune.setBounds(juce::Rectangle<int>(w*0.5, off, w*0.25, h-off).reduced(componentElementSpacer));
-	sliderMix.setBounds(juce::Rectangle<int>(w*0.75, off, w*0.25, h-off).reduced(componentElementSpacer));
+	float w2 = (w - grid.getRight()) - 10;
+
+	sliderDetuneSteps.setBounds(juce::Rectangle<int>(grid.getRight()+5, off, w2/3.0, h-off).reduced(componentElementSpacer));
+	sliderDetuneCents.setBounds(juce::Rectangle<int>(grid.getRight()+5+w2 / 3.0, off, w2/3.0, h-off).reduced(componentElementSpacer));
+	sliderMix.setBounds(juce::Rectangle<int>(grid.getRight() + 5 + 2.0*w2 / 3.0, off, w2/3.0, h-off).reduced(componentElementSpacer));
 
 	SynthComponent::resized();
 }

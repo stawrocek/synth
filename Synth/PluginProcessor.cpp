@@ -22,6 +22,9 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterInt>(osc1DetuneParamId, osc1DetuneParamName, -100, 100, 0),
 		std::make_unique<juce::AudioParameterInt>(osc2DetuneParamId, osc2DetuneParamName, -100, 100, 0),
 		std::make_unique<juce::AudioParameterInt>(osc3DetuneParamId, osc3DetuneParamName, -100, 100, 0),
+		std::make_unique<juce::AudioParameterInt>(osc1DetuneStepsParamId, osc1DetuneStepsParamName, -12, 12, 0),
+		std::make_unique<juce::AudioParameterInt>(osc2DetuneStepsParamId, osc2DetuneStepsParamName, -12, 12, 0),
+		std::make_unique<juce::AudioParameterInt>(osc3DetuneStepsParamId, osc3DetuneStepsParamName, -12, 12, 0),
 		std::make_unique<juce::AudioParameterInt>(osc1MixParamId, osc1MixParamName, 0, 100, 100),
 		std::make_unique<juce::AudioParameterInt>(osc2MixParamId, osc2MixParamName, 0, 100, 100),
 		std::make_unique<juce::AudioParameterInt>(osc3MixParamId, osc3MixParamName, 0, 100, 100),
@@ -50,7 +53,7 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(reverbDampingParamId, reverbDampingParamName, 0, 1, reverbInitialDamping),
 		std::make_unique<juce::AudioParameterFloat>(reverbWetLevelParamId, reverbWetLevelParamName, 0, 1, reverbInitialWetLevel),
 		std::make_unique<juce::AudioParameterFloat>(reverbWidthParamId, reverbWidthParamName, 0, 1, reverbInitialWidth),
-		std::make_unique<juce::AudioParameterFloat>(reverbFreezeModeParamId, reverbFreezeModeParamName, 0, 1, reverbInitialFreezeMode),
+		std::make_unique<juce::AudioParameterBool>(reverbFreezeModeParamId, reverbFreezeModeParamName, reverbInitialFreezeMode),
 		
 		std::make_unique<juce::AudioParameterInt>(lfoWaveformTypeParamId, lfoWaveformTypeParamName, 0, 3, 0),
 		std::make_unique<juce::AudioParameterFloat>(lfoRateParamId, lfoRateParamName, 0.1, 10, lfoInitialRate),
@@ -210,7 +213,7 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 		reverbParams.wetLevel = tree.getParameterAsValue(reverbWetLevelParamId).getValue();
 		reverbParams.dryLevel = 1.0 - (float)tree.getParameterAsValue(reverbWetLevelParamId).getValue();
 		reverbParams.width = tree.getParameterAsValue(reverbWidthParamId).getValue();
-		reverbParams.freezeMode = tree.getParameterAsValue(reverbFreezeModeParamId).getValue();
+		reverbParams.freezeMode = (float)tree.getParameterAsValue(reverbFreezeModeParamId).getValue();
 
 		leftReverb.setParameters(reverbParams);
 		rightReverb.setParameters(reverbParams);
@@ -224,6 +227,9 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc1DetuneParamId), 1);
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc2DetuneParamId), 2);
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc3DetuneParamId), 3);
+			synthVoice->setSemitone((int)*tree.getRawParameterValue(osc1DetuneStepsParamId), 1);
+			synthVoice->setSemitone((int)*tree.getRawParameterValue(osc2DetuneStepsParamId), 2);
+			synthVoice->setSemitone((int)*tree.getRawParameterValue(osc3DetuneStepsParamId), 3);
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc1MixParamId), 1);
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc2MixParamId), 2);
 			synthVoice->setMix((int)*tree.getRawParameterValue(osc3MixParamId), 3);

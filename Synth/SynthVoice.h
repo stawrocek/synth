@@ -27,6 +27,7 @@ public:
 
 	void setOscillator(OscillatorType oscillatorType, int id);
 	void setDetune(int detune, int id);
+	void setSemitone(int detune, int id);
 	void setMix(int mixVal, int id);
 
 	void setAdsrAttack(float attack);
@@ -63,6 +64,7 @@ private:
 	Oscillator osc2;
 	Oscillator osc3;
 	float detune1, detune2, detune3;
+	float semitone1, semitone2, semitone3;
 	float mix[3] = {1, 1, 1};
 	juce::ADSR adsr;
 	juce::ADSR::Parameters adsrParams;

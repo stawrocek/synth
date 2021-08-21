@@ -69,13 +69,16 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 			if (lfoTargetCutoff)
 				cutoffFreq = jmax(0.1, filterCutoff + lfoVar * lfoIntensity * 300.0);
 			if (lfoTargetDetune)
-				detuneLFO = lfoVar * lfoIntensity * 200.0;
+				detuneLFO = lfoVar * lfoIntensity * 100.0;
 			if (lfoTargetVolume)
 				levelLFO = lfoVar * lfoIntensity;
 		}
-		osc1.setDetune((detune1+detuneLFO)/1000.);
-		osc2.setDetune((detune2+detuneLFO)/1000.);
-		osc3.setDetune((detune3+detuneLFO)/1000.);
+		osc1.setDetuneCents(detune1 + detuneLFO);
+		osc2.setDetuneCents(detune2 + detuneLFO);
+		osc3.setDetuneCents(detune3 + detuneLFO);
+		osc1.setDetuneHalfSteps(semitone1);
+		osc2.setDetuneHalfSteps(semitone2);
+		osc3.setDetuneHalfSteps(semitone3);
 
 		if (filterType == FilterType::LowPassFilter) {
 			filterCoefficients = IIRCoefficients::makeLowPass(sampleRate, cutoffFreq, filterResonance);
@@ -154,6 +157,15 @@ void SynthVoice::setDetune(int detune, int id) {
 		detune2 = detune;
 	if (id == 3)
 		detune3 = detune;
+}
+
+void SynthVoice::setSemitone(int semitone, int id) {
+	if (id == 1)
+		semitone1 = semitone;
+	if (id == 2)
+		semitone2 = semitone;
+	if (id == 3)
+		semitone3 = semitone;
 }
 
 void SynthVoice::setMix(int mixVal, int id) {

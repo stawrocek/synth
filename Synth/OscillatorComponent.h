@@ -22,9 +22,11 @@ private:
 	WaveformButton btnOscRect;
 	WaveformButton btnOscTriangle;
 	WaveformButton btnOscSawtooth;
-	RotarySlider sliderDetune;
+	RotarySlider sliderDetuneCents;
+	RotarySlider sliderDetuneSteps;
 	RotarySlider sliderMix;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderDetuneAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderDetuneCentsAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderDetuneStepsAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderMixAttachment;
 };
 

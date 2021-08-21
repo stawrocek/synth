@@ -46,7 +46,7 @@ void DelayComponent::resized() {
 	sliderFilter.setBounds(juce::Rectangle<int>(w*0.5, off, w * 0.25, h - off).reduced(componentElementSpacer));
 	sliderWetLevel.setBounds(juce::Rectangle<int>(w*0.75, off, w * 0.25, h - off).reduced(componentElementSpacer));
 	
-	buttonTailoff.setBounds(juce::Rectangle<int>(5, h-25, w*0.25, 20));
+	buttonTailoff.setBounds(juce::Rectangle<int>(5, h-20, w*0.25, 15));
 
 	SynthComponent::resized();
 }

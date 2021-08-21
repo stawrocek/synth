@@ -18,13 +18,13 @@ private:
 	RotarySlider sliderDamping;
 	RotarySlider sliderWetLevel;
 	RotarySlider sliderWidth;
-	RotarySlider sliderFreezeMode;
+	juce::ToggleButton buttonFreeze;
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentRoomSize;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentDamping;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentWetLevel;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentWidth;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFreezeMode;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonAttachmentFreezeMode;
 };
 
 
