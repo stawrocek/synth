@@ -40,6 +40,18 @@ const juce::String filterCutoffParamName = "Cutoff";
 const juce::String filterResonanceParamName = "Resonance";
 const juce::String filterTypeParamName = "Filter type";
 
+const juce::String delayTimeParamId = "DELAY_TIME";
+const juce::String delayWetLevelParamId = "DELAY_WET_LEVEL";
+const juce::String delayFeedbackParamId = "DELAY_FEEDBACK";
+const juce::String delayFilterParamId = "DELAY_FILTER";
+const juce::String delayTailoffParamId = "DELAY_TAILOFF";
+
+const juce::String delayTimeParamName = "Time";
+const juce::String delayWetLevelParamName = "Wet/Dry";
+const juce::String delayFeedbackParamName = "Feedback";
+const juce::String delayFilterParamName = "Filter";
+const juce::String delayTailoffParamName = "Tailoff";
+
 const juce::String reverbRoomSizeParamId = "REVERB_ROOM_SIZE";
 const juce::String reverbDampingParamId = "REVERB_DAMPING";
 const juce::String reverbWetLevelParamId = "REVERB_WET_LEVEL";
@@ -90,6 +102,8 @@ const juce::String lfoEnabledParamId = "LFOENABLED";
 const juce::String lfoEnabledParamName = "LFO Enabled";
 const juce::String ampEnabledParamId = "AMPENABLED";
 const juce::String ampEnabledParamName = "Amp Enabled";
+const juce::String delayEnabledParamId = "DELAYENABLED";
+const juce::String delayEnabledParamName = "Delay Enabled";
 
 const float adsrInitialAttack = 0.5;
 const float adsrInitialDecay = 0.2;
@@ -99,6 +113,12 @@ const float adsrInitialRelease = 0.5;
 const float filterInitialCutoff = 440;
 const float filterInitialResonance = 2;
 const FilterType filterInitialType = FilterType::LowPassFilter;
+
+const float delayInitialTime = 2.0f;
+const float delayInitialWetLevel = 0.33f;
+const float delayInitialFeedback = 0.5;
+const float delayInitialFilter = 100;
+const bool delayInitialTailoff = true;
 
 const float reverbInitialRoomSize   = 0.5f;
 const float reverbInitialDamping    = 0.5f;

@@ -9,6 +9,7 @@
 #include "ReverbComponent.h"
 #include "LFOComponent.h"
 #include "AmpComponent.h"
+#include "DelayComponent.h"
 
 class SynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
 								   private juce::Slider::Listener
@@ -35,6 +36,7 @@ private:
 	ReverbComponent reverbComponent;
 	LFOComponent lfoComponent;
 	AmpComponent ampComponent;
+	DelayComponent delayComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessorEditor)
 };

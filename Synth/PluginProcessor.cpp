@@ -25,28 +25,40 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterInt>(osc1MixParamId, osc1MixParamName, 0, 100, 100),
 		std::make_unique<juce::AudioParameterInt>(osc2MixParamId, osc2MixParamName, 0, 100, 100),
 		std::make_unique<juce::AudioParameterInt>(osc3MixParamId, osc3MixParamName, 0, 100, 100),
+		
 		std::make_unique<juce::AudioParameterFloat>(adsrAttackParamId, adsrAttackParamName, 0, 5, adsrInitialAttack),
 		std::make_unique<juce::AudioParameterFloat>(adsrDecayParamId, adsrDecayParamName, 0, 2, adsrInitialDecay),
 		std::make_unique<juce::AudioParameterFloat>(adsrSustainParamId, adsrSustainParamName, 0, 1, adsrInitialSustain),
 		std::make_unique<juce::AudioParameterFloat>(adsrReleaseParamId, adsrReleaseParamName, 0, 2, adsrInitialRelease),
+		
 		std::make_unique<juce::AudioParameterFloat>(filterCutoffParamId, filterCutoffParamName, 20, 1000, filterInitialCutoff),
 		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0.1, 10, filterInitialResonance),
 		std::make_unique<juce::AudioParameterInt>(filterTypeParamId, filterTypeParamName, 0, 1, 0),
+		
 		std::make_unique<juce::AudioParameterFloat>(ampGainParamId, ampGainParamName, 0.01, 10, ampInitialGain),
 		std::make_unique<juce::AudioParameterFloat>(ampWetLevelParamId, ampWetLevelParamName, 0, 1, ampInitialWetLevel),
 		std::make_unique<juce::AudioParameterFloat>(ampVolumeParamId, ampVolumeParamName, 0, 1, ampInitialVolume),
 		std::make_unique<juce::AudioParameterInt>(ampDistortionTypeParamId, ampDistortionTypeParamName, 0, 1, 0),
+		
+		std::make_unique<juce::AudioParameterFloat>(delayTimeParamId, delayTimeParamName, 0.01, 4.0, delayInitialTime),
+		std::make_unique<juce::AudioParameterFloat>(delayWetLevelParamId, delayWetLevelParamName, 0.0, 1.0, delayInitialWetLevel),
+		std::make_unique<juce::AudioParameterFloat>(delayFeedbackParamId, delayFeedbackParamName, 0.0, 1.0, delayInitialFeedback),
+		std::make_unique<juce::AudioParameterFloat>(delayFilterParamId, delayFilterParamName, 20.0, 2000.0, delayInitialFilter),
+		std::make_unique<juce::AudioParameterBool>(delayTailoffParamId, delayTailoffParamName, delayInitialTailoff),
+
 		std::make_unique<juce::AudioParameterFloat>(reverbRoomSizeParamId, reverbRoomSizeParamName, 0, 1, reverbInitialRoomSize),
 		std::make_unique<juce::AudioParameterFloat>(reverbDampingParamId, reverbDampingParamName, 0, 1, reverbInitialDamping),
 		std::make_unique<juce::AudioParameterFloat>(reverbWetLevelParamId, reverbWetLevelParamName, 0, 1, reverbInitialWetLevel),
 		std::make_unique<juce::AudioParameterFloat>(reverbWidthParamId, reverbWidthParamName, 0, 1, reverbInitialWidth),
 		std::make_unique<juce::AudioParameterFloat>(reverbFreezeModeParamId, reverbFreezeModeParamName, 0, 1, reverbInitialFreezeMode),
+		
 		std::make_unique<juce::AudioParameterInt>(lfoWaveformTypeParamId, lfoWaveformTypeParamName, 0, 3, 0),
 		std::make_unique<juce::AudioParameterFloat>(lfoRateParamId, lfoRateParamName, 0.1, 10, lfoInitialRate),
 		std::make_unique<juce::AudioParameterFloat>(lfoIntensityParamId, lfoIntensityParamName, 0.01, 1.0, lfoInitialIntensity),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget1ActiveParamId, lfoTarget1ActiveParamName, false),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget2ActiveParamId, lfoTarget2ActiveParamName, false),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget3ActiveParamId, lfoTarget3ActiveParamName, false),
+		
 		std::make_unique<juce::AudioParameterBool>(osc1EnabledParamId, osc1EnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(osc2EnabledParamId, osc2EnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(osc3EnabledParamId, osc3EnabledParamName, true),
@@ -54,7 +66,8 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterBool>(filterEnabledParamId, filterEnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(reverbEnabledParamId, reverbEnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(lfoEnabledParamId, lfoEnabledParamName, true),
-		std::make_unique<juce::AudioParameterBool>(ampEnabledParamId, ampEnabledParamName, true)
+		std::make_unique<juce::AudioParameterBool>(ampEnabledParamId, ampEnabledParamName, true),
+		std::make_unique<juce::AudioParameterBool>(delayEnabledParamId, delayEnabledParamName, true)
 	})
 #endif
 {
@@ -137,14 +150,20 @@ void SynthAudioProcessor::prepareToPlay (double sampleRate_, int samplesPerBlock
 	sampleRate = sampleRate_;
 	Oscillator::sampleRate = sampleRate;
 
-	juce::dsp::ProcessSpec spec;
+	juce::dsp::ProcessSpec specDelay;
+	specDelay.sampleRate = sampleRate;
+	specDelay.maximumBlockSize = samplesPerBlock;
+	specDelay.numChannels = 2;
+	delay.prepare(specDelay);
+	if (tree.getParameterAsValue(reverbEnabledParamId).getValue()) {
+		juce::dsp::ProcessSpec specReverb;
+		specReverb.sampleRate = sampleRate;
+		specReverb.maximumBlockSize = samplesPerBlock;
+		specReverb.numChannels = 1;
 
-	spec.sampleRate = sampleRate;
-	spec.maximumBlockSize = samplesPerBlock;
-	spec.numChannels = 1;
-	leftReverb.prepare(spec);
-	rightReverb.prepare(spec);
-	
+		leftReverb.prepare(specReverb);
+		rightReverb.prepare(specReverb);
+	}
 	synth.setCurrentPlaybackSampleRate(sampleRate);
 	midiMessageCollector.reset(sampleRate);
 	for (SynthVoice* synthVoice : voices)
@@ -239,6 +258,16 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	buffer.clear();
 	int numSamples = buffer.getNumSamples();
 	synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
+
+	delay.setDelayTime(tree.getParameterAsValue(delayTimeParamId).getValue());
+	delay.setFeedback(tree.getParameterAsValue(delayFeedbackParamId).getValue());
+	delay.setFilter(tree.getParameterAsValue(delayFilterParamId).getValue());
+	delay.setWetLevel(tree.getParameterAsValue(delayWetLevelParamId).getValue());
+	delay.setTailoff(tree.getParameterAsValue(delayTailoffParamId).getValue());
+	delay.setEnabled(tree.getParameterAsValue(delayEnabledParamId).getValue());
+	juce::dsp::AudioBlock<float> block(buffer);
+	juce::dsp::ProcessContextReplacing<float> ctx(block);
+	delay.process(ctx);
 
 	if (tree.getParameterAsValue(reverbEnabledParamId).getValue()) {
 		juce::dsp::AudioBlock<float> block(buffer);

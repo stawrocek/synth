@@ -16,8 +16,6 @@ public:
 
 private:
 	juce::ComboBox comboboxFilterType;
-	//juce::Slider sliderCutoff;
-	//juce::Slider sliderResonance;
 
 	RotarySlider sliderCutoff;
 	RotarySlider sliderResonance;

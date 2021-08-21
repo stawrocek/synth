@@ -39,5 +39,9 @@ target_sources(SynthPlugin
 		LFOComponent.cpp
 		AmpComponent.h
 		AmpComponent.cpp
+		DelayComponent.h
+		DelayComponent.cpp
+		Delay.h
+		Delay.cpp
 		
 )

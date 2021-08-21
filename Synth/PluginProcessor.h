@@ -6,6 +6,7 @@
 #include "SynthVoice.h"
 #include "AudioBufferQueue.h"
 #include "ScopeDataCollector.h"
+#include "Delay.h"
 
 class SynthAudioProcessor  : public juce::AudioProcessor
 {
@@ -55,6 +56,7 @@ private:
 	juce::dsp::Reverb leftReverb;
 	juce::dsp::Reverb rightReverb;
 	juce::Reverb::Parameters reverbParams;
+	Delay<float> delay;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessor)
 };
