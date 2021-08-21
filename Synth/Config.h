@@ -52,12 +52,14 @@ const juce::String delayWetLevelParamId = "DELAY_WET_LEVEL";
 const juce::String delayFeedbackParamId = "DELAY_FEEDBACK";
 const juce::String delayFilterParamId = "DELAY_FILTER";
 const juce::String delayTailoffParamId = "DELAY_TAILOFF";
+const juce::String delayFilterTypeParamId = "DELAY_FILTER_TYPE";
 
 const juce::String delayTimeParamName = "Time";
 const juce::String delayWetLevelParamName = "Wet/Dry";
 const juce::String delayFeedbackParamName = "Feedback";
 const juce::String delayFilterParamName = "Filter";
 const juce::String delayTailoffParamName = "Tailoff";
+const juce::String delayFilterTypeParamName = "Delay Filter";
 
 const juce::String reverbRoomSizeParamId = "REVERB_ROOM_SIZE";
 const juce::String reverbDampingParamId = "REVERB_DAMPING";
@@ -126,6 +128,7 @@ const float delayInitialWetLevel = 0.33f;
 const float delayInitialFeedback = 0.5;
 const float delayInitialFilter = 100;
 const bool delayInitialTailoff = true;
+const FilterType delayFilterInitialType = FilterType::LowPassFilter;
 
 const float reverbInitialRoomSize   = 0.5f;
 const float reverbInitialDamping    = 0.5f;

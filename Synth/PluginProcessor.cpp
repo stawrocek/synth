@@ -36,7 +36,7 @@ SynthAudioProcessor::SynthAudioProcessor()
 		
 		std::make_unique<juce::AudioParameterFloat>(filterCutoffParamId, filterCutoffParamName, 20, 1000, filterInitialCutoff),
 		std::make_unique<juce::AudioParameterFloat>(filterResonanceParamId, filterResonanceParamName, 0.1, 10, filterInitialResonance),
-		std::make_unique<juce::AudioParameterInt>(filterTypeParamId, filterTypeParamName, 0, 1, 0),
+		std::make_unique<juce::AudioParameterInt>(filterTypeParamId, filterTypeParamName, 0, 1, (int)filterInitialType),
 		
 		std::make_unique<juce::AudioParameterFloat>(ampGainParamId, ampGainParamName, 0.01, 10, ampInitialGain),
 		std::make_unique<juce::AudioParameterFloat>(ampWetLevelParamId, ampWetLevelParamName, 0, 1, ampInitialWetLevel),
@@ -48,6 +48,7 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(delayFeedbackParamId, delayFeedbackParamName, 0.0, 1.0, delayInitialFeedback),
 		std::make_unique<juce::AudioParameterFloat>(delayFilterParamId, delayFilterParamName, 20.0, 2000.0, delayInitialFilter),
 		std::make_unique<juce::AudioParameterBool>(delayTailoffParamId, delayTailoffParamName, delayInitialTailoff),
+		std::make_unique<juce::AudioParameterInt>(delayFilterTypeParamId, delayFilterTypeParamName, 0, 1, (int)delayFilterInitialType),
 
 		std::make_unique<juce::AudioParameterFloat>(reverbRoomSizeParamId, reverbRoomSizeParamName, 0, 1, reverbInitialRoomSize),
 		std::make_unique<juce::AudioParameterFloat>(reverbDampingParamId, reverbDampingParamName, 0, 1, reverbInitialDamping),
@@ -126,8 +127,7 @@ double SynthAudioProcessor::getTailLengthSeconds() const
 
 int SynthAudioProcessor::getNumPrograms()
 {
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
+    return 1;
 }
 
 int SynthAudioProcessor::getCurrentProgram()
@@ -175,8 +175,7 @@ void SynthAudioProcessor::prepareToPlay (double sampleRate_, int samplesPerBlock
 
 void SynthAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -186,15 +185,10 @@ bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
     juce::ignoreUnused (layouts);
     return true;
   #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    // Some plugin hosts, such as certain GarageBand versions, will only
-    // load plugins that support stereo bus layouts.
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
      && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
-    // This checks if the input layout matches the output layout
    #if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
@@ -267,10 +261,12 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 
 	delay.setDelayTime(tree.getParameterAsValue(delayTimeParamId).getValue());
 	delay.setFeedback(tree.getParameterAsValue(delayFeedbackParamId).getValue());
-	delay.setFilter(tree.getParameterAsValue(delayFilterParamId).getValue());
+	delay.setFilter(tree.getParameterAsValue(delayFilterParamId).getValue(),
+		(FilterType)(int)tree.getParameterAsValue(delayFilterTypeParamId).getValue());
 	delay.setWetLevel(tree.getParameterAsValue(delayWetLevelParamId).getValue());
 	delay.setTailoff(tree.getParameterAsValue(delayTailoffParamId).getValue());
 	delay.setEnabled(tree.getParameterAsValue(delayEnabledParamId).getValue());
+
 	juce::dsp::AudioBlock<float> block(buffer);
 	juce::dsp::ProcessContextReplacing<float> ctx(block);
 	delay.process(ctx);
@@ -294,7 +290,7 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 
 bool SynthAudioProcessor::hasEditor() const
 {
-    return true; // (change this to false if you choose to not supply an editor)
+    return true;
 }
 
 juce::AudioProcessorEditor* SynthAudioProcessor::createEditor()
@@ -304,18 +300,20 @@ juce::AudioProcessorEditor* SynthAudioProcessor::createEditor()
 
 void SynthAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+	auto state = tree.copyState();
+	std::unique_ptr<juce::XmlElement> xml(state.createXml());
+	copyXmlToBinary(*xml, destData);
 }
 
 void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+	std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+
+	if (xmlState.get() != nullptr)
+		if (xmlState->hasTagName(tree.state.getType()))
+			tree.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
-// This creates new instances of the plugin.
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SynthAudioProcessor();

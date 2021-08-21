@@ -8,6 +8,7 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	delayComponent(p)
 {
 	setSize(950, 650);
+	setResizable(false, false);
 	addAndMakeVisible(osc1Component);
 	addAndMakeVisible(osc2Component);
 	addAndMakeVisible(osc3Component);

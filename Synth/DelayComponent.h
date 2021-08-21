@@ -19,7 +19,9 @@ private:
 	RotarySlider sliderFeedback;
 	RotarySlider sliderFilter;
 	juce::ToggleButton buttonTailoff;
+	juce::ComboBox comboboxFilterType;
 
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> filterTypeAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentTime;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentWetLevel;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFeedback;
