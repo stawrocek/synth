@@ -162,11 +162,12 @@ public:
 			for (size_t i = 0; i < numSamples; ++i) {
 				auto delayedSample = filter.processSample(dline.get(delayTime));
 				auto inputSample = input[i];
+				if (!enabled)
+					inputSample = 0;
 				auto dlineInputSample = std::tanh(inputSample + feedback * delayedSample);
-				if (!enabled && !tailoff)
-					dlineInputSample = 0;
+				
 				dline.push(dlineInputSample);
-				auto outputSample = inputSample + wetLevel * delayedSample;
+				auto outputSample = input[i] + wetLevel * delayedSample;
 				output[i] = outputSample;
 			}
 		}

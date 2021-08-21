@@ -42,6 +42,5 @@ target_sources(SynthPlugin
 		DelayComponent.h
 		DelayComponent.cpp
 		Delay.h
-		Delay.cpp
 		
 )

@@ -41,10 +41,10 @@ void DelayComponent::resized() {
 
 	int off = (sliderFontSize + sliderSpacer);
 
-	sliderTime.setBounds(juce::Rectangle<int>(0, off, w * 0.25, h - off).reduced(componentElementSpacer));
-	sliderFeedback.setBounds(juce::Rectangle<int>(w*0.25, off, w * 0.25, h - off).reduced(componentElementSpacer));
-	sliderFilter.setBounds(juce::Rectangle<int>(w*0.5, off, w * 0.25, h - off).reduced(componentElementSpacer));
-	sliderWetLevel.setBounds(juce::Rectangle<int>(w*0.75, off, w * 0.25, h - off).reduced(componentElementSpacer));
+	sliderTime.setBounds(juce::Rectangle<int>(0, off, w * 0.25, h - off).reduced(2*componentElementSpacer));
+	sliderFeedback.setBounds(juce::Rectangle<int>(w*0.25, off, w * 0.25, h - off).reduced(2*componentElementSpacer));
+	sliderFilter.setBounds(juce::Rectangle<int>(w*0.5, off, w * 0.25, h - off).reduced(2*componentElementSpacer));
+	sliderWetLevel.setBounds(juce::Rectangle<int>(w*0.75, off, w * 0.25, h - off).reduced(2*componentElementSpacer));
 	
 	buttonTailoff.setBounds(juce::Rectangle<int>(5, h-20, w*0.25, 15));
 
