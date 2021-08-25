@@ -59,8 +59,7 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 	if (adsrEnabled) {
 		adsr.setParameters(adsrParams);
 	}
-	for (int sample = 0; sample < numSamples; sample++)
-	{
+	for (int sample = 0; sample < numSamples; sample++) {
 		double detuneLFO = 0;
 		double levelLFO = 1.0;
 		double lfoVar = lfo.generateWave(lfoRate);
