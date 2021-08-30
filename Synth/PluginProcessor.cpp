@@ -76,7 +76,7 @@ SynthAudioProcessor::SynthAudioProcessor()
 #endif
 {
 	synth.clearVoices();
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 16; i++) {
 		voices.push_back(new SynthVoice());
 		synth.addVoice(voices.back());
 	}
@@ -88,13 +88,11 @@ SynthAudioProcessor::~SynthAudioProcessor() {
 
 }
 
-const juce::String SynthAudioProcessor::getName() const
-{
+const juce::String SynthAudioProcessor::getName() const {
     return JucePlugin_Name;
 }
 
-bool SynthAudioProcessor::acceptsMidi() const
-{
+bool SynthAudioProcessor::acceptsMidi() const {
    #if JucePlugin_WantsMidiInput
     return true;
    #else
@@ -102,8 +100,7 @@ bool SynthAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool SynthAudioProcessor::producesMidi() const
-{
+bool SynthAudioProcessor::producesMidi() const {
    #if JucePlugin_ProducesMidiOutput
     return true;
    #else
@@ -111,8 +108,7 @@ bool SynthAudioProcessor::producesMidi() const
    #endif
 }
 
-bool SynthAudioProcessor::isMidiEffect() const
-{
+bool SynthAudioProcessor::isMidiEffect() const {
    #if JucePlugin_IsMidiEffect
     return true;
    #else
@@ -120,36 +116,29 @@ bool SynthAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double SynthAudioProcessor::getTailLengthSeconds() const
-{
+double SynthAudioProcessor::getTailLengthSeconds() const {
     return 0.0;
 }
 
-int SynthAudioProcessor::getNumPrograms()
-{
+int SynthAudioProcessor::getNumPrograms() {
     return 1;
 }
 
-int SynthAudioProcessor::getCurrentProgram()
-{
+int SynthAudioProcessor::getCurrentProgram() {
     return 0;
 }
 
-void SynthAudioProcessor::setCurrentProgram (int index)
-{
+void SynthAudioProcessor::setCurrentProgram (int index) {
 }
 
-const juce::String SynthAudioProcessor::getProgramName (int index)
-{
+const juce::String SynthAudioProcessor::getProgramName (int index) {
     return {};
 }
 
-void SynthAudioProcessor::changeProgramName (int index, const juce::String& newName)
-{
+void SynthAudioProcessor::changeProgramName (int index, const juce::String& newName) {
 }
 
-void SynthAudioProcessor::prepareToPlay (double sampleRate_, int samplesPerBlock)
-{
+void SynthAudioProcessor::prepareToPlay (double sampleRate_, int samplesPerBlock) {
 	sampleRate = sampleRate_;
 	Oscillator::sampleRate = sampleRate;
 
@@ -173,14 +162,12 @@ void SynthAudioProcessor::prepareToPlay (double sampleRate_, int samplesPerBlock
 		synthVoice->setSampleRate(sampleRate);
 }
 
-void SynthAudioProcessor::releaseResources()
-{
+void SynthAudioProcessor::releaseResources() {
 
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
-{
+bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
     return true;
@@ -199,8 +186,7 @@ bool SynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
 }
 #endif
 
-void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
-{
+void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) {
 	if (tree.getParameterAsValue(reverbEnabledParamId).getValue()) {
 		reverbParams.roomSize = tree.getParameterAsValue(reverbRoomSizeParamId).getValue();
 		reverbParams.damping = tree.getParameterAsValue(reverbDampingParamId).getValue();
@@ -288,25 +274,21 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	scopeDataCollector.process(buffer.getReadPointer(0), (size_t)buffer.getNumSamples());
 }
 
-bool SynthAudioProcessor::hasEditor() const
-{
+bool SynthAudioProcessor::hasEditor() const {
     return true;
 }
 
-juce::AudioProcessorEditor* SynthAudioProcessor::createEditor()
-{
+juce::AudioProcessorEditor* SynthAudioProcessor::createEditor() {
     return new SynthAudioProcessorEditor (*this);
 }
 
-void SynthAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
-{
+void SynthAudioProcessor::getStateInformation (juce::MemoryBlock& destData) {
 	auto state = tree.copyState();
 	std::unique_ptr<juce::XmlElement> xml(state.createXml());
 	copyXmlToBinary(*xml, destData);
 }
 
-void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
-{
+void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes) {
 	std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
 
 	if (xmlState.get() != nullptr)
@@ -314,8 +296,7 @@ void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes
 			tree.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
-juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
-{
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
     return new SynthAudioProcessor();
 }
 
