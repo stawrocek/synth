@@ -5,10 +5,10 @@
 
 DelayComponent::DelayComponent(SynthAudioProcessor& processor_)
 	:SynthComponent(processor_, "Delay", delayEnabledParamId),
-	sliderTime(0.01, 4, 0.01, delayInitialTime, delayTimeParamName),
-	sliderWetLevel(0.0, 1, 0.01, delayInitialWetLevel, delayWetLevelParamName),
-	sliderFeedback(0.0, 1, 0.01, delayInitialFeedback, delayFeedbackParamName),
-	sliderFilter(20, 2000, 1, delayInitialFilter, delayFilterParamName),
+	sliderTime(0.01, 4, 0.01, delayInitialTime, delayTimeParamName, delayTimeParamId),
+	sliderWetLevel(0.0, 1, 0.01, delayInitialWetLevel, delayWetLevelParamName, delayWetLevelParamId),
+	sliderFeedback(0.0, 1, 0.01, delayInitialFeedback, delayFeedbackParamName, delayFeedbackParamId),
+	sliderFilter(20, 2000, 1, delayInitialFilter, delayFilterParamName, delayFilterParamId),
 	buttonTailoff("Tailoff")
 {
 	comboboxFilterType.setTextWhenNoChoicesAvailable("No waveform selected :(");

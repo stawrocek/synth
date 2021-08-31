@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Config.h"
 
 SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
@@ -19,8 +20,7 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	addAndMakeVisible(ampComponent);
 	addAndMakeVisible(delayComponent);
 
-	if (JUCEApplication::isStandaloneApp())
-		addAndMakeVisible(midiKeyboardComponent);
+	addAndMakeVisible(midiKeyboardComponent);
 	midiKeyboardComponent.setMidiChannel(2);
 	midiKeyboardState.addListener(&audioProcessor.midiMessageCollector);
 
@@ -59,11 +59,15 @@ void SynthAudioProcessorEditor::resized()
 
 	scopeComponent.setBounds(0, h*0.6, w, h*0.3);
 
-	if(JUCEApplication::isStandaloneApp())
-		midiKeyboardComponent.setBounds(area.removeFromBottom(h * 0.1));
+	midiKeyboardComponent.setBounds(area.removeFromBottom(h * 0.1));
 }
 
-void SynthAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
-{
-	//audioProcessor.noteOnVel = midiVolume.getValue();
+void SynthAudioProcessorEditor::showHostMenuForParam(const juce::MouseEvent& event, juce::String paramID) {
+	auto c = getHostContext();
+	
+	if (c != nullptr) {
+		auto d = c->getContextMenuForParameterIndex(audioProcessor.tree.getParameter(paramID));
+		d->showNativeMenu(this->getScreenPosition() + event.getPosition());
+	}
+	//audioProcessor.getParameter()
 }

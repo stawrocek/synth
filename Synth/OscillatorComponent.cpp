@@ -10,9 +10,9 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	btnOscRect("btn_rect_" + name, OscillatorType::OscSquare, identifier),
 	btnOscTriangle("btn_triangle_" + name, OscillatorType::OscTriangle, identifier),
 	btnOscSawtooth("btn_sawtooth_" + name, OscillatorType::OscSawtooth, identifier),
-	sliderDetuneCents(-100, 100, 1.0, 0, osc1DetuneParamName),
-	sliderDetuneSteps(-12, 12, 1.0, 0, osc1DetuneStepsParamName),
-	sliderMix(0, 100, 1.0, 100, osc1MixParamName)
+	sliderDetuneCents(-100, 100, 1.0, 0, osc1DetuneParamName, "OSC" + std::to_string(id) + "DETUNE"),
+	sliderDetuneSteps(-12, 12, 1.0, 0, osc1DetuneStepsParamName, "OSC" + std::to_string(id) + "DETUNESTEPS"),
+	sliderMix(0, 100, 1.0, 100, osc1MixParamName, "OSC" + std::to_string(id) + "MIX")
 {
 	btnOscSine.triggerClick();
 

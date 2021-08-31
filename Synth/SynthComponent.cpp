@@ -3,6 +3,8 @@
 #include "Config.h"
 #include "Styles.h"
 #include "RotarySlider.h"
+#include "PluginEditor.h"
+
 
 SynthComponent::SynthComponent(SynthAudioProcessor& processor_, const juce::String& name_,
 	const juce::String& buttonNameParamId)
@@ -15,7 +17,6 @@ SynthComponent::SynthComponent(SynthAudioProcessor& processor_, const juce::Stri
 	buttonName.setColour(TextButton::textColourOffId, buttonNameOffFontColour);
 	buttonName.setColour(TextButton::textColourOnId, buttonNameOnFontColour);
 	buttonName.setToggleState(true, juce::NotificationType::dontSendNotification);
-	buttonName.addListener(this);
 	nameButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
 		processor.tree, buttonNameParamId, buttonName);
 	addAndMakeVisible(buttonName);
@@ -25,7 +26,6 @@ SynthComponent::SynthComponent(SynthAudioProcessor& processor_, const juce::Stri
 }
 
 SynthComponent::~SynthComponent() {
-	buttonName.removeListener(this);
 }
 
 void SynthComponent::paint(Graphics& g) {
@@ -91,19 +91,6 @@ void SynthComponent::paint(Graphics& g) {
 	}
 }
 
-void SynthComponent::buttonClicked(Button* button) {
-	if (button == &buttonName) {
-		if (isMuted) {
-			isMuted = false;
-			setColour(outlineColourId, groupComponentOutlineOnColor);
-		}
-		else if (!isMuted) {
-			isMuted = true;
-			setColour(outlineColourId, groupComponentOutlineOffColor);
-		}
-	}
-}
-
 Font SynthComponent::NameButtonLookAndFeel::getTextButtonFont(TextButton&, int buttonHeight) 
 {
 	return { jmin(16.0f, (float)buttonHeight * 0.8f) };
@@ -121,4 +108,14 @@ void SynthComponent::squareLayout() {
 
 void SynthComponent::resized() {
 	squareLayout();
+}
+
+void SynthComponent::fireHostContextMenu(const juce::MouseEvent& event, juce::String stringID) {
+	if (juce::ModifierKeys::currentModifiers.isRightButtonDown()) {
+		if (SynthAudioProcessorEditor* editor =
+			findParentComponentOfClass<SynthAudioProcessorEditor>()) {
+
+			editor->showHostMenuForParam(event, stringID);
+		}
+	}
 }

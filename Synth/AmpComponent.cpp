@@ -5,9 +5,9 @@
 
 AmpComponent::AmpComponent(SynthAudioProcessor& processor_)
 	:SynthComponent(processor_, "Amp", ampEnabledParamId),
-	sliderGain(0.01, 10, 0.1, ampInitialGain, ampGainParamName),
-	sliderWetLevel(0.0, 1.0, 0.01, ampInitialWetLevel, ampWetLevelParamName),
-	sliderVolume(0, 1.0, 0.01, ampInitialVolume, ampVolumeParamName)
+	sliderGain(0.01, 10, 0.1, ampInitialGain, ampGainParamName, ampGainParamId),
+	sliderWetLevel(0.0, 1.0, 0.01, ampInitialWetLevel, ampWetLevelParamName, ampWetLevelParamId),
+	sliderVolume(0, 1.0, 0.01, ampInitialVolume, ampVolumeParamName, ampVolumeParamId)
 {
 	juce::StringArray distortions{ "soft clipping", "hard clipping" };
 	distortionType.addItemList(distortions, 1);

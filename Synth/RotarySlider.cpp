@@ -4,8 +4,11 @@
 #include "RotarySlider.h"
 
 #include "Styles.h"
+#include "SynthComponent.h"
+#include "config.h"
 
-RotarySlider::RotarySlider(double minimum, double maximum, double step, double initial, juce::String tooltip)
+RotarySlider::RotarySlider(double minimum, double maximum, double step, double initial, juce::String tooltip, juce::String paramID_)
+	:paramID(paramID_)
 {
 	setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
 	setTextBoxStyle(juce::Slider::TextBoxBelow, false, 0, 0);
@@ -74,7 +77,10 @@ void RotarySlider::paint(juce::Graphics& g)
 void RotarySlider::mouseDown(const juce::MouseEvent& event)
 {
 	juce::Slider::mouseDown(event);
-
+	if (SynthComponent* parent =
+		findParentComponentOfClass<SynthComponent>()) {
+		parent->fireHostContextMenu(event, paramID);
+	}
 	setMouseCursor(juce::MouseCursor::NoCursor);
 }
 

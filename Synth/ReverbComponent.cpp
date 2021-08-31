@@ -5,10 +5,10 @@
 
 ReverbComponent::ReverbComponent(SynthAudioProcessor& processor_)
 	:SynthComponent(processor_, "Reverb", reverbEnabledParamId),
-	sliderRoomSize(0, 1.0, 0.01, reverbInitialRoomSize, reverbRoomSizeParamName),
-	sliderDamping(0, 1.0, 0.01, reverbInitialDamping, reverbDampingParamName),
-	sliderWetLevel(0, 1.0, 0.01, reverbInitialWetLevel, reverbWetLevelParamName),
-	sliderWidth(0, 1.0, 0.01, reverbInitialWidth, reverbWidthParamName),
+	sliderRoomSize(0, 1.0, 0.01, reverbInitialRoomSize, reverbRoomSizeParamName, reverbRoomSizeParamId),
+	sliderDamping(0, 1.0, 0.01, reverbInitialDamping, reverbDampingParamName, reverbDampingParamId),
+	sliderWetLevel(0, 1.0, 0.01, reverbInitialWetLevel, reverbWetLevelParamName, reverbWetLevelParamId),
+	sliderWidth(0, 1.0, 0.01, reverbInitialWidth, reverbWidthParamName, reverbWidthParamId),
 	buttonFreeze(reverbFreezeModeParamName)
 {
 	sliderAttachmentRoomSize = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(

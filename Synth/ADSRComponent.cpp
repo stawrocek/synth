@@ -5,10 +5,10 @@
 
 ADSRComponent::ADSRComponent(SynthAudioProcessor& processor_)
 	:SynthComponent(processor_, "ADSR", adsrEnabledParamId),
-	sliderAttack(0, 5.0, 0.1, adsrInitialAttack, adsrAttackParamName),
-	sliderDecay(0, 2, 0.1, adsrInitialDecay, adsrDecayParamName),
-	sliderSustain(0, 1, 0.05, adsrInitialSustain, adsrSustainParamName),
-	sliderRelease(0, 2, 0.1, adsrInitialRelease, adsrReleaseParamName)
+	sliderAttack(0, 5.0, 0.1, adsrInitialAttack, adsrAttackParamName, adsrAttackParamId),
+	sliderDecay(0, 2, 0.1, adsrInitialDecay, adsrDecayParamName, adsrDecayParamId),
+	sliderSustain(0, 1, 0.05, adsrInitialSustain, adsrSustainParamName, adsrSustainParamId),
+	sliderRelease(0, 2, 0.1, adsrInitialRelease, adsrReleaseParamName, adsrReleaseParamId)
 {
 	sliderAttachmentAttack = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, adsrAttackParamId, sliderAttack);

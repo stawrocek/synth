@@ -4,16 +4,15 @@
 
 #include "PluginProcessor.h"
 
-class SynthComponent : public juce::GroupComponent, 
-					   public Button::Listener
+class SynthComponent : public juce::GroupComponent
 {
 public:
 	SynthComponent(SynthAudioProcessor& processor, const juce::String & name, 
 		const juce::String& buttonNameParamId);
 	~SynthComponent();
 	void paint(Graphics& g) override;
-	void buttonClicked(Button*) override;
 	void resized() override;
+	void fireHostContextMenu(const juce::MouseEvent& event, juce::String stringID);
 
 protected:
 	class NameButtonLookAndFeel : public LookAndFeel_V4 {
@@ -25,8 +24,7 @@ protected:
 	juce::TextButton buttonName;
 	juce::String name;
 	NameButtonLookAndFeel nameButtonLookAndFeel;
-
-	bool isMuted = false;
+	
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> nameButtonAttachment;
 };
 
