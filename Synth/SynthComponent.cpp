@@ -109,13 +109,3 @@ void SynthComponent::squareLayout() {
 void SynthComponent::resized() {
 	squareLayout();
 }
-
-void SynthComponent::fireHostContextMenu(const juce::MouseEvent& event, juce::String stringID) {
-	if (juce::ModifierKeys::currentModifiers.isRightButtonDown()) {
-		if (SynthAudioProcessorEditor* editor =
-			findParentComponentOfClass<SynthAudioProcessorEditor>()) {
-
-			editor->showHostMenuForParam(event, stringID);
-		}
-	}
-}

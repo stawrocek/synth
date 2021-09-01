@@ -12,7 +12,6 @@ public:
 	~SynthComponent();
 	void paint(Graphics& g) override;
 	void resized() override;
-	void fireHostContextMenu(const juce::MouseEvent& event, juce::String stringID);
 
 protected:
 	class NameButtonLookAndFeel : public LookAndFeel_V4 {

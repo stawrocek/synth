@@ -6,6 +6,7 @@
 #include "Styles.h"
 #include "SynthComponent.h"
 #include "config.h"
+#include "PluginEditor.h"
 
 RotarySlider::RotarySlider(double minimum, double maximum, double step, double initial, juce::String tooltip, juce::String paramID_)
 	:paramID(paramID_)
@@ -77,9 +78,11 @@ void RotarySlider::paint(juce::Graphics& g)
 void RotarySlider::mouseDown(const juce::MouseEvent& event)
 {
 	juce::Slider::mouseDown(event);
-	if (SynthComponent* parent =
-		findParentComponentOfClass<SynthComponent>()) {
-		parent->fireHostContextMenu(event, paramID);
+	if (juce::ModifierKeys::currentModifiers.isRightButtonDown()) {
+		if (SynthAudioProcessorEditor* editor =
+			findParentComponentOfClass<SynthAudioProcessorEditor>()) {
+			editor->showHostMenuForParam(event, paramID);
+		}
 	}
 	setMouseCursor(juce::MouseCursor::NoCursor);
 }
