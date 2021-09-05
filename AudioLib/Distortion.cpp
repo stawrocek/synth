@@ -13,6 +13,7 @@ float Distortion::processSingleSample(float sample) {
 		
 		return clean + wetLevel * dist;
 	}
+	return sample;
 }
 
 void Distortion::setType(DistortionType type) {

@@ -18,7 +18,7 @@ void WaveformButton::paint(juce::Graphics& graphics) {
 	auto w = area.getWidth();
 
 	graphics.setColour(componentBorderColour);
-	graphics.drawRect(area.getX(), area.getY(), area.getWidth(), area.getHeight(), 1);
+	graphics.drawRect(area.getX(), area.getY(), w, h, 1);
 
 	ShapeButton::paint(graphics);
 }

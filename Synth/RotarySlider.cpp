@@ -5,7 +5,7 @@
 
 #include "Styles.h"
 #include "SynthComponent.h"
-#include "config.h"
+#include "Config.h"
 #include "PluginEditor.h"
 
 RotarySlider::RotarySlider(double minimum, double maximum, double step, double initial, juce::String tooltip, juce::String paramID_)

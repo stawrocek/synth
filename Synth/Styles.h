@@ -6,7 +6,7 @@ const juce::Colour componentHeaderColour     = juce::Colours::black;
 const juce::Colour componentHeaderFontColour = juce::Colours::white;
 const juce::Colour componentBorderColour     = juce::Colours::black;
 const int componentBorderSize                = 2;
-const juce::Colour groupComponentOutlineOnColor = juce::Colours::lightgrey.darker(0.2);;
+const juce::Colour groupComponentOutlineOnColor = juce::Colours::lightgrey.darker(0.2);
 const juce::Colour groupComponentOutlineOffColor = juce::Colours::darkred;
 
 

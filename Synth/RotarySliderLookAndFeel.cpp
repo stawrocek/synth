@@ -5,8 +5,8 @@
 
 #include "Styles.h"
 
-RotarySliderLookAndFeel::RotarySliderLookAndFeel() {};
-RotarySliderLookAndFeel::~RotarySliderLookAndFeel() {};
+RotarySliderLookAndFeel::RotarySliderLookAndFeel() {}
+RotarySliderLookAndFeel::~RotarySliderLookAndFeel() {}
 
 juce::Slider::SliderLayout RotarySliderLookAndFeel::getSliderLayout(juce::Slider& slider)
 {
@@ -74,9 +74,4 @@ juce::Font RotarySliderLookAndFeel::getTextButtonFont(juce::TextButton&, int but
 {
 	juce::Font font("Avenir Next Medium", 20, 0);
 	return { font };
-}
-
-void RotarySliderLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
-	bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
-{
 }

@@ -20,6 +20,7 @@ public:
 		int currentPitchWheelPosition) override;
 	void stopNote(float velocity, bool allowTailoff) override;
 	void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
+
 	void pitchWheelMoved(int newPitchWheel);
 	void controllerMoved(int controllerNumber, int newControllerValue);
 	

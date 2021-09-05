@@ -3,6 +3,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Config.h"
 
 template <typename Type>
 class DelayLine
