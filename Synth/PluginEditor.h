@@ -5,9 +5,13 @@
 #include "PluginProcessor.h"
 #include "ScopeComponent.h"
 #include "ADSRComponent.h"
+#include "FilterComponent.h"
+#include "ReverbComponent.h"
+#include "LFOComponent.h"
+#include "AmpComponent.h"
+#include "DelayComponent.h"
 
-class SynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
-								   private juce::Slider::Listener
+class SynthAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
     SynthAudioProcessorEditor (SynthAudioProcessor&);
@@ -16,9 +20,9 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-private:
-	void sliderValueChanged(juce::Slider* slider) override;
+	void showHostMenuForParam(const juce::MouseEvent& event, juce::String paramID);
 
+private:
     SynthAudioProcessor& audioProcessor;
 	juce::MidiKeyboardState midiKeyboardState;
 	juce::MidiKeyboardComponent midiKeyboardComponent{ midiKeyboardState, juce::MidiKeyboardComponent::horizontalKeyboard };
@@ -26,8 +30,12 @@ private:
 	OscillatorComponent osc1Component;
 	OscillatorComponent osc2Component;
 	OscillatorComponent osc3Component;
-
 	ADSRComponent adsrComponent;
+	FilterComponent filterComponent;
+	ReverbComponent reverbComponent;
+	LFOComponent lfoComponent;
+	AmpComponent ampComponent;
+	DelayComponent delayComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessorEditor)
 };

@@ -6,12 +6,12 @@ Oscillator::Oscillator()
 
 }
 
-double Oscillator::sampleRate = 44100.;
+double Oscillator::sampleRate = 48000.;
 
 double Oscillator::generateSinWave(double frequency) {
 	double result = sin(phase * 2.0 * PI);
 	if (phase >= 1.) {
-		phase -= 2.;
+		phase -= 1.;
 	}
 	phase += frequency / sampleRate;
 	return result;
@@ -58,7 +58,9 @@ double Oscillator::generateSawtoothWave(double frequency) {
 }
 
 double Oscillator::generateWave(double frequency) {
-	frequency *= (1.0 + detune);
+	//frequency *= (1.0 + detune);
+	frequency = frequency * powf(2.0, (detuneHalfSteps + (detuneCents / 100.0)) / 12.0);
+	
 	if (oscillatorType == OscillatorType::OscSin)
 		return generateSinWave(frequency);
 	else if (oscillatorType == OscillatorType::OscSquare)
@@ -67,6 +69,7 @@ double Oscillator::generateWave(double frequency) {
 		return generateTriangleWave(frequency);
 	else if (oscillatorType == OscillatorType::OscSawtooth)
 		return generateSawtoothWave(frequency);
+	return 0.0;
 }
 
 OscillatorType Oscillator::getType() {
@@ -84,11 +87,11 @@ void Oscillator::setPhase(double phase_) {
 	phase = phase_;
 }
 
-double Oscillator::getDetune() {
-	return detune;
+void Oscillator::setDetuneHalfSteps(double detune_) {
+	detuneHalfSteps = detune_;
 }
 
-void Oscillator::setDetune(double detune_) {
-	detune = detune_;
+void Oscillator::setDetuneCents(double detune_) {
+	detuneCents = detune_;
 }
 

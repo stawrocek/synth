@@ -21,6 +21,26 @@ target_sources(SynthPlugin
 		OscillatorComponent.cpp
 		ADSRComponent.h
 		ADSRComponent.cpp
+		FilterComponent.h
+		FilterComponent.cpp
 		Config.h
 		Styles.h
+		SynthComponent.h
+		SynthComponent.cpp
+		ReverbComponent.h
+		ReverbComponent.cpp
+		RotarySlider.h
+		RotarySlider.cpp
+		RotarySliderLookAndFeel.h
+		RotarySliderLookAndFeel.cpp
+		WaveformButton.h
+		WaveformButton.cpp
+		LFOComponent.h
+		LFOComponent.cpp
+		AmpComponent.h
+		AmpComponent.cpp
+		DelayComponent.h
+		DelayComponent.cpp
+		Delay.h
+		
 )

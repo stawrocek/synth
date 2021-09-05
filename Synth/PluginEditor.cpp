@@ -1,25 +1,31 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Config.h"
 
 SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
 	scopeComponent(p.audioBufferQueue), osc1Component(p, 1), osc2Component(p, 2), osc3Component(p, 3),
-	adsrComponent(p)
+	adsrComponent(p), filterComponent(p), reverbComponent(p), lfoComponent(p), ampComponent(p),
+	delayComponent(p)
 {
-	setSize(800, 600);
+	setSize(950, 550);
+	setResizable(false, false);
 	addAndMakeVisible(osc1Component);
 	addAndMakeVisible(osc2Component);
 	addAndMakeVisible(osc3Component);
-
 	addAndMakeVisible(adsrComponent);
+	addAndMakeVisible(filterComponent);
+	addAndMakeVisible(reverbComponent);
+	addAndMakeVisible(lfoComponent);
+	addAndMakeVisible(ampComponent);
+	addAndMakeVisible(delayComponent);
 
-	if (JUCEApplication::isStandaloneApp())
-		addAndMakeVisible(midiKeyboardComponent);
+	addAndMakeVisible(midiKeyboardComponent);
 	midiKeyboardComponent.setMidiChannel(2);
 	midiKeyboardState.addListener(&audioProcessor.midiMessageCollector);
 
 	
-	addAndMakeVisible(scopeComponent);	
+	addAndMakeVisible(scopeComponent);
 }
 
 SynthAudioProcessorEditor::~SynthAudioProcessorEditor()
@@ -29,7 +35,6 @@ SynthAudioProcessorEditor::~SynthAudioProcessorEditor()
 
 void SynthAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 }
 
@@ -39,19 +44,28 @@ void SynthAudioProcessorEditor::resized()
 	auto h = area.getHeight();
 	auto w = area.getWidth();
 
-	osc1Component.setBounds(0, 0, w * 0.33, h * 0.2);
-	osc2Component.setBounds(osc1Component.getBounds().withY(h*0.2));
-	osc3Component.setBounds(osc1Component.getBounds().withY(h*0.4));
+	osc1Component.setBounds(0, 0, w * 0.33, h * 0.2333);
+	osc2Component.setBounds(osc1Component.getBounds().withY(h*0.2333));
+	osc3Component.setBounds(osc1Component.getBounds().withY(h*0.4666));
 
-	adsrComponent.setBounds(osc1Component.getBounds().withX(w*0.33));
+	adsrComponent.setBounds(osc1Component.getBounds().withX(w*0.33).withWidth(w*0.4));
+	filterComponent.setBounds(osc2Component.getBounds().withX(w*0.33).withWidth(w*0.22));
+	lfoComponent.setBounds(osc3Component.getBounds().withX(w*0.33));
+	
+	ampComponent.setBounds(osc1Component.getBounds().withX(w * 0.73).withWidth(w*0.27));
+	delayComponent.setBounds(osc2Component.getBounds().withX(w * 0.55).withWidth(w * 0.45));
+	reverbComponent.setBounds(osc3Component.getBounds().withX(w * 0.66));
 
-	scopeComponent.setBounds(0, h*0.6, w, h*0.3);
+	scopeComponent.setBounds(0, h*0.7, w, h*0.2);
 
-	if(JUCEApplication::isStandaloneApp())
-		midiKeyboardComponent.setBounds(area.removeFromBottom(h * 0.1));
+	midiKeyboardComponent.setBounds(area.removeFromBottom(h * 0.1));
 }
 
-void SynthAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
-{
-	//audioProcessor.noteOnVel = midiVolume.getValue();
+void SynthAudioProcessorEditor::showHostMenuForParam(const juce::MouseEvent& event, juce::String paramID) {
+	auto c = getHostContext();
+	
+	if (c != nullptr) {
+		auto d = c->getContextMenuForParameterIndex(audioProcessor.tree.getParameter(paramID));
+		d->showNativeMenu(this->getScreenPosition() + event.getPosition());
+	}
 }

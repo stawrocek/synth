@@ -6,9 +6,9 @@
 #include "SynthVoice.h"
 #include "AudioBufferQueue.h"
 #include "ScopeDataCollector.h"
+#include "Delay.h"
 
-class SynthAudioProcessor  : public juce::AudioProcessor,
-							 public AudioProcessorValueTreeState::Listener
+class SynthAudioProcessor  : public juce::AudioProcessor
 {
 public:
     SynthAudioProcessor();
@@ -42,18 +42,21 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-	void parameterChanged(const String& parameterID, float newValue) override;
-
 	AudioProcessorValueTreeState tree;
 	juce::MidiMessageCollector midiMessageCollector;
 	AudioBufferQueue<float> audioBufferQueue;
 	ScopeDataCollector<float> scopeDataCollector{ audioBufferQueue };
 
 private:
+	double sampleRate;
 	juce::Synthesiser synth;
 	
 	std::vector<SynthVoice*> voices;
-	
+
+	juce::dsp::Reverb leftReverb;
+	juce::dsp::Reverb rightReverb;
+	juce::Reverb::Parameters reverbParams;
+	Delay<float> delay;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessor)
 };

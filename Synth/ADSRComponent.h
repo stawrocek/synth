@@ -3,22 +3,21 @@
 #include <JuceHeader.h>
 
 #include "PluginProcessor.h"
+#include "SynthComponent.h"
+#include "RotarySlider.h"
 
-class ADSRComponent : public juce::Component
+class ADSRComponent : public SynthComponent
 {
 public:
 	ADSRComponent(SynthAudioProcessor& processor);
 
-	void paint(juce::Graphics& g) override;
 	void resized() override;
 
 private:
-	SynthAudioProcessor& processor;
-	juce::Label labelName;
-	juce::Slider sliderAttack;
-	juce::Slider sliderDecay;
-	juce::Slider sliderSustain;
-	juce::Slider sliderRelease;
+	RotarySlider sliderAttack;
+	RotarySlider sliderDecay;
+	RotarySlider sliderSustain;
+	RotarySlider sliderRelease;
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentAttack;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentDecay;

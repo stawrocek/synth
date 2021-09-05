@@ -39,6 +39,7 @@ public:
 		auto scopeRect = juce::Rectangle<SampleType>{ SampleType(0), h/4, w, h / 2 };
 		plot(sampleData.data(), sampleData.size(), g, scopeRect, SampleType(1), h / 4);
 
+		g.setColour(juce::Colours::lightblue);
 		// Spectrum
 		auto spectrumRect = juce::Rectangle<SampleType>{ SampleType(0), h / 4, w, h / 2 };
 		plot(spectrumData.data(), spectrumData.size() / 4, g, spectrumRect);
