@@ -8,7 +8,7 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
 	adsrComponent(p), filterComponent(p), reverbComponent(p), lfoComponent(p), ampComponent(p),
 	delayComponent(p)
 {
-	setSize(950, 650);
+	setSize(950, 550);
 	setResizable(false, false);
 	addAndMakeVisible(osc1Component);
 	addAndMakeVisible(osc2Component);
@@ -44,9 +44,9 @@ void SynthAudioProcessorEditor::resized()
 	auto h = area.getHeight();
 	auto w = area.getWidth();
 
-	osc1Component.setBounds(0, 0, w * 0.33, h * 0.2);
-	osc2Component.setBounds(osc1Component.getBounds().withY(h*0.2));
-	osc3Component.setBounds(osc1Component.getBounds().withY(h*0.4));
+	osc1Component.setBounds(0, 0, w * 0.33, h * 0.2333);
+	osc2Component.setBounds(osc1Component.getBounds().withY(h*0.2333));
+	osc3Component.setBounds(osc1Component.getBounds().withY(h*0.4666));
 
 	adsrComponent.setBounds(osc1Component.getBounds().withX(w*0.33).withWidth(w*0.4));
 	filterComponent.setBounds(osc2Component.getBounds().withX(w*0.33).withWidth(w*0.22));
@@ -56,7 +56,7 @@ void SynthAudioProcessorEditor::resized()
 	delayComponent.setBounds(osc2Component.getBounds().withX(w * 0.55).withWidth(w * 0.45));
 	reverbComponent.setBounds(osc3Component.getBounds().withX(w * 0.66));
 
-	scopeComponent.setBounds(0, h*0.6, w, h*0.3);
+	scopeComponent.setBounds(0, h*0.7, w, h*0.2);
 
 	midiKeyboardComponent.setBounds(area.removeFromBottom(h * 0.1));
 }
