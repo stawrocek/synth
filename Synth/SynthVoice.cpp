@@ -124,13 +124,11 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 	}
 }
 
-void SynthVoice::pitchWheelMoved(int newPitchWheel)
-{
+void SynthVoice::pitchWheelMoved(int newPitchWheel) {
 
 }
 
-void SynthVoice::controllerMoved(int controllerNumber, int newControllerValue)
-{
+void SynthVoice::controllerMoved(int controllerNumber, int newControllerValue) {
 
 }
 

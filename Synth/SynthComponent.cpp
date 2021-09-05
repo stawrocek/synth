@@ -50,8 +50,6 @@ void SynthComponent::paint(Graphics& g) {
 			(float)f.getStringWidth(name) + textEdgeGap * 2.0f);
 	auto textX = cs + textEdgeGap;
 
-	//textX = cs + (w - cs2 - textW) * 0.5f;
-
 	p.startNewSubPath(x + textX + textW, y);
 	p.lineTo(x + w - cs, y);
 
@@ -73,7 +71,6 @@ void SynthComponent::paint(Graphics& g) {
 		.withMultipliedAlpha(alpha));
 
 	g.strokePath(p, PathStrokeType(2.0f));
-
 
 	buttonName.setBounds(roundToInt(x+textX), 2,
 		roundToInt(textW), roundToInt(textH));

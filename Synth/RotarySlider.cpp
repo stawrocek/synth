@@ -106,5 +106,4 @@ void RotarySlider::squareLayout() {
 		float newY = y + (h-newH)/2.0;
 		setBounds(x, newY, w, newH);
 	}
-	
 }

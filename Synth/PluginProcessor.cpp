@@ -247,7 +247,7 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 
 	delay.setDelayTime(tree.getParameterAsValue(delayTimeParamId).getValue());
 	delay.setFeedback(tree.getParameterAsValue(delayFeedbackParamId).getValue());
-	delay.setFilter(tree.getParameterAsValue(delayFilterParamId).getValue(),
+	delay.setFilter((float)tree.getParameterAsValue(delayFilterParamId).getValue(),
 		(FilterType)(int)tree.getParameterAsValue(delayFilterTypeParamId).getValue());
 	delay.setWetLevel(tree.getParameterAsValue(delayWetLevelParamId).getValue());
 	delay.setTailoff(tree.getParameterAsValue(delayTailoffParamId).getValue());
@@ -258,8 +258,6 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	delay.process(ctx);
 
 	if (tree.getParameterAsValue(reverbEnabledParamId).getValue()) {
-		juce::dsp::AudioBlock<float> block(buffer);
-
 		auto leftBlock = block.getSingleChannelBlock(0);
 		auto rightBlock = block.getSingleChannelBlock(1);
 

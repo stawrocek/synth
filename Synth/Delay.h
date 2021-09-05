@@ -134,7 +134,8 @@ public:
 		}
 	}
 
-	void setFilter(Type newValue, FilterType filterType) {
+	void setFilter(Type newValue, FilterType filterType_) {
+		filterType = filterType_;
 		if(filterType == FilterType::LowPassFilter)
 			filterCoefs = juce::dsp::IIR::Coefficients<Type>::makeFirstOrderLowPass(sampleRate, newValue);
 		else if (filterType == FilterType::HighPassFilter)
@@ -184,7 +185,7 @@ private:
 	Type wetLevel{ Type(0) };
 	std::array<juce::dsp::IIR::Filter<Type>, maxNumChannels> filters;
 	typename juce::dsp::IIR::Coefficients<Type>::Ptr filterCoefs;
-	const FilterType filterType = delayFilterInitialType;
+	FilterType filterType = delayFilterInitialType;
 
 	Type sampleRate{ Type(48000) };
 	Type maxDelayTime{ Type(2) };
