@@ -2,9 +2,32 @@
 
 #include <JuceHeader.h>
 
-const juce::String osc1WaveTypeParamId = "WAVEFORM1";
-const juce::String osc2WaveTypeParamId = "WAVEFORM2";
-const juce::String osc3WaveTypeParamId = "WAVEFORM3";
+const juce::String osc1WaveformSineParamId = "OSC1_WAVEFORM_SINE";
+const juce::String osc1WaveformSquareParamId = "OSC1_WAVEFORM_SQUARE";
+const juce::String osc1WaveformTriangleParamId = "OSC1_WAVEFORM_TRIANGLE";
+const juce::String osc1WaveformSawtoothParamId = "OSC1_WAVEFORM_SAWTOOTH";
+const juce::String osc1WaveformSineParamName = "Oscillator 1 waveform type sine";
+const juce::String osc1WaveformSquareParamName = "Oscillator 1 waveform type square";
+const juce::String osc1WaveformTriangleParamName = "Oscillator 1 waveform type triangle";
+const juce::String osc1WaveformSawtoothParamName = "Oscillator 1 waveform type sawtooth";
+const juce::String osc2WaveformSineParamId = "OSC2_WAVEFORM_SINE";
+const juce::String osc2WaveformSquareParamId = "OSC2_WAVEFORM_SQUARE";
+const juce::String osc2WaveformTriangleParamId = "OSC2_WAVEFORM_TRIANGLE";
+const juce::String osc2WaveformSawtoothParamId = "OSC2_WAVEFORM_SAWTOOTH";
+const juce::String osc2WaveformSineParamName = "Oscillator 2 waveform type sine";
+const juce::String osc2WaveformSquareParamName = "Oscillator 2 waveform type square";
+const juce::String osc2WaveformTriangleParamName = "Oscillator 2 waveform type triangle";
+const juce::String osc2WaveformSawtoothParamName = "Oscillator 2 waveform type sawtooth";
+const juce::String osc3WaveformSineParamId = "OSC3_WAVEFORM_SINE";
+const juce::String osc3WaveformSquareParamId = "OSC3_WAVEFORM_SQUARE";
+const juce::String osc3WaveformTriangleParamId = "OSC3_WAVEFORM_TRIANGLE";
+const juce::String osc3WaveformSawtoothParamId = "OSC3_WAVEFORM_SAWTOOTH";
+const juce::String osc3WaveformSineParamName = "Oscillator 3 waveform type sine";
+const juce::String osc3WaveformSquareParamName = "Oscillator 3 waveform type square";
+const juce::String osc3WaveformTriangleParamName = "Oscillator 3 waveform type triangle";
+const juce::String osc3WaveformSawtoothParamName = "Oscillator 3 waveform type sawtooth";
+
+
 const juce::String osc1DetuneParamId = "OSC1DETUNE";
 const juce::String osc2DetuneParamId = "OSC2DETUNE";
 const juce::String osc3DetuneParamId = "OSC3DETUNE";
@@ -73,10 +96,8 @@ const juce::String reverbWetLevelParamName = "Wet/Dry";
 const juce::String reverbWidthParamName = "Width";
 const juce::String reverbFreezeModeParamName = "Freeze";
 
-const juce::String lfoWaveformTypeParamId = "LFO_WAVEFORM_TYPE";
 const juce::String lfoRateParamId = "LFO_RATE";
 const juce::String lfoIntensityParamId = "LFO_INTENSITY";
-const juce::String lfoWaveformTypeParamName = "Waveform type";
 const juce::String lfoRateParamName = "Rate";
 const juce::String lfoIntensityParamName = "Intensity";
 const juce::String lfoTarget1ActiveParamId = "LFO_TARGET_1_ACTIVE";
@@ -85,6 +106,14 @@ const juce::String lfoTarget2ActiveParamId = "LFO_TARGET_2_ACTIVE";
 const juce::String lfoTarget2ActiveParamName = "LFO detune";
 const juce::String lfoTarget3ActiveParamId = "LFO_TARGET_3_ACTIVE";
 const juce::String lfoTarget3ActiveParamName = "LFO volume";
+const juce::String lfoWaveformSineParamId = "LFO_WAVEFORM_SINE";
+const juce::String lfoWaveformSquareParamId = "LFO_WAVEFORM_SQUARE";
+const juce::String lfoWaveformTriangleParamId = "LFO_WAVEFORM_TRIANGLE";
+const juce::String lfoWaveformSawtoothParamId = "LFO_WAVEFORM_SAWTOOTH";
+const juce::String lfoWaveformSineParamName = "LFO type sine";
+const juce::String lfoWaveformSquareParamName = "LFO type square";
+const juce::String lfoWaveformTriangleParamName = "LFO type triangle";
+const juce::String lfoWaveformSawtoothParamName = "LFO type sawtooth";
 
 const juce::String ampGainParamId = "AMP_GAIN";
 const juce::String ampWetLevelParamId = "AMP_WET_LEVEL";

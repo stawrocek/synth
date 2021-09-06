@@ -16,30 +16,7 @@ LFOComponent::LFOComponent(SynthAudioProcessor& processor_)
 	lfoTargetFilterCutoff("Cutoff"),
 	lfoTargetDetune("Detune"),
 	lfoTargetVolume("Volume")
-{
-	btnOscSine.triggerClick();
-
-	btnOscSine.onStateChange = [this]() {
-		if (btnOscSine.getState() == Button::ButtonState::buttonDown) {
-			processor.tree.getParameterAsValue("LFO_WAVEFORM_TYPE").setValue(0);
-		}
-	};
-	btnOscRect.onStateChange = [this]() {
-		if (btnOscRect.getState() == Button::ButtonState::buttonDown) {
-			processor.tree.getParameterAsValue("LFO_WAVEFORM_TYPE").setValue(1);
-		}
-	};
-	btnOscTriangle.onStateChange = [this]() {
-		if (btnOscTriangle.getState() == Button::ButtonState::buttonDown) {
-			processor.tree.getParameterAsValue("LFO_WAVEFORM_TYPE").setValue(2);
-		}
-	};
-	btnOscSawtooth.onStateChange = [this]() {
-		if (btnOscSawtooth.getState() == Button::ButtonState::buttonDown) {
-			processor.tree.getParameterAsValue("LFO_WAVEFORM_TYPE").setValue(3);
-		}
-	};
-
+{	
 	addAndMakeVisible(btnOscSine);
 	addAndMakeVisible(btnOscRect);
 	addAndMakeVisible(btnOscTriangle);
@@ -75,6 +52,15 @@ LFOComponent::LFOComponent(SynthAudioProcessor& processor_)
 	lfoTargets.addAndMakeVisible(lfoTargetDetune);
 	lfoTargets.addAndMakeVisible(lfoTargetVolume);
 	addAndMakeVisible(lfoTargets);
+
+	buttonWaveformSineAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		processor.tree, lfoWaveformSineParamId, btnOscSine);
+	buttonWaveformSquareAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		processor.tree, lfoWaveformSquareParamId, btnOscRect);
+	buttonWaveformTriangleAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		processor.tree, lfoWaveformTriangleParamId, btnOscTriangle);
+	buttonWaveformSawtoothAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		processor.tree, lfoWaveformSawtoothParamId, btnOscSawtooth);
 }
 
 void LFOComponent::resized() {

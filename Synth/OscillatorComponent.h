@@ -28,6 +28,11 @@ private:
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderDetuneCentsAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderDetuneStepsAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderMixAttachment;
+
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonWaveformSineAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonWaveformSquareAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonWaveformTriangleAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonWaveformSawtoothAttachment;
 };
 
 

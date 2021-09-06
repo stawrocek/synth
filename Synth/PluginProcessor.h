@@ -48,6 +48,7 @@ public:
 	ScopeDataCollector<float> scopeDataCollector{ audioBufferQueue };
 
 private:
+	OscillatorType getToggleIndex(bool waveform1, bool waveform2, bool waveform3, bool waveform4);
 	double sampleRate;
 	juce::Synthesiser synth;
 	

@@ -14,29 +14,6 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	sliderDetuneSteps(-12, 12, 1.0, 0, osc1DetuneStepsParamName, "OSC" + std::to_string(id) + "DETUNESTEPS"),
 	sliderMix(0, 100, 1.0, 100, osc1MixParamName, "OSC" + std::to_string(id) + "MIX")
 {
-	btnOscSine.triggerClick();
-
-	btnOscSine.onStateChange = [this]() {
-		if (btnOscSine.getState() == Button::ButtonState::buttonDown) {
-			processor.tree.getParameterAsValue("WAVEFORM" + std::to_string(id)).setValue(0);
-		}
-	};
-	btnOscRect.onStateChange = [this]() {
-		if (btnOscRect.getState() == Button::ButtonState::buttonDown) {
-			processor.tree.getParameterAsValue("WAVEFORM" + std::to_string(id)).setValue(1);
-		}
-	};
-	btnOscTriangle.onStateChange = [this]() {
-		if (btnOscTriangle.getState() == Button::ButtonState::buttonDown) {
-			processor.tree.getParameterAsValue("WAVEFORM" + std::to_string(id)).setValue(2);
-		}
-	};
-	btnOscSawtooth.onStateChange = [this]() {
-		if (btnOscSawtooth.getState() == Button::ButtonState::buttonDown) {
-			processor.tree.getParameterAsValue("WAVEFORM" + std::to_string(id)).setValue(3);
-		}
-	};
-
 	addAndMakeVisible(btnOscSine);
 	addAndMakeVisible(btnOscRect);
 	addAndMakeVisible(btnOscTriangle);
@@ -53,6 +30,15 @@ OscillatorComponent::OscillatorComponent(SynthAudioProcessor& processor_, int id
 	sliderMixAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 		processor.tree, "OSC" + std::to_string(id) + "MIX", sliderMix);
 	addAndMakeVisible(sliderMix);
+
+	buttonWaveformSineAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		processor.tree, "OSC"+ std::to_string(id) +"_WAVEFORM_SINE", btnOscSine);
+	buttonWaveformSquareAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		processor.tree, "OSC" + std::to_string(id) + "_WAVEFORM_SQUARE", btnOscRect);
+	buttonWaveformTriangleAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		processor.tree, "OSC" + std::to_string(id) + "_WAVEFORM_TRIANGLE", btnOscTriangle);
+	buttonWaveformSawtoothAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+		processor.tree, "OSC" + std::to_string(id) + "_WAVEFORM_SAWTOOTH", btnOscSawtooth);
 }
 
 void OscillatorComponent::resized() {

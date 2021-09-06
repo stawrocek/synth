@@ -16,9 +16,21 @@ SynthAudioProcessor::SynthAudioProcessor()
 		.withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
 	), tree(*this, nullptr, "SynthAudioProcessorParameters", {
-		std::make_unique<juce::AudioParameterInt>(osc1WaveTypeParamId, osc1WaveTypeParamName, 0, 3, 0),
-		std::make_unique<juce::AudioParameterInt>(osc2WaveTypeParamId, osc2WaveTypeParamName, 0, 3, 0),
-		std::make_unique<juce::AudioParameterInt>(osc3WaveTypeParamId, osc3WaveTypeParamName, 0, 3, 0),
+		std::make_unique<juce::AudioParameterBool>(osc1WaveformSineParamId, osc1WaveformSineParamName, true),
+		std::make_unique<juce::AudioParameterBool>(osc1WaveformSquareParamId, osc1WaveformSquareParamName, false),
+		std::make_unique<juce::AudioParameterBool>(osc1WaveformTriangleParamId, osc1WaveformTriangleParamName, false),
+		std::make_unique<juce::AudioParameterBool>(osc1WaveformSawtoothParamId, osc1WaveformSawtoothParamName, false),
+
+		std::make_unique<juce::AudioParameterBool>(osc2WaveformSineParamId, osc2WaveformSineParamName, true),
+		std::make_unique<juce::AudioParameterBool>(osc2WaveformSquareParamId, osc2WaveformSquareParamName, false),
+		std::make_unique<juce::AudioParameterBool>(osc2WaveformTriangleParamId, osc2WaveformTriangleParamName, false),
+		std::make_unique<juce::AudioParameterBool>(osc2WaveformSawtoothParamId, osc2WaveformSawtoothParamName, false),
+
+		std::make_unique<juce::AudioParameterBool>(osc3WaveformSineParamId, osc3WaveformSineParamName, true),
+		std::make_unique<juce::AudioParameterBool>(osc3WaveformSquareParamId, osc3WaveformSquareParamName, false),
+		std::make_unique<juce::AudioParameterBool>(osc3WaveformTriangleParamId, osc3WaveformTriangleParamName, false),
+		std::make_unique<juce::AudioParameterBool>(osc3WaveformSawtoothParamId, osc3WaveformSawtoothParamName, false),
+
 		std::make_unique<juce::AudioParameterInt>(osc1DetuneParamId, osc1DetuneParamName, -100, 100, 0),
 		std::make_unique<juce::AudioParameterInt>(osc2DetuneParamId, osc2DetuneParamName, -100, 100, 0),
 		std::make_unique<juce::AudioParameterInt>(osc3DetuneParamId, osc3DetuneParamName, -100, 100, 0),
@@ -56,13 +68,17 @@ SynthAudioProcessor::SynthAudioProcessor()
 		std::make_unique<juce::AudioParameterFloat>(reverbWidthParamId, reverbWidthParamName, 0, 1, reverbInitialWidth),
 		std::make_unique<juce::AudioParameterBool>(reverbFreezeModeParamId, reverbFreezeModeParamName, reverbInitialFreezeMode),
 		
-		std::make_unique<juce::AudioParameterInt>(lfoWaveformTypeParamId, lfoWaveformTypeParamName, 0, 3, 0),
+		std::make_unique<juce::AudioParameterBool>(lfoWaveformSineParamId, lfoWaveformSineParamName, true),
+		std::make_unique<juce::AudioParameterBool>(lfoWaveformSquareParamId, lfoWaveformSquareParamName, false),
+		std::make_unique<juce::AudioParameterBool>(lfoWaveformTriangleParamId, lfoWaveformTriangleParamName, false),
+		std::make_unique<juce::AudioParameterBool>(lfoWaveformSawtoothParamId, lfoWaveformSawtoothParamName, false),
 		std::make_unique<juce::AudioParameterFloat>(lfoRateParamId, lfoRateParamName, 0.1, 10, lfoInitialRate),
 		std::make_unique<juce::AudioParameterFloat>(lfoIntensityParamId, lfoIntensityParamName, 0.01, 1.0, lfoInitialIntensity),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget1ActiveParamId, lfoTarget1ActiveParamName, false),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget2ActiveParamId, lfoTarget2ActiveParamName, false),
 		std::make_unique<juce::AudioParameterBool>(lfoTarget3ActiveParamId, lfoTarget3ActiveParamName, false),
 		
+
 		std::make_unique<juce::AudioParameterBool>(osc1EnabledParamId, osc1EnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(osc2EnabledParamId, osc2EnabledParamName, true),
 		std::make_unique<juce::AudioParameterBool>(osc3EnabledParamId, osc3EnabledParamName, true),
@@ -201,9 +217,28 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	for(int i = 0; i < synth.getNumVoices(); i++) {
 		SynthVoice* synthVoice;
 		if ((synthVoice = dynamic_cast<SynthVoice*>(synth.getVoice(i)))) {
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc1WaveTypeParamId)), 1);
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc2WaveTypeParamId)), 2);
-			synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc3WaveTypeParamId)), 3);
+			OscillatorType osc1Index = getToggleIndex(tree.getParameterAsValue(osc1WaveformSineParamId).getValue(),
+				tree.getParameterAsValue(osc1WaveformSquareParamId).getValue(),
+				tree.getParameterAsValue(osc1WaveformTriangleParamId).getValue(),
+				tree.getParameterAsValue(osc1WaveformSawtoothParamId).getValue());
+			OscillatorType osc2Index = getToggleIndex(tree.getParameterAsValue(osc2WaveformSineParamId).getValue(),
+				tree.getParameterAsValue(osc2WaveformSquareParamId).getValue(),
+				tree.getParameterAsValue(osc2WaveformTriangleParamId).getValue(),
+				tree.getParameterAsValue(osc2WaveformSawtoothParamId).getValue());
+			OscillatorType osc3Index = getToggleIndex(tree.getParameterAsValue(osc3WaveformSineParamId).getValue(),
+				tree.getParameterAsValue(osc3WaveformSquareParamId).getValue(),
+				tree.getParameterAsValue(osc3WaveformTriangleParamId).getValue(),
+				tree.getParameterAsValue(osc3WaveformSawtoothParamId).getValue());
+			synthVoice->setOscillator(osc1Index, 1);
+			synthVoice->setOscillator(osc2Index, 2);
+			synthVoice->setOscillator(osc3Index, 3);
+			
+			//synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc1WaveTypeParamId)), 1);
+			//synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc2WaveTypeParamId)), 2);
+			//synthVoice->setOscillator(static_cast<OscillatorType>((int)*tree.getRawParameterValue(osc3WaveTypeParamId)), 3);
+			
+			
+			
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc1DetuneParamId), 1);
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc2DetuneParamId), 2);
 			synthVoice->setDetune((int)*tree.getRawParameterValue(osc3DetuneParamId), 3);
@@ -225,7 +260,13 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 			synthVoice->setDistortionType((DistortionType)(int)tree.getParameterAsValue(ampDistortionTypeParamId).getValue());
 			synthVoice->setLFORate(tree.getParameterAsValue(lfoRateParamId).getValue());
 			synthVoice->setLFOIntensity(tree.getParameterAsValue(lfoIntensityParamId).getValue());
-			synthVoice->setLFOWavetype(static_cast<OscillatorType>((int)*tree.getRawParameterValue(lfoWaveformTypeParamId)));
+			OscillatorType lfoIndex = getToggleIndex(tree.getParameterAsValue(lfoWaveformSineParamId).getValue(),
+				tree.getParameterAsValue(lfoWaveformSquareParamId).getValue(),
+				tree.getParameterAsValue(lfoWaveformTriangleParamId).getValue(),
+				tree.getParameterAsValue(lfoWaveformSawtoothParamId).getValue());
+			
+			//synthVoice->setLFOWavetype(static_cast<OscillatorType>((int)*tree.getRawParameterValue(lfoWaveformTypeParamId)));
+			synthVoice->setLFOWavetype(static_cast<OscillatorType>(lfoIndex));
 			synthVoice->setLFOTargetCutoff(tree.getParameterAsValue(lfoTarget1ActiveParamId).getValue());
 			synthVoice->setLFOTargetDetune(tree.getParameterAsValue(lfoTarget2ActiveParamId).getValue());
 			synthVoice->setLFOTargetVolume(tree.getParameterAsValue(lfoTarget3ActiveParamId).getValue());
@@ -294,7 +335,13 @@ void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes
 			tree.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
+OscillatorType SynthAudioProcessor::getToggleIndex(bool waveform1, bool waveform2, bool waveform3, bool waveform4) {
+	if (waveform1) return OscillatorType::OscSin;
+	if (waveform2) return OscillatorType::OscSquare;
+	if (waveform3) return OscillatorType::OscTriangle;
+	if (waveform4) return OscillatorType::OscSawtooth;
+}
+
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
     return new SynthAudioProcessor();
 }
-

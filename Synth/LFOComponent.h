@@ -36,6 +36,10 @@ private:
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonTarget2Attachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonTarget3Attachment;
 
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonWaveformSineAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonWaveformSquareAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonWaveformTriangleAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> buttonWaveformSawtoothAttachment;
 };
 
 
