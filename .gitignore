@@ -38,3 +38,4 @@
 #Builds
 build/
 
+!Binaries/Synth.exe
