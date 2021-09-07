@@ -10,7 +10,7 @@ If you already have the source in form of a .zip file run this command instead o
 git clone https://github.com/juce-framework/JUCE.git  
 
 
-## building on Linux
+## Building on Linux
 
 #### Requirements for installation on Debian: 
 * cmake 3.16+
@@ -22,9 +22,9 @@ mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..  
 make
 
-now ./SynthPlugin_artefacts/ contains builded binaries
+now ./SynthPlugin_artefacts/ contains binaries
 
-## building on Windows:  
+## Building on Windows:  
 
 mkdir build && cd build  
 cmake ..
@@ -33,4 +33,4 @@ now open build/SynthProject.sln in VisualStudio
 set solution configuration to "Release"    
 press build>build solution (ctrl+shift+b)    
 
-now ./SynthPlugin_artefacts/ contains builded binaries
+now ./SynthPlugin_artefacts/ contains binaries
