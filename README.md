@@ -19,7 +19,7 @@ git clone https://github.com/juce-framework/JUCE.git
 #building:  
 
 mkdir build && cd build  
-cmake ..  
+cmake -DCMAKE_BUILD_TYPE=Release ..  
 make  
 
 #run standalone executable:  
